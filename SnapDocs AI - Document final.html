@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)https://convert-scan-app.preview.emergentagent.com/snapdocs-final.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapDocs AI - Document Processing Tools by MVAPS &amp; Company</title>
+    
+    <!-- TailwindCSS CDN -->
+    <script src="./SnapDocs AI - Document final_files/saved_resource"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="./SnapDocs AI - Document final_files/all.min.css">
+    
+    <!-- jsPDF Library -->
+    <script src="./SnapDocs AI - Document final_files/jspdf.umd.min.js.download"></script>
+    
+    <!-- Tesseract.js for OCR -->
+    <script src="./SnapDocs AI - Document final_files/tesseract.min.js.download"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-in-out 4s forwards;
+            overflow: hidden;
+        }
+        
+        .splash-screen::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, #ef4444 0%, #f59e0b 25%, #3b82f6 50%, #8b5cf6 75%, #ec4899 100%);
+            border-radius: 50%;
+            animation: colorBlast 1.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes colorBlast {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            30% {
+                opacity: 1;
+            }
+            100% {
+                width: 300vw;
+                height: 300vw;
+                opacity: 0.8;
+            }
+        }
+        
+        .splash-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 2rem;
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: logoAppear 1s ease-out 0.5s forwards, logoFloat 2s ease-in-out 1.5s infinite;
+        }
+        
+        @keyframes logoAppear {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-20px) scale(1.05);
+            }
+        }
+        
+        .splash-screen h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: textAppear 0.8s ease-out 1.5s forwards;
+        }
+        
+        @keyframes textAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        .main-app {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out 4.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .animated-logo {
+            animation: breathe 3s ease-in-out infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .tool-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .tool-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+        }
+        
+        .tool-card-pdf::before {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+        
+        .tool-card-format::before {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+        
+        .tool-card-scanner::before {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+        
+        .tool-card-ocr::before {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.4);
+        }
+        
+        .btn-secondary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-success {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.4);
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .file-input-label {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input-label:hover {
+            background-color: #dbeafe;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #3b82f6 50%, #000000 100%);
+        }
+        
+        #ocr-progress {
+            display: none;
+        }
+        
+        .about-section {
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .about-section.active {
+            display: block;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .splash-screen h1 {
+                font-size: 2.5rem;
+            }
+            
+            .splash-logo {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .navbar {
+                padding: 0.5rem !important;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem !important;
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-1{margin-left:0.25rem}.ml-2{margin-left:0.5rem}.mr-2{margin-right:0.5rem}.mr-4{margin-right:1rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-2{height:0.5rem}.h-24{height:6rem}.h-32{height:8rem}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-24{width:6rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.flex-1{flex:1 1 0%}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-not-allowed{cursor:not-allowed}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border-2{border-width:2px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.border-purple-500{--tw-border-opacity:1;border-color:rgb(168 85 247 / var(--tw-border-opacity, 1))}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-red-500{--tw-gradient-from:#ef4444 var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 68 68 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-500{--tw-gradient-to:rgb(59 130 246 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #3b82f6 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-black{--tw-gradient-to:#000 var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-12{padding-bottom:3rem}.pb-8{padding-bottom:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235 / var(--tw-text-opacity, 1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/80{color:rgb(255 255 255 / 0.8)}.text-white\/90{color:rgb(255 255 255 / 0.9)}.opacity-50{opacity:0.5}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.focus\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 768px){.md\:mt-0{margin-top:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-5xl{font-size:3rem;line-height:1}}</style></head>
+<body class="bg-gradient-to-r from-red-500 via-blue-500 to-black min-h-screen">
+    
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI Logo" class="splash-logo">
+        <h1>SnapDocs AI</h1>
+    </div>
+    
+    <!-- Main App -->
+    <div class="main-app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container mx-auto px-4 py-4 flex items-center justify-between flex-wrap">
+                <div class="flex items-center gap-3">
+                    <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI" class="w-12 h-12 animated-logo">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">SnapDocs AI</h2>
+                        <p class="text-xs text-gray-600">by MVAPS &amp; Company</p>
+                    </div>
+                </div>
+                <div class="nav-links flex gap-6 mt-4 md:mt-0">
+                    <a href="https://convert-scan-app.preview.emergentagent.com/snapdocs-final.html#home" class="nav-link font-semibold text-gray-700">Home</a>
+                    <a onclick="toggleAbout()" class="nav-link font-semibold text-gray-700">About</a>
+                    <a href="https://mvaps-and-company.onrender.com/#services" target="_blank" class="nav-link font-semibold text-gray-700">Services</a>
+                    <a href="https://mvaps-and-company.onrender.com/#products" target="_blank" class="nav-link font-semibold text-gray-700">Products</a>
+                    <a href="https://mvaps-and-company.onrender.com/#team" target="_blank" class="nav-link font-semibold text-gray-700">Team</a>
+                    <a href="https://mvaps-and-company.onrender.com/#contact" target="_blank" class="nav-link font-semibold text-gray-700">Contact</a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Header -->
+        <header id="home" class="text-center py-8 px-4">
+            <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI" class="w-24 h-24 mx-auto mb-4 animated-logo">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">SnapDocs AI</h1>
+            <p class="text-lg text-white/90 mb-2">Your All-in-One Document Processing Suite</p>
+            <p class="text-sm text-white/80">by MVAPS &amp; Company</p>
+        </header>
+        
+        <!-- About Section (Collapsible) -->
+        <div id="aboutSection" class="about-section">
+            <div class="container mx-auto px-4 pb-8">
+                <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 text-center">About MVAPS &amp; Company</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Founded in Nagpur on May 20, 2024, MVAPS &amp; Company is a software development agency dedicated to excellence and innovation. We specialize in creating powerful solutions that transform visions into reality, delivering cutting-edge technology with a focus on quality, reliability, and client satisfaction.
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        SnapDocs AI 📄✨ Convert photos to PDFs, transform image formats, and scan documents effortlessly with our AI-powered app. Streamline your document management today!
+                    </p>
+                    <div class="text-center">
+                        <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105">
+                            Learn More About Us <i class="fas fa-external-link-alt ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tools Grid -->
+        <div class="container mx-auto px-4 pb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                
+                <!-- Tool 1: Image to PDF Converter -->
+                <div class="tool-card tool-card-pdf bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-file-pdf text-4xl text-red-500 mr-4"></i>
+                        <h2 class="text-2xl font-bold text-red-400">Image to PDF</h2>
+                    </div>
+                    <p class="text-gray-300 mb-4">Convert multiple images into a single PDF file</p>
+                    
+                    <label for="imageToPdfInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-red-400 rounded-lg border-2 border-dashed border-red-500 mb-3">
+                        <i class="fas fa-upload mr-2"></i>Upload Images
+                    </label>
+                    <input type="file" id="imageToPdfInput" multiple="" accept="image/*" class="hidden">
+                    
+                    <div id="pdfImagePreview" class="mb-3 text-sm text-gray-300"></div>
+                    
+                    <button onclick="convertImagesToPdf()" class="btn-primary w-full bg-red-500 text-white py-3 px-6 rounded-lg font-semibold">
+                        <i class="fas fa-magic mr-2"></i>Convert to PDF
+                    </button>
+                </div>
+                
+                <!-- Tool 2: Photo Format Converter -->
+                <div class="tool-card tool-card-format bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-image text-4xl text-blue-500 mr-4"></i>
+                        <h2 class="text-2xl font-bold text-blue-400">Format Converter</h2>
+                    </div>
+                    <p class="text-gray-300 mb-4">Convert images between different formats</p>
+                    
+                    <label for="formatConverterInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-blue-400 rounded-lg border-2 border-dashed border-blue-500 mb-3">
+                        <i class="fas fa-upload mr-2"></i>Upload Image
+                    </label>
+                    <input type="file" id="formatConverterInput" accept="image/*" class="hidden">
+                    
+                    <select id="formatSelect" class="w-full p-3 border-2 border-gray-700 bg-gray-800 text-gray-200 rounded-lg mb-3 focus:outline-none focus:border-blue-500">
+                        <option value="image/jpeg">JPG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/bmp">BMP</option>
+                        <option value="image/webp">WEBP</option>
+                    </select>
+                    
+                    <button onclick="convertImageFormat()" class="btn-secondary w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold">
+                        <i class="fas fa-exchange-alt mr-2"></i>Convert Format
+                    </button>
+                </div>
+                
+                <!-- Tool 3: Document Scanner -->
+                <div class="tool-card tool-card-scanner bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-scanner text-4xl text-green-500 mr-4"></i>
+                        <h2 class="text-2xl font-bold text-green-400">Document Scanner</h2>
+                    </div>
+                    <p class="text-gray-300 mb-4">Enhance and scan document images</p>
+                    
+                    <label for="scannerInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-green-400 rounded-lg border-2 border-dashed border-green-500 mb-3">
+                        <i class="fas fa-upload mr-2"></i>Upload Document
+                    </label>
+                    <input type="file" id="scannerInput" accept="image/*" class="hidden">
+                    
+                    <div id="scannerPreview" class="text-center mb-3"></div>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="scanDocument()" class="btn-secondary flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold">
+                            <i class="fas fa-wand-magic-sparkles mr-2"></i>Scan
+                        </button>
+                        <button onclick="downloadScannedDoc()" id="downloadScanBtn" disabled="" class="btn-success flex-1 bg-green-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tool 4: Text Extractor with Real OCR -->
+                <div class="tool-card tool-card-ocr bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-text-width text-4xl text-purple-500 mr-4"></i>
+                        <h2 class="text-2xl font-bold text-purple-400">Text Extractor</h2>
+                    </div>
+                    <p class="text-gray-300 mb-4">Extract text from images using AI OCR</p>
+                    
+                    <label for="ocrInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-purple-400 rounded-lg border-2 border-dashed border-purple-500 mb-3">
+                        <i class="fas fa-upload mr-2"></i>Upload Image
+                    </label>
+                    <input type="file" id="ocrInput" accept="image/*" class="hidden">
+                    
+                    <button onclick="extractText()" class="btn-secondary w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold mb-3">
+                        <i class="fas fa-magnifying-glass mr-2"></i>Extract Text
+                    </button>
+                    
+                    <!-- OCR Progress -->
+                    <div id="ocr-progress" class="mb-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-600">Processing...</span>
+                            <span id="ocr-percent" class="text-sm font-bold text-blue-600">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="ocr-bar" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <textarea id="extractedText" class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500" placeholder="Extracted text will appear here..."></textarea>
+                    
+                    <button onclick="downloadExtractedText()" id="downloadTextBtn" disabled="" class="btn-success w-full bg-green-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed">
+                        <i class="fas fa-download mr-2"></i>Download Text
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center py-6 text-white/80">
+            <p>© 2025 SnapDocs AI by MVAPS &amp; Company. All rights reserved.</p>
+            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="text-white/90 hover:text-white transition-colors mt-2 inline-block">
+                Visit Our Website <i class="fas fa-external-link-alt ml-1"></i>
+            </a>
+        </footer>
+    </div>
+    
+    <script>
+        // Toggle About Section
+        function toggleAbout() {
+            const aboutSection = document.getElementById('aboutSection');
+            aboutSection.classList.toggle('active');
+        }
+        
+        // Global variables
+        let uploadedImages = [];
+        let formatConverterImage = null;
+        let scannerImage = null;
+        let scannedCanvas = null;
+        let ocrImage = null;
+        
+        // Tool 1: Image to PDF Converter
+        document.getElementById('imageToPdfInput').addEventListener('change', function(e) {
+            uploadedImages = Array.from(e.target.files);
+            document.getElementById('pdfImagePreview').textContent = 
+                uploadedImages.length > 0 ? `${uploadedImages.length} image(s) selected` : '';
+        });
+        
+        async function convertImagesToPdf() {
+            if (uploadedImages.length === 0) {
+                alert('Please upload at least one image');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            let isFirstPage = true;
+            
+            for (let i = 0; i < uploadedImages.length; i++) {
+                const img = await loadImage(uploadedImages[i]);
+                
+                if (!isFirstPage) {
+                    pdf.addPage();
+                }
+                
+                const imgWidth = 210;
+                const imgHeight = (img.height * imgWidth) / img.width;
+                
+                pdf.addImage(img.src, 'JPEG', 0, 0, imgWidth, imgHeight);
+                isFirstPage = false;
+            }
+            
+            pdf.save('snapdocs-converted.pdf');
+            alert('PDF created successfully!');
+        }
+        
+        function loadImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Tool 2: Photo Format Converter
+        document.getElementById('formatConverterInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                formatConverterImage = e.target.files[0];
+            }
+        });
+        
+        async function convertImageFormat() {
+            if (!formatConverterImage) {
+                alert('Please upload an image first');
+                return;
+            }
+            
+            const format = document.getElementById('formatSelect').value;
+            const img = await loadImage(formatConverterImage);
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                const extension = format.split('/')[1];
+                a.download = `converted-image.${extension}`;
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                alert('Image converted successfully!');
+            }, format);
+        }
+        
+        // Tool 3: Document Scanner
+        document.getElementById('scannerInput').addEventListener('change', async function(e) {
+            if (e.target.files.length > 0) {
+                scannerImage = e.target.files[0];
+                const img = await loadImage(scannerImage);
+                
+                const preview = document.getElementById('scannerPreview');
+                preview.innerHTML = '<img src="' + img.src + '" class="preview-image">';
+            }
+        });
+        
+        async function scanDocument() {
+            if (!scannerImage) {
+                alert('Please upload a document image first');
+                return;
+            }
+            
+            const img = await loadImage(scannerImage);
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.filter = 'brightness(1.1) contrast(1.2)';
+            ctx.drawImage(img, 0, 0);
+            
+            scannedCanvas = canvas;
+            
+            const preview = document.getElementById('scannerPreview');
+            preview.innerHTML = '<img src="' + canvas.toDataURL() + '" class="preview-image">';
+            
+            const downloadBtn = document.getElementById('downloadScanBtn');
+            downloadBtn.disabled = false;
+            downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            alert('Document scanned successfully!');
+        }
+        
+        function downloadScannedDoc() {
+            if (!scannedCanvas) {
+                alert('Please scan a document first');
+                return;
+            }
+            
+            scannedCanvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'scanned-document.png';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        // Tool 4: Text Extractor with REAL OCR
+        document.getElementById('ocrInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                ocrImage = e.target.files[0];
+            }
+        });
+        
+        async function extractText() {
+            if (!ocrImage) {
+                alert('Please upload an image first');
+                return;
+            }
+            
+            const progressDiv = document.getElementById('ocr-progress');
+            const progressBar = document.getElementById('ocr-bar');
+            const progressPercent = document.getElementById('ocr-percent');
+            const textArea = document.getElementById('extractedText');
+            
+            progressDiv.style.display = 'block';
+            textArea.value = 'Processing image...';
+            
+            try {
+                const result = await Tesseract.recognize(
+                    ocrImage,
+                    'eng',
+                    {
+                        logger: m => {
+                            if (m.status === 'recognizing text') {
+                                const percent = Math.round(m.progress * 100);
+                                progressBar.style.width = percent + '%';
+                                progressPercent.textContent = percent + '%';
+                            }
+                        }
+                    }
+                );
+                
+                const extractedText = result.data.text;
+                
+                if (extractedText.trim()) {
+                    textArea.value = extractedText;
+                    
+                    const downloadBtn = document.getElementById('downloadTextBtn');
+                    downloadBtn.disabled = false;
+                    downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    
+                    alert('Text extracted successfully!');
+                } else {
+                    textArea.value = 'No text found in the image. Please try with a clearer image.';
+                    alert('No text detected. Please try with a clearer image.');
+                }
+                
+            } catch (error) {
+                console.error('OCR Error:', error);
+                textArea.value = 'Error during text extraction. Please try again.';
+                alert('Error during OCR processing. Please try again.');
+            } finally {
+                progressDiv.style.display = 'none';
+                progressBar.style.width = '0%';
+                progressPercent.textContent = '0%';
+            }
+        }
+        
+        function downloadExtractedText() {
+            const text = document.getElementById('extractedText').value;
+            
+            if (!text || text === 'Extracted text will appear here...') {
+                alert('No text to download');
+                return;
+            }
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'extracted-text.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+
+</body></html>
