@@ -107,6 +107,17 @@
             transform: translateY(30px);
             animation: textAppear 0.8s ease-out 1.5s forwards;
         }
+
+        /* --- STYLE FOR SPLASH SCREEN SUBTITLE (ADDED) --- */
+        .splash-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: textAppear 0.8s ease-out 1.7s forwards;
+        }
         
         @keyframes textAppear {
             to {
@@ -298,6 +309,7 @@
     <div class="splash-screen" id="splashScreen">
         <img src="https://i.postimg.cc/44cwdBwK/snapdocs-logo.png" alt="SnapDocs AI Logo" class="splash-logo">
         <h1>SnapDocs AI</h1>
+        <p class="splash-subtitle">by MVAPS & Company</p>
     </div>
     
     <div class="main-app">
