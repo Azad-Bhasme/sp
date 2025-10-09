@@ -5,150 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SnapDocs AI - Document Processing Tools by MVAPS & Company</title>
     
+    <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- jsPDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
+    <!-- Tesseract.js for OCR -->
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js'></script>
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 9999;
-            animation: fadeOut 0.5s ease-in-out 4s forwards;
-            overflow: hidden;
-        }
-        .splash-screen::before {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, #ef4444 0%, #f59e0b 25%, #3b82f6 50%, #8b5cf6 75%, #ec4899 100%);
-            border-radius: 50%;
-            animation: colorBlast 1.5s ease-out forwards;
-            opacity: 0;
-        }
-        @keyframes colorBlast {
-            0% { width: 0; height: 0; opacity: 0; }
-            30% { opacity: 1; }
-            100% { width: 300vw; height: 300vw; opacity: 0.8; }
-        }
-        .splash-logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 2rem;
-            z-index: 2;
-            opacity: 0;
-            transform: scale(0.5);
-            animation: logoAppear 1s ease-out 0.5s forwards, logoFloat 2s ease-in-out 1.5s infinite;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 9999; animation: fadeOut 0.5s ease-in-out 4s forwards; overflow: hidden; }
+        .splash-screen::before { content: ''; position: absolute; width: 0; height: 0; background: radial-gradient(circle, #ef4444 0%, #f59e0b 25%, #3b82f6 50%, #8b5cf6 75%, #ec4899 100%); border-radius: 50%; animation: colorBlast 1.5s ease-out forwards; opacity: 0; }
+        @keyframes colorBlast { 0% { width: 0; height: 0; opacity: 0; } 30% { opacity: 1; } 100% { width: 300vw; height: 300vw; opacity: 0.8; } }
+        .splash-logo { width: 200px; height: 200px; margin-bottom: 2rem; z-index: 2; opacity: 0; transform: scale(0.5); animation: logoAppear 1s ease-out 0.5s forwards, logoFloat 2s ease-in-out 1.5s infinite; }
         @keyframes logoAppear { to { opacity: 1; transform: scale(1); } }
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.05); }
-        }
-        .splash-screen h1 {
-            font-size: 4rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            z-index: 2;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: textAppear 0.8s ease-out 1.5s forwards;
-        }
-        .splash-subtitle {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 0.5rem;
-            z-index: 2;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: textAppear 0.8s ease-out 1.7s forwards;
-        }
+        @keyframes logoFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
+        .splash-screen h1 { font-size: 4rem; font-weight: bold; color: white; text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); z-index: 2; opacity: 0; transform: translateY(30px); animation: textAppear 0.8s ease-out 1.5s forwards; }
+        .splash-subtitle { font-size: 1.25rem; color: rgba(255, 255, 255, 0.8); margin-top: 0.5rem; z-index: 2; opacity: 0; transform: translateY(30px); animation: textAppear 0.8s ease-out 1.7s forwards; }
         @keyframes textAppear { to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-        .main-app {
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in-out 4.5s forwards;
-        }
+        .main-app { opacity: 0; animation: fadeIn 0.5s ease-in-out 4.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
+        .navbar { position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
         .animated-logo { animation: breathe 3s ease-in-out infinite; }
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-            position: relative;
-            cursor: pointer;
-        }
-        .nav-link:hover {
-            color: #3b82f6;
-            transform: translateY(-2px);
-        }
-        .tool-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .tool-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
-        }
-        .preview-image {
-            max-width: 100%;
-            max-height: 400px;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-        }
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .nav-link { transition: all 0.3s ease; position: relative; cursor: pointer; }
+        .nav-link:hover { color: #3b82f6; transform: translateY(-2px); }
+        .tool-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); }
+        .preview-image { max-width: 100%; max-height: 400px; border-radius: 0.5rem; margin: 1rem 0; }
         .file-input-label { cursor: pointer; transition: all 0.3s ease; }
-        .file-input-label:hover { background-color: #dbeafe; }
+        .file-input-label:hover { background-color: #374151; }
         #ocr-progress { display: none; }
         .about-section { display: none; animation: slideDown 0.3s ease-out; }
         .about-section.active { display: block; }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
             .splash-screen h1 { font-size: 2.5rem; }
             .splash-logo { width: 150px; height: 150px; }
         }
     </style>
 </head>
-<body class="bg-white min-h-screen">
+<body class="bg-gradient-to-r from-red-500 via-blue-500 to-black min-h-screen">
     
     <div class="splash-screen" id="splashScreen">
         <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI Logo" class="splash-logo">
@@ -171,18 +76,20 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     </button>
                 </div>
-                <div id="nav-menu" class="nav-links hidden w-full md:w-auto md:flex mt-4 md:mt-0 flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
-                    <a href="#home" class="nav-link font-semibold text-gray-700">Home</a>
-                    <a onclick="toggleAbout()" class="nav-link font-semibold text-gray-700">About</a>
-                    <a href="https://mvaps-and-company.onrender.com/#services" target="_blank" class="nav-link font-semibold text-gray-700">Services</a>
-                    <a href="https://mvaps-and-company.onrender.com/#products" target="_blank" class="nav-link font-semibold text-gray-700">Products</a>
-                    <a href="https://mvaps-and-company.onrender.com/#team" target="_blank" class="nav-link font-semibold text-gray-700">Team</a>
-                    <a href="https://mvaps-and-company.onrender.com/#contact" target="_blank" class="nav-link font-semibold text-gray-700">Contact</a>
+                <div id="nav-menu" class="hidden md:flex md:items-center md:w-auto w-full">
+                    <div class="flex flex-col md:flex-row md:gap-6 mt-4 md:mt-0">
+                        <a href="#home" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Home</a>
+                        <a onclick="toggleAbout()" class="nav-link font-semibold text-gray-700 py-2 md:py-0">About</a>
+                        <a href="https://mvaps-and-company.onrender.com/#services" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Services</a>
+                        <a href="https://mvaps-and-company.onrender.com/#products" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Products</a>
+                        <a href="https://mvaps-and-company.onrender.com/#team" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Team</a>
+                        <a href="https://mvaps-and-company.onrender.com/#contact" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Contact</a>
+                    </div>
                 </div>
             </div>
         </nav>
         
-        <header id="home" class="text-center py-8 px-4 bg-gradient-to-r from-red-500 via-blue-500 to-black">
+        <header id="home" class="text-center py-8 px-4">
             <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI" class="w-24 h-24 mx-auto mb-4 animated-logo">
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">SnapDocs AI</h1>
             <p class="text-lg text-white/90 mb-2">Your All-in-One Document Processing Suite</p>
@@ -204,28 +111,28 @@
         
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <div class="tool-card bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-file-pdf text-4xl text-red-500 mr-4"></i><h2 class="text-2xl font-bold text-gray-800">Image to PDF</h2></div>
-                    <p class="text-gray-600 mb-4">Convert multiple images into a single PDF file.</p>
-                    <label for="imageToPdfInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-100 text-gray-700 rounded-lg border-2 border-dashed border-gray-300 mb-3"><i class="fas fa-upload mr-2"></i>Upload Images</label>
+                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4"><i class="fas fa-file-pdf text-4xl text-red-500 mr-4"></i><h2 class="text-2xl font-bold text-red-400">Image to PDF</h2></div>
+                    <p class="text-gray-300 mb-4">Convert multiple images into a single PDF file.</p>
+                    <label for="imageToPdfInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-red-400 rounded-lg border-2 border-dashed border-red-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Images</label>
                     <input type="file" id="imageToPdfInput" multiple accept="image/*" class="hidden">
-                    <div id="pdfImagePreview" class="mb-3 text-sm text-gray-500"></div>
+                    <div id="pdfImagePreview" class="mb-3 text-sm text-gray-400"></div>
                     <button onclick="convertImagesToPdf()" class="w-full bg-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-600 transition-colors"><i class="fas fa-magic mr-2"></i>Convert to PDF</button>
                 </div>
-                <div class="tool-card bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-image text-4xl text-blue-500 mr-4"></i><h2 class="text-2xl font-bold text-gray-800">Format Converter</h2></div>
-                    <p class="text-gray-600 mb-4">Convert images between different formats.</p>
-                    <label for="formatConverterInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-100 text-gray-700 rounded-lg border-2 border-dashed border-gray-300 mb-3"><i class="fas fa-upload mr-2"></i>Upload Image</label>
+                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4"><i class="fas fa-image text-4xl text-blue-500 mr-4"></i><h2 class="text-2xl font-bold text-blue-400">Format Converter</h2></div>
+                    <p class="text-gray-300 mb-4">Convert images between different formats.</p>
+                    <label for="formatConverterInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-blue-400 rounded-lg border-2 border-dashed border-blue-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Image</label>
                     <input type="file" id="formatConverterInput" accept="image/*" class="hidden">
-                    <select id="formatSelect" class="w-full p-3 border-2 border-gray-300 bg-white text-gray-800 rounded-lg mb-3 focus:outline-none focus:border-blue-500">
+                    <select id="formatSelect" class="w-full p-3 border-2 border-gray-700 bg-gray-800 text-gray-200 rounded-lg mb-3 focus:outline-none focus:border-blue-500">
                         <option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/bmp">BMP</option><option value="image/webp">WEBP</option>
                     </select>
                     <button onclick="convertImageFormat()" class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-exchange-alt mr-2"></i>Convert Format</button>
                 </div>
-                <div class="tool-card bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-scanner text-4xl text-green-500 mr-4"></i><h2 class="text-2xl font-bold text-gray-800">Document Scanner</h2></div>
-                    <p class="text-gray-600 mb-4">Enhance and scan document images.</p>
-                    <label for="scannerInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-100 text-gray-700 rounded-lg border-2 border-dashed border-gray-300 mb-3"><i class="fas fa-upload mr-2"></i>Upload Document</label>
+                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4"><i class="fas fa-scanner text-4xl text-green-500 mr-4"></i><h2 class="text-2xl font-bold text-green-400">Document Scanner</h2></div>
+                    <p class="text-gray-300 mb-4">Enhance and scan document images.</p>
+                    <label for="scannerInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-green-400 rounded-lg border-2 border-dashed border-green-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Document</label>
                     <input type="file" id="scannerInput" accept="image/*" class="hidden">
                     <div id="scannerPreview" class="text-center mb-3"></div>
                     <div class="flex gap-2">
@@ -233,69 +140,71 @@
                         <button onclick="downloadScannedDoc()" id="downloadScanBtn" disabled class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed hover:bg-green-600 transition-colors"><i class="fas fa-download mr-2"></i>Download</button>
                     </div>
                 </div>
-                <div class="tool-card bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-text-width text-4xl text-purple-500 mr-4"></i><h2 class="text-2xl font-bold text-gray-800">Text Extractor</h2></div>
-                    <p class="text-gray-600 mb-4">Extract text from images using AI OCR.</p>
-                    <label for="ocrInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-100 text-gray-700 rounded-lg border-2 border-dashed border-gray-300 mb-3"><i class="fas fa-upload mr-2"></i>Upload Image</label>
+                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4"><i class="fas fa-text-width text-4xl text-purple-500 mr-4"></i><h2 class="text-2xl font-bold text-purple-400">Text Extractor</h2></div>
+                    <p class="text-gray-300 mb-4">Extract text from images using AI OCR.</p>
+                    <label for="ocrInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-purple-400 rounded-lg border-2 border-dashed border-purple-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Image</label>
                     <input type="file" id="ocrInput" accept="image/*" class="hidden">
                     <button onclick="extractText()" class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold mb-3 hover:bg-blue-600 transition-colors"><i class="fas fa-magnifying-glass mr-2"></i>Extract Text</button>
                     <div id="ocr-progress" class="mb-3">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm text-gray-600">Processing...</span><span id="ocr-percent" class="text-sm font-bold text-blue-600">0%</span></div>
-                        <div class="w-full bg-gray-200 rounded-full h-2"><div id="ocr-bar" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 0%"></div></div>
+                        <div class="flex items-center justify-between mb-2"><span class="text-sm text-gray-400">Processing...</span><span id="ocr-percent" class="text-sm font-bold text-blue-400">0%</span></div>
+                        <div class="w-full bg-gray-700 rounded-full h-2"><div id="ocr-bar" class="bg-blue-500 h-2 rounded-full transition-all" style="width: 0%"></div></div>
                     </div>
-                    <textarea id="extractedText" class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500" placeholder="Extracted text will appear here..."></textarea>
+                    <textarea id="extractedText" class="w-full h-32 p-3 border-2 border-gray-700 bg-gray-800 text-gray-200 rounded-lg mb-3 focus:outline-none focus:border-blue-500" placeholder="Extracted text will appear here..."></textarea>
                     <button onclick="downloadExtractedText()" id="downloadTextBtn" disabled class="w-full bg-green-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed hover:bg-green-600 transition-colors"><i class="fas fa-download mr-2"></i>Download Text</button>
                 </div>
             </div>
         </div>
         
-        <footer class="text-center py-6 text-gray-600">
+        <footer class="text-center py-6 text-white/80">
             <p>© 2025 SnapDocs AI by MVAPS & Company. All rights reserved.</p>
-            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="text-gray-800 hover:text-blue-600 transition-colors mt-2 inline-block">Visit Our Website <i class="fas fa-external-link-alt ml-1"></i></a>
+            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="text-white/90 hover:text-white transition-colors mt-2 inline-block">Visit Our Website <i class="fas fa-external-link-alt ml-1"></i></a>
         </footer>
     </div>
     
     <script>
-        // Toggle About Section
-        function toggleAbout() {
-            const aboutSection = document.getElementById('aboutSection');
-            aboutSection.classList.toggle('active');
-        }
-        
-        // Mobile Menu Toggle
         document.addEventListener('DOMContentLoaded', () => {
-            const menuButton = document.getElementById('menu-button');
-            const navMenu = document.getElementById('nav-menu');
-            menuButton.addEventListener('click', () => { navMenu.classList.toggle('hidden'); });
+            document.getElementById('menu-button').addEventListener('click', () => {
+                document.getElementById('nav-menu').classList.toggle('hidden');
+            });
         });
 
-        // Global variables
-        let uploadedImages = []; let formatConverterImage = null; let scannerImage = null; let scannedCanvas = null; let ocrImage = null;
+        function toggleAbout() {
+            document.getElementById('aboutSection').classList.toggle('active');
+        }
+
+        let uploadedImages = [], formatConverterImage = null, scannerImage = null, scannedCanvas = null, ocrImage = null;
         
-        // Tool 1: Image to PDF Converter
-        document.getElementById('imageToPdfInput').addEventListener('change', function(e) {
+        document.getElementById('imageToPdfInput').addEventListener('change', e => {
             uploadedImages = Array.from(e.target.files);
             document.getElementById('pdfImagePreview').textContent = uploadedImages.length > 0 ? `${uploadedImages.length} image(s) selected` : '';
         });
         
         async function convertImagesToPdf() {
-            if (uploadedImages.length === 0) { alert('Please upload at least one image'); return; }
+            if (uploadedImages.length === 0) return alert('Please upload at least one image');
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
             for (let i = 0; i < uploadedImages.length; i++) {
-                if (i > 0) { pdf.addPage(); }
+                if (i > 0) pdf.addPage();
                 const img = await loadImage(uploadedImages[i]);
-                const imgWidth = 210; const imgHeight = (img.height * imgWidth) / img.width;
-                pdf.addImage(img.src, 'JPEG', 0, 0, imgWidth, imgHeight);
+                const imgRatio = img.height / img.width;
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                let newImgWidth = pdfWidth;
+                let newImgHeight = newImgWidth * imgRatio;
+                if (newImgHeight > pdfHeight) {
+                    newImgHeight = pdfHeight;
+                    newImgWidth = newImgHeight / imgRatio;
+                }
+                pdf.addImage(img, 'PNG', (pdfWidth - newImgWidth) / 2, 0, newImgWidth, newImgHeight);
             }
             pdf.save('snapdocs-converted.pdf');
-            alert('PDF created successfully!');
         }
         
         function loadImage(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = e => {
                     const img = new Image();
                     img.onload = () => resolve(img);
                     img.onerror = reject;
@@ -305,41 +214,37 @@
             });
         }
         
-        // Tool 2: Photo Format Converter
-        document.getElementById('formatConverterInput').addEventListener('change', function(e) { if (e.target.files.length > 0) { formatConverterImage = e.target.files[0]; } });
+        document.getElementById('formatConverterInput').addEventListener('change', e => { if (e.target.files.length > 0) formatConverterImage = e.target.files[0]; });
         
         async function convertImageFormat() {
-            if (!formatConverterImage) { alert('Please upload an image first'); return; }
+            if (!formatConverterImage) return alert('Please upload an image first');
             const format = document.getElementById('formatSelect').value;
             const img = await loadImage(formatConverterImage);
             const canvas = document.createElement('canvas');
             canvas.width = img.width; canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            canvas.toBlob((blob) => {
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            canvas.toBlob(blob => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                const extension = format.split('/')[1];
-                a.download = `converted-image.${extension}`;
+                a.download = `converted-image.${format.split('/')[1]}`;
+                document.body.appendChild(a);
                 a.click();
+                document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-                alert('Image converted successfully!');
             }, format);
         }
         
-        // Tool 3: Document Scanner
-        document.getElementById('scannerInput').addEventListener('change', async function(e) {
+        document.getElementById('scannerInput').addEventListener('change', async e => {
             if (e.target.files.length > 0) {
                 scannerImage = e.target.files[0];
                 const img = await loadImage(scannerImage);
-                const preview = document.getElementById('scannerPreview');
-                preview.innerHTML = `<img src="${img.src}" class="preview-image">`;
+                document.getElementById('scannerPreview').innerHTML = `<img src="${img.src}" class="preview-image">`;
             }
         });
         
         async function scanDocument() {
-            if (!scannerImage) { alert('Please upload a document image first'); return; }
+            if (!scannerImage) return alert('Please upload a document image first');
             const img = await loadImage(scannerImage);
             const canvas = document.createElement('canvas');
             canvas.width = img.width; canvas.height = img.height;
@@ -347,60 +252,48 @@
             ctx.filter = 'brightness(1.1) contrast(1.2)';
             ctx.drawImage(img, 0, 0);
             scannedCanvas = canvas;
-            const preview = document.getElementById('scannerPreview');
-            preview.innerHTML = `<img src="${canvas.toDataURL()}" class="preview-image">`;
+            document.getElementById('scannerPreview').innerHTML = `<img src="${canvas.toDataURL()}" class="preview-image">`;
             const downloadBtn = document.getElementById('downloadScanBtn');
             downloadBtn.disabled = false;
             downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            alert('Document scanned successfully!');
         }
         
         function downloadScannedDoc() {
-            if (!scannedCanvas) { alert('Please scan a document first'); return; }
-            scannedCanvas.toBlob((blob) => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'scanned-document.png';
-                a.click();
-                URL.revokeObjectURL(url);
-            });
+            if (!scannedCanvas) return alert('Please scan a document first');
+            const url = scannedCanvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'scanned-document.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
         
-        // Tool 4: Text Extractor with REAL OCR
-        document.getElementById('ocrInput').addEventListener('change', function(e) { if (e.target.files.length > 0) { ocrImage = e.target.files[0]; } });
+        document.getElementById('ocrInput').addEventListener('change', e => { if (e.target.files.length > 0) ocrImage = e.target.files[0]; });
         
         async function extractText() {
-            if (!ocrImage) { alert('Please upload an image first'); return; }
-            const progressDiv = document.getElementById('ocr-progress');
-            const progressBar = document.getElementById('ocr-bar');
-            const progressPercent = document.getElementById('ocr-percent');
-            const textArea = document.getElementById('extractedText');
+            if (!ocrImage) return alert('Please upload an image first');
+            const progressDiv = document.getElementById('ocr-progress'), progressBar = document.getElementById('ocr-bar'), progressPercent = document.getElementById('ocr-percent'), textArea = document.getElementById('extractedText');
             progressDiv.style.display = 'block';
             textArea.value = 'Processing image...';
             try {
-                const result = await Tesseract.recognize(ocrImage, 'eng', { logger: m => {
+                const { data: { text } } = await Tesseract.recognize(ocrImage, 'eng', { logger: m => {
                     if (m.status === 'recognizing text') {
                         const percent = Math.round(m.progress * 100);
                         progressBar.style.width = percent + '%';
                         progressPercent.textContent = percent + '%';
                     }}
                 });
-                const extractedText = result.data.text;
-                if (extractedText.trim()) {
-                    textArea.value = extractedText;
-                    const downloadBtn = document.getElementById('downloadTextBtn');
-                    downloadBtn.disabled = false;
-                    downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    alert('Text extracted successfully!');
+                if (text.trim()) {
+                    textArea.value = text;
+                    document.getElementById('downloadTextBtn').disabled = false;
+                    document.getElementById('downloadTextBtn').classList.remove('opacity-50', 'cursor-not-allowed');
                 } else {
                     textArea.value = 'No text found in the image. Please try with a clearer image.';
-                    alert('No text detected. Please try with a clearer image.');
                 }
             } catch (error) {
                 console.error('OCR Error:', error);
                 textArea.value = 'Error during text extraction. Please try again.';
-                alert('Error during OCR processing. Please try again.');
             } finally {
                 progressDiv.style.display = 'none';
                 progressBar.style.width = '0%';
@@ -410,13 +303,15 @@
         
         function downloadExtractedText() {
             const text = document.getElementById('extractedText').value;
-            if (!text || text === 'Extracted text will appear here...') { alert('No text to download'); return; }
+            if (!text || text === 'Extracted text will appear here...') return alert('No text to download');
             const blob = new Blob([text], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'extracted-text.txt';
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
     </script>
