@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SnapDocs AI | All-in-One Document Intelligence &amp; PDF Suite</title>
+  <title>SnapDocs AI | Convert Photos to PDFs, Scan Documents &amp; AI OCR</title>
   <meta
     name="description"
-    content="SnapDocs AI by MVAPS & Company — Your All-in-One Document Intelligence Hub. Image to PDF, Merge & Split PDF, AI Document Scanner, OCR Data Extractor, AI Summarizer, Target-KB Compressor, and e-Sign PDF."
+    content="SnapDocs AI by MVAPS & Company — Convert photos to PDFs, transform image formats, scan documents, extract text with AI OCR, merge/split PDFs, summarize documents, and e-sign PDFs."
   />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap"
     rel="stylesheet"
   />
 
-  <!-- Core Document Processing Engines (100% Client-Side & Free on Render) -->
+  <!-- Client-Side Document Engines (100% Free on Render & 100% Private) -->
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -25,32 +25,34 @@
 
   <style>
     :root {
-      --bg-950: #050914;
-      --bg-900: #0a1122;
-      --bg-800: #111c35;
-      --bg-card: rgba(17, 28, 53, 0.82);
-      --bg-panel: #0d162b;
-      --cyan-400: #22d3ee;
-      --cyan-500: #06b6d4;
-      --indigo-400: #818cf8;
+      --navy-950: #070e1a;
+      --navy-900: #0b1628;
+      --navy-800: #152542;
+      --primary-600: #2563eb;
+      --primary-500: #3b82f6;
+      --indigo-600: #4f46e5;
       --indigo-500: #6366f1;
-      --blue-500: #3b82f6;
-      --blue-600: #2563eb;
-      --emerald-400: #34d399;
+      --gold-500: #d4af37;
+      --gold-400: #e5c453;
+      --emerald-600: #059669;
       --emerald-500: #10b981;
-      --amber-400: #fbbf24;
-      --danger: #ef4444;
-      --text-white: #f8fafc;
-      --text-slate: #cbd5e1;
-      --text-muted: #94a3b8;
-      --border-subtle: rgba(56, 189, 248, 0.18);
-      --border-bright: rgba(34, 211, 238, 0.45);
+      --danger: #dc2626;
+      --bg-body: #f4f7fb;
+      --bg-alt: #eef2f9;
+      --bg-white: #ffffff;
+      --slate-900: #0f172a;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
       --radius-sm: 10px;
       --radius-md: 16px;
       --radius-lg: 22px;
-      --shadow-lg: 0 20px 50px rgba(2, 6, 23, 0.55);
-      --shadow-glow: 0 0 30px rgba(6, 182, 212, 0.25);
-      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-sm: 0 4px 18px rgba(11, 22, 40, 0.06);
+      --shadow-md: 0 12px 32px rgba(11, 22, 40, 0.1);
+      --shadow-lg: 0 20px 48px rgba(11, 22, 40, 0.16);
+      --transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * {
@@ -66,9 +68,9 @@
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-950);
-      color: var(--text-white);
-      line-height: 1.6;
+      background-color: var(--bg-body);
+      color: var(--slate-900);
+      line-height: 1.65;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -79,32 +81,33 @@
       letter-spacing: -0.02em;
     }
 
-    .mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-
     a {
       color: inherit;
       text-decoration: none;
       transition: var(--transition);
     }
 
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
     .container {
       width: 100%;
-      max-width: 1280px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
     /* ==========================================================================
-       Slower Scroll-Up & Scroll-Down Reveal Animations
+       Scroll Reveal Animations (Works Scrolling Down & Scrolling Up)
        ========================================================================== */
     .reveal {
       opacity: 0;
-      transform: translateY(50px);
+      transform: translateY(48px);
       transition:
-        opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: opacity, transform;
     }
 
@@ -113,14 +116,14 @@
       transform: translateY(0);
     }
 
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.45; transform: scale(0.88); }
-    }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
 
-    @keyframes gridSlide {
-      0% { background-position: 0 0; }
-      100% { background-position: 48px 48px; }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
     }
 
     @keyframes inputShake {
@@ -138,316 +141,443 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--emerald-400);
-      box-shadow: 0 0 10px var(--emerald-400);
-      animation: pulseGlow 1.6s infinite ease-in-out;
+      background: #34d399;
+      animation: pulseDot 1.5s infinite ease-in-out;
     }
 
-    /* Navbar */
+    /* ==========================================================================
+       Navbar with Original SnapDocs AI Logo
+       ========================================================================== */
     .navbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(5, 9, 20, 0.88);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(11, 22, 40, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 76px;
+      height: 78px;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      font-weight: 700;
-      font-size: 1.32rem;
-    }
-
-    .brand-logo {
-      width: 42px;
-      height: 42px;
-      flex-shrink: 0;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.08;
-    }
-
-    .brand-name {
-      background: linear-gradient(90deg, #ffffff, var(--cyan-400), var(--indigo-400));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 1.28rem;
+      color: #ffffff;
+      font-size: 1.35rem;
       font-weight: 700;
     }
 
-    .brand-by {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--cyan-400);
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1.5px solid rgba(212, 175, 55, 0.55);
+      background: var(--navy-900);
+    }
+
+    .brand-title {
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-title span {
+      color: #60a5fa;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 24px;
       list-style: none;
     }
 
     .nav-links a {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-slate);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #cbd5e1;
     }
 
     .nav-links a:hover {
-      color: var(--cyan-400);
+      color: #60a5fa;
     }
 
-    .privacy-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 6px 13px;
+    .nav-cta {
+      background: linear-gradient(135deg, var(--primary-600), var(--indigo-600));
+      color: #ffffff !important;
+      padding: 10px 20px !important;
       border-radius: 999px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(52, 211, 153, 0.35);
-      color: var(--emerald-400);
-      font-size: 0.76rem;
-      font-weight: 600;
+      font-size: 0.88rem !important;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.5);
     }
 
     .menu-toggle {
       display: none;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid var(--border-subtle);
-      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
       padding: 8px 12px;
       border-radius: 8px;
-      cursor: pointer;
       font-size: 1.2rem;
+      cursor: pointer;
     }
 
-    /* Hero Section */
+    /* ==========================================================================
+       Hero Section with Original SnapDocs AI Logo & Identity
+       ========================================================================== */
     .hero {
-      position: relative;
-      padding: 76px 0 56px;
       background:
-        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.22), transparent 42%),
-        radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.18), transparent 42%),
-        linear-gradient(180deg, var(--bg-950) 0%, var(--bg-900) 100%);
-      border-bottom: 1px solid var(--border-subtle);
-      overflow: hidden;
+        radial-gradient(circle at 82% 20%, rgba(59, 130, 246, 0.22), transparent 45%),
+        radial-gradient(circle at 18% 80%, rgba(212, 175, 55, 0.14), transparent 42%),
+        linear-gradient(160deg, var(--navy-950) 0%, var(--navy-900) 60%, var(--navy-800) 100%);
+      color: #ffffff;
+      padding: 76px 0 68px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-      background-size: 48px 48px;
-      animation: gridSlide 18s linear infinite;
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      max-width: 860px;
-      margin: 0 auto;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 7px 16px;
+      gap: 8px;
+      padding: 6px 16px;
       border-radius: 999px;
-      background: rgba(6, 182, 212, 0.12);
-      border: 1px solid rgba(34, 211, 238, 0.35);
-      color: var(--cyan-400);
+      background: rgba(59, 130, 246, 0.16);
+      border: 1px solid rgba(96, 165, 250, 0.38);
+      color: #93c5fd;
       font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
     }
 
     .hero h1 {
-      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-size: clamp(2.4rem, 4.6vw, 3.6rem);
       margin-bottom: 16px;
+      color: #ffffff;
     }
 
     .hero h1 span {
-      background: linear-gradient(90deg, var(--cyan-400), var(--indigo-400), #c084fc);
+      background: linear-gradient(90deg, #60a5fa, #a78bfa, var(--gold-400));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero p {
-      font-size: 1.08rem;
-      color: var(--text-slate);
-      max-width: 700px;
-      margin: 0 auto 28px;
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      max-width: 600px;
+      margin-bottom: 28px;
     }
 
-    /* Quick Tool Launcher Cards Grid (8 Tools) */
-    .quick-tools-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
       gap: 14px;
-      margin-top: 32px;
     }
 
-    .quick-tool-card {
-      background: rgba(15, 25, 48, 0.78);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px 16px;
-      text-align: left;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      color: var(--text-white);
-      font-family: inherit;
-    }
-
-    .quick-tool-card:hover,
-    .quick-tool-card.active {
-      border-color: var(--cyan-400);
-      background: rgba(6, 182, 212, 0.14);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .qt-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.22), rgba(99, 102, 241, 0.22));
-      border: 1px solid rgba(34, 211, 238, 0.35);
-      display: flex;
+    .btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--cyan-400);
-      flex-shrink: 0;
-    }
-
-    .qt-meta strong {
-      display: block;
-      font-size: 0.94rem;
-      margin-bottom: 3px;
-    }
-
-    .qt-meta span {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      line-height: 1.35;
-      display: block;
-    }
-
-    /* ==========================================================================
-       Main Interactive Document Workspace
-       ========================================================================== */
-    .workspace-section {
-      padding: 56px 0 88px;
-    }
-
-    .workspace-shell {
-      display: grid;
-      grid-template-columns: 270px 1fr;
-      gap: 26px;
-      align-items: start;
-    }
-
-    /* Sidebar Navigation */
-    .workspace-sidebar {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      position: sticky;
-      top: 96px;
-    }
-
-    .sidebar-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--cyan-400);
-      padding: 6px 10px 12px;
-      display: block;
-    }
-
-    .sidebar-nav {
-      display: grid;
-      gap: 6px;
-    }
-
-    .sidebar-btn {
-      width: 100%;
-      text-align: left;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--text-slate);
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 999px;
       font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 0.94rem;
+      font-weight: 700;
       cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-600), var(--indigo-600));
+      color: #ffffff;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-500), #b69121);
+      color: var(--navy-950);
+      box-shadow: 0 8px 22px rgba(212, 175, 55, 0.28);
+    }
+
+    .btn-gold:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+    }
+
+    .btn-emerald {
+      background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+      color: #ffffff;
+    }
+
+    .btn-emerald:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-light {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: #60a5fa;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: var(--bg-alt);
+      border-color: var(--slate-300);
+      color: var(--slate-700);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      border-color: var(--primary-600);
+      color: var(--primary-600);
+      background: #ffffff;
+    }
+
+    .btn-sm {
+      padding: 9px 18px;
+      font-size: 0.84rem;
+    }
+
+    /* Hero Logo Showcase Card */
+    .hero-logo-card {
+      background: rgba(21, 37, 66, 0.78);
+      border: 1px solid rgba(212, 175, 55, 0.38);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-logo-card img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      background: var(--navy-950);
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-logo-caption {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ==========================================================================
+       Tool Cards Grid Section (Launch Any Tool Like Earlier)
+       ========================================================================== */
+    .tools-section {
+      padding: 72px 0 44px;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 740px;
+      margin: 0 auto 48px;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary-600);
+      background: rgba(37, 99, 235, 0.1);
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 3.2vw, 2.55rem);
+      color: var(--navy-900);
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 1.04rem;
+      color: var(--slate-600);
+    }
+
+    .tools-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+
+    .tool-launch-card {
+      background: var(--bg-white);
+      border: 1px solid var(--slate-200);
+      border-top: 4px solid var(--primary-600);
+      border-radius: var(--radius-md);
+      padding: 26px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .tool-launch-card:hover,
+    .tool-launch-card.active {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary-600);
+    }
+
+    .tool-launch-card.active {
+      background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.16);
+    }
+
+    .tool-icon-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(79, 70, 229, 0.12));
+      color: var(--primary-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      border: 1px solid rgba(37, 99, 235, 0.22);
+    }
+
+    .tool-icon-wrap svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .tool-launch-card h3 {
+      font-size: 1.22rem;
+      color: var(--navy-900);
+      margin-bottom: 8px;
+    }
+
+    .tool-launch-card p {
+      font-size: 0.9rem;
+      color: var(--slate-600);
+      margin-bottom: 20px;
+    }
+
+    .launch-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--navy-900);
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
       transition: var(--transition);
     }
 
-    .sidebar-btn:hover {
-      background: rgba(255, 255, 255, 0.05);
+    .tool-launch-card:hover .launch-link-btn,
+    .tool-launch-card.active .launch-link-btn {
+      background: var(--primary-600);
+    }
+
+    /* ==========================================================================
+       Active Launched Tool Workspace Section
+       ========================================================================== */
+    .workspace-section {
+      padding: 24px 0 88px;
+    }
+
+    .workspace-tabs-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+      background: var(--bg-white);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ws-tab-btn {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--slate-600);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .ws-tab-btn:hover {
+      background: var(--bg-alt);
+      color: var(--navy-900);
+    }
+
+    .ws-tab-btn.active {
+      background: var(--primary-600);
       color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
     }
 
-    .sidebar-btn.active {
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
-      border-color: var(--cyan-400);
-      color: #ffffff;
-      box-shadow: 0 4px 18px rgba(6, 182, 212, 0.2);
-    }
-
-    .sidebar-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      padding: 2px 7px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--cyan-400);
-    }
-
-    /* Tool Panels */
     .tool-panel {
       display: none;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-white);
+      border: 1px solid var(--slate-200);
       border-radius: var(--radius-lg);
-      padding: 36px;
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(16px);
+      padding: 40px;
+      box-shadow: var(--shadow-md);
     }
 
     .tool-panel.active {
@@ -460,36 +590,38 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      padding-bottom: 22px;
+      padding-bottom: 20px;
       margin-bottom: 28px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--slate-200);
     }
 
     .panel-header h2 {
-      font-size: 1.65rem;
-      color: #ffffff;
+      font-size: 1.7rem;
+      color: var(--navy-900);
       margin-bottom: 4px;
     }
 
     .panel-header p {
-      font-size: 0.92rem;
-      color: var(--text-muted);
+      font-size: 0.95rem;
+      color: var(--slate-600);
     }
 
     .panel-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--cyan-400);
-      background: rgba(6, 182, 212, 0.12);
-      border: 1px solid rgba(34, 211, 238, 0.3);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-600);
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(37, 99, 235, 0.25);
       padding: 6px 14px;
       border-radius: 999px;
     }
 
     /* Upload Dropzone */
     .dropzone {
-      border: 2px dashed rgba(56, 189, 248, 0.38);
-      background: rgba(10, 17, 34, 0.65);
+      border: 2px dashed rgba(37, 99, 235, 0.4);
+      background: #f8fafc;
       border-radius: var(--radius-md);
       padding: 36px 24px;
       text-align: center;
@@ -500,8 +632,8 @@
     }
 
     .dropzone:hover {
-      border-color: var(--cyan-400);
-      background: rgba(6, 182, 212, 0.08);
+      border-color: var(--primary-600);
+      background: #eff6ff;
     }
 
     .dropzone input[type='file'] {
@@ -511,27 +643,27 @@
     .dropzone-title {
       font-size: 1.08rem;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--navy-900);
       margin-bottom: 6px;
     }
 
     .dropzone-sub {
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      font-size: 0.88rem;
+      color: var(--slate-600);
     }
 
-    /* Controls & Form Elements */
+    /* Controls & Inputs */
     .controls-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 18px;
       margin-bottom: 22px;
     }
 
     .controls-grid-2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 18px;
       margin-bottom: 22px;
     }
 
@@ -541,22 +673,22 @@
     }
 
     .field-group label {
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: var(--text-slate);
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--navy-900);
     }
 
     .field-group input,
     .field-group select,
     .field-group textarea {
       width: 100%;
-      padding: 11px 14px;
+      padding: 12px 14px;
       border-radius: var(--radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(5, 9, 20, 0.75);
-      color: #ffffff;
+      border: 1px solid var(--slate-300);
+      background: #f8fafc;
+      color: var(--slate-900);
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.94rem;
       transition: var(--transition);
     }
 
@@ -564,65 +696,9 @@
     .field-group select:focus,
     .field-group textarea:focus {
       outline: none;
-      border-color: var(--cyan-400);
-      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 22px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: var(--transition);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--cyan-500), var(--blue-600));
-      color: #ffffff;
-      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 26px rgba(6, 182, 212, 0.48);
-    }
-
-    .btn-emerald {
-      background: linear-gradient(135deg, var(--emerald-500), #059669);
-      color: #ffffff;
-    }
-
-    .btn-emerald:hover:not(:disabled) {
-      transform: translateY(-2px);
-    }
-
-    .btn-ghost {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.18);
-      color: var(--text-white);
-    }
-
-    .btn-ghost:hover:not(:disabled) {
-      border-color: var(--cyan-400);
-      background: rgba(6, 182, 212, 0.14);
-    }
-
-    .btn-sm {
-      padding: 8px 15px;
-      font-size: 0.82rem;
+      border-color: var(--primary-600);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
     .action-bar {
@@ -633,27 +709,27 @@
       margin-top: 16px;
     }
 
-    /* Preview & Output Boxes */
     .preview-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 14px;
       margin: 18px 0;
     }
 
     .preview-item {
-      background: rgba(5, 9, 20, 0.75);
-      border: 1px solid var(--border-subtle);
+      background: #f8fafc;
+      border: 1px solid var(--slate-200);
       border-radius: var(--radius-sm);
       padding: 10px;
       text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-slate);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--slate-700);
     }
 
     .preview-item img {
       width: 100%;
-      height: 95px;
+      height: 96px;
       object-fit: cover;
       border-radius: 6px;
       margin-bottom: 6px;
@@ -662,24 +738,23 @@
     .status-banner {
       display: none;
       margin-top: 16px;
-      padding: 13px 16px;
+      padding: 13px 18px;
       border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      font-weight: 600;
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(52, 211, 153, 0.4);
-      color: var(--emerald-400);
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
     }
 
     .status-banner.visible {
       display: block;
     }
 
-    /* Progress Bar */
     .progress-wrap {
       display: none;
       margin: 16px 0;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--slate-200);
       border-radius: 999px;
       height: 10px;
       overflow: hidden;
@@ -692,14 +767,14 @@
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--cyan-400), var(--indigo-500));
+      background: linear-gradient(90deg, var(--primary-600), var(--indigo-600));
       transition: width 0.25s ease;
     }
 
-    /* Canvas Workspaces (Scanner & Signature) */
+    /* Canvas Workspaces */
     .canvas-stage {
-      background: rgba(5, 9, 20, 0.85);
-      border: 1px solid var(--border-subtle);
+      background: var(--navy-900);
+      border: 1px solid var(--slate-300);
       border-radius: var(--radius-md);
       padding: 20px;
       text-align: center;
@@ -713,17 +788,16 @@
       max-height: 440px;
       margin: 0 auto;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .sig-pad-canvas {
       background: #ffffff;
+      border: 2px solid var(--slate-300);
       border-radius: var(--radius-sm);
       cursor: crosshair;
       touch-action: none;
     }
 
-    /* Entity & Intelligence Cards */
     .intel-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -732,25 +806,26 @@
     }
 
     .intel-stat-box {
-      background: rgba(5, 9, 20, 0.72);
-      border: 1px solid var(--border-subtle);
+      background: #f8fafc;
+      border: 1px solid var(--slate-200);
       border-radius: var(--radius-sm);
-      padding: 14px;
+      padding: 16px;
       text-align: center;
     }
 
     .intel-stat-box strong {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.45rem;
-      color: var(--cyan-400);
+      font-size: 1.5rem;
+      color: var(--primary-600);
     }
 
     .intel-stat-box span {
       font-size: 0.76rem;
-      color: var(--text-muted);
+      font-weight: 700;
+      color: var(--slate-600);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
     }
 
     .entity-pills {
@@ -761,26 +836,29 @@
     }
 
     .entity-pill {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.76rem;
-      padding: 5px 11px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
       border-radius: 999px;
-      background: rgba(6, 182, 212, 0.14);
-      border: 1px solid rgba(34, 211, 238, 0.32);
-      color: var(--cyan-400);
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--primary-600);
     }
 
-    /* About & Support Section */
+    /* ==========================================================================
+       About MVAPS Ecosystem & Support Section
+       ========================================================================== */
     .info-section {
-      padding: 80px 0;
-      background: var(--bg-900);
-      border-top: 1px solid var(--border-subtle);
+      padding: 84px 0;
+      background: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-950) 100%);
+      color: #ffffff;
+      border-top: 1px solid rgba(212, 175, 55, 0.28);
     }
 
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1.1fr;
-      gap: 44px;
+      gap: 48px;
       align-items: start;
     }
 
@@ -791,28 +869,43 @@
     }
 
     .eco-card {
-      background: rgba(17, 28, 53, 0.75);
-      border: 1px solid var(--border-subtle);
+      background: rgba(21, 37, 66, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: var(--radius-md);
-      padding: 20px;
+      padding: 18px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
     }
 
+    .eco-card-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .eco-card-left img {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(212, 175, 55, 0.45);
+    }
+
     .support-form-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-white);
+      color: var(--slate-900);
       border-radius: var(--radius-lg);
-      padding: 34px;
+      padding: 36px;
+      box-shadow: var(--shadow-lg);
     }
 
     .field-error-msg {
       display: none;
       font-size: 0.78rem;
       color: var(--danger);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .field-error-msg.visible {
@@ -821,15 +914,15 @@
 
     .input-invalid {
       border-color: var(--danger) !important;
-      background: rgba(239, 68, 68, 0.1) !important;
+      background: #fff5f5 !important;
     }
 
     /* Warning Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.75);
-      backdrop-filter: blur(6px);
+      background: rgba(7, 14, 26, 0.72);
+      backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -846,35 +939,36 @@
     }
 
     .modal-box {
-      background: var(--bg-900);
-      border: 1px solid var(--border-bright);
-      border-top: 4px solid var(--danger);
+      background: var(--bg-white);
+      color: var(--slate-900);
+      border-top: 5px solid var(--danger);
       border-radius: var(--radius-lg);
       max-width: 440px;
       width: 100%;
-      padding: 30px 26px;
+      padding: 32px 28px;
       text-align: center;
       box-shadow: var(--shadow-lg);
     }
 
     .modal-box h4 {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       margin-bottom: 10px;
+      color: var(--navy-900);
     }
 
     .modal-box p {
-      font-size: 0.92rem;
-      color: var(--text-slate);
-      margin-bottom: 20px;
+      font-size: 0.94rem;
+      color: var(--slate-600);
+      margin-bottom: 22px;
     }
 
     /* Footer */
     .footer {
-      background: var(--bg-950);
-      border-top: 1px solid var(--border-subtle);
-      padding: 48px 0 32px;
-      color: var(--text-muted);
-      font-size: 0.88rem;
+      background: var(--navy-950);
+      color: #94a3b8;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 44px 0 32px;
+      font-size: 0.9rem;
     }
 
     .footer-inner {
@@ -886,20 +980,12 @@
     }
 
     @media (max-width: 1024px) {
-      .quick-tools-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .workspace-shell,
+      .hero-grid,
       .info-grid {
         grid-template-columns: 1fr;
       }
 
-      .workspace-sidebar {
-        position: static;
-      }
-
-      .sidebar-nav {
+      .tools-cards-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
@@ -912,214 +998,269 @@
       .nav-links {
         display: none;
         position: absolute;
-        top: 76px;
+        top: 78px;
         left: 0;
         right: 0;
-        background: var(--bg-900);
+        background: var(--navy-900);
         flex-direction: column;
-        padding: 20px;
-        border-bottom: 1px solid var(--border-subtle);
+        padding: 22px;
+        gap: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .nav-links.open {
         display: flex;
       }
 
-      .quick-tools-grid,
-      .sidebar-nav,
+      .tools-cards-grid,
       .controls-grid,
       .controls-grid-2,
       .intel-grid {
         grid-template-columns: 1fr;
       }
 
-      .tool-panel {
-        padding: 24px 18px;
+      .tool-panel,
+      .support-form-card {
+        padding: 26px 18px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- Navbar with Original SnapDocs AI Logo -->
   <header class="navbar">
     <div class="container nav-inner">
       <a href="#top" class="brand">
-        <svg class="brand-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sdGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#22d3ee" />
-              <stop offset="50%" stop-color="#6366f1" />
-              <stop offset="100%" stop-color="#a855f7" />
-            </linearGradient>
-          </defs>
-          <rect x="6" y="4" width="30" height="38" rx="6" fill="#0d162b" stroke="url(#sdGrad)" stroke-width="2.5" />
-          <path d="M14 14H28M14 21H28M14 28H22" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" />
-          <circle cx="34" cy="34" r="10" fill="url(#sdGrad)" />
-          <path d="M30 34L33 37L39 31" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <div class="brand-text">
-          <span class="brand-name">SnapDocs AI</span>
-          <span class="brand-by">By MVAPS &amp; Company</span>
-        </div>
+        <img
+          src="https://i.postimg.cc/mZMfX7tV/Screenshot-2025-09-22-205658.png"
+          alt="SnapDocs AI Logo"
+          class="brand-logo-img"
+        />
+        <span class="brand-title">SnapDocs <span>AI</span></span>
       </a>
 
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#workspace">Document Hub</a></li>
+        <li><a href="#top">Home</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#workspace">Workspace</a></li>
         <li><a href="#about">About &amp; Support</a></li>
         <li><a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer">MVAPS &amp; Company ↗</a></li>
         <li><a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer">Project Nest AI ↗</a></li>
-        <li>
-          <span class="privacy-pill">
-            <span class="live-dot"></span>100% On-Device Privacy
-          </span>
-        </li>
+        <li><a href="#tools" class="nav-cta">Launch Tools</a></li>
       </ul>
     </div>
   </header>
 
-  <!-- Hero & Quick Tool Selector -->
+  <!-- Hero Section with Original SnapDocs AI Logo & Identity -->
   <section class="hero" id="top">
-    <div class="container hero-content reveal is-visible">
-      <div class="hero-badge">
-        <span class="live-dot"></span>
-        All-in-One Document Intelligence &amp; PDF Processing Hub
+    <div class="container hero-grid">
+      <div class="reveal is-visible">
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          AI-Powered Document Processing Hub
+        </div>
+        <h1>
+          SnapDocs <span>AI</span>
+        </h1>
+        <p>
+          Convert photos to PDFs, transform image formats, scan documents, extract text using AI
+          OCR, merge &amp; split PDFs, and summarize documents effortlessly—100% free and private in
+          your browser.
+        </p>
+        <div class="btn-row">
+          <a href="#tools" class="btn btn-primary">Explore &amp; Launch Tools</a>
+          <a href="#workspace" class="btn btn-gold">Open Active Workspace</a>
+        </div>
       </div>
-      <h1>
-        Every Document Tool You Need, <span>Powered by AI.</span>
-      </h1>
-      <p>
-        Convert, merge, split, scan, compress, sign, extract OCR data, and summarize documents
-        instantly in your browser—with zero watermarks, zero daily limits, and 100% local privacy.
-      </p>
 
-      <!-- 8 Quick Launcher Cards -->
-      <div class="quick-tools-grid" id="quickToolsGrid">
-        <button type="button" class="quick-tool-card active" data-tool="img2pdf">
-          <div class="qt-icon">PDF</div>
-          <div class="qt-meta">
-            <strong>Image to PDF Pro</strong>
-            <span>Multi-image to A4/Letter PDF with margins &amp; layout</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="mergeSplit">
-          <div class="qt-icon">M&amp;S</div>
-          <div class="qt-meta">
-            <strong>Merge, Split &amp; Rotate</strong>
-            <span>Combine PDFs, extract page ranges, or rotate pages</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="scanner">
-          <div class="qt-icon">SCN</div>
-          <div class="qt-meta">
-            <strong>AI Document Scanner</strong>
-            <span>Magic Color, B&amp;W scan, shadow removal &amp; camera</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="ocr">
-          <div class="qt-icon">OCR</div>
-          <div class="qt-meta">
-            <strong>AI OCR &amp; Data Extractor</strong>
-            <span>Extract text, emails, phones, amounts &amp; redact PII</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="summarizer">
-          <div class="qt-icon">SUM</div>
-          <div class="qt-meta">
-            <strong>AI Doc Summarizer &amp; Q&amp;A</strong>
-            <span>Executive summary, key takeaways &amp; Ask Document</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="converter">
-          <div class="qt-icon">KB</div>
-          <div class="qt-meta">
-            <strong>Converter &amp; KB Resizer</strong>
-            <span>JPG/PNG/WEBP converter &amp; 20KB/50KB/100KB compressor</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="sign">
-          <div class="qt-icon">SGN</div>
-          <div class="qt-meta">
-            <strong>e-Sign &amp; Watermark PDF</strong>
-            <span>Draw signature, stamp watermark &amp; number pages</span>
-          </div>
-        </button>
-
-        <button type="button" class="quick-tool-card" data-tool="pdf2img">
-          <div class="qt-icon">QR</div>
-          <div class="qt-meta">
-            <strong>PDF to Image &amp; QR Studio</strong>
-            <span>Export PDF pages as PNGs &amp; generate document QR codes</span>
-          </div>
-        </button>
+      <div class="hero-logo-card reveal is-visible delay-1">
+        <img
+          src="https://i.postimg.cc/mZMfX7tV/Screenshot-2025-09-22-205658.png"
+          alt="SnapDocs AI Official Logo"
+        />
+        <div class="hero-logo-caption">
+          <span><strong style="color: #fff;">SnapDocs AI</strong> · By MVAPS &amp; Company</span>
+          <span style="color: #34d399; font-weight: 700;">● 100% Local Privacy</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Interactive Workspace -->
-  <section class="workspace-section" id="workspace">
-    <div class="container workspace-shell">
+  <!-- Tools Grid Section (Original 4 Core Tools + 4 New Power Tools with Visual Logos & Launch Buttons) -->
+  <section class="tools-section" id="tools">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">All-in-One Document Suite</span>
+        <h2 class="section-title">Choose a Tool to Launch</h2>
+        <p class="section-subtitle">
+          Click any tool card below to launch its workspace immediately.
+        </p>
+      </div>
 
-      <!-- Left Sidebar Navigation -->
-      <aside class="workspace-sidebar">
-        <span class="sidebar-label">Document Suite</span>
-        <div class="sidebar-nav" id="sidebarNav">
-          <button type="button" class="sidebar-btn active" data-tool="img2pdf">
-            <span>Image to PDF Pro</span>
-            <span class="sidebar-tag">PDF</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="mergeSplit">
-            <span>Merge, Split &amp; Rotate</span>
-            <span class="sidebar-tag">SUITE</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="scanner">
-            <span>AI Document Scanner</span>
-            <span class="sidebar-tag">SCAN</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="ocr">
-            <span>AI OCR &amp; Extractor</span>
-            <span class="sidebar-tag">AI OCR</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="summarizer">
-            <span>AI Summarizer &amp; Q&amp;A</span>
-            <span class="sidebar-tag">INTEL</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="converter">
-            <span>Format &amp; KB Compressor</span>
-            <span class="sidebar-tag">IMG/KB</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="sign">
-            <span>Sign &amp; Watermark PDF</span>
-            <span class="sidebar-tag">SIGN</span>
-          </button>
-          <button type="button" class="sidebar-btn" data-tool="pdf2img">
-            <span>PDF to Image &amp; QR</span>
-            <span class="sidebar-tag">EXPORT</span>
-          </button>
+      <div class="tools-cards-grid" id="quickToolsGrid">
+        <!-- 1. Image to PDF (Original Core Tool 1) -->
+        <div class="tool-launch-card active reveal delay-1" data-tool="img2pdf">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <rect x="8" y="12" width="8" height="6" rx="1" />
+              </svg>
+            </div>
+            <h3>Image to PDF</h3>
+            <p>Convert multiple images into a single PDF file with custom page size and margins.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
         </div>
-      </aside>
 
-      <!-- Right Active Tool Container -->
+        <!-- 2. Format Converter (Original Core Tool 2) -->
+        <div class="tool-launch-card reveal delay-2" data-tool="converter">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 3 21 3 21 8" />
+                <line x1="4" y1="20" x2="21" y2="3" />
+                <polyline points="21 16 21 21 16 21" />
+                <line x1="15" y1="15" x2="21" y2="21" />
+                <line x1="4" y1="4" x2="9" y2="9" />
+              </svg>
+            </div>
+            <h3>Format Converter</h3>
+            <p>Convert images between JPG, PNG, and WEBP or compress to 20KB, 50KB, or 100KB.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+
+        <!-- 3. Document Scanner (Original Core Tool 3) -->
+        <div class="tool-launch-card reveal delay-3" data-tool="scanner">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+            </div>
+            <h3>Document Scanner</h3>
+            <p>Enhance and scan document images with Magic Color, B&amp;W photocopy, or live camera.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+
+        <!-- 4. Text Extractor (Original Core Tool 4) -->
+        <div class="tool-launch-card reveal delay-4" data-tool="ocr">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 7V4h3M20 7V4h-3M4 17v3h3M20 17v3h-3" />
+                <line x1="7" y1="12" x2="17" y2="12" />
+                <line x1="7" y1="8" x2="13" y2="8" />
+                <line x1="7" y1="16" x2="15" y2="16" />
+              </svg>
+            </div>
+            <h3>Text Extractor</h3>
+            <p>Extract text, emails, phones, and amounts from images or PDFs using AI OCR.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+
+        <!-- 5. Merge, Split & Rotate PDF -->
+        <div class="tool-launch-card reveal delay-1" data-tool="mergeSplit">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="9" rx="1" />
+                <rect x="14" y="3" width="7" height="9" rx="1" />
+                <path d="M12 15v6M9 18l3 3 3-3" />
+              </svg>
+            </div>
+            <h3>Merge, Split &amp; Rotate PDF</h3>
+            <p>Combine multiple PDF files into one, extract custom page ranges, or rotate pages.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+
+        <!-- 6. AI Document Summarizer & Q&A -->
+        <div class="tool-launch-card reveal delay-2" data-tool="summarizer">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            </div>
+            <h3>AI Document Summarizer</h3>
+            <p>Generate executive summaries, key bullet takeaways, and ask questions on any document.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+
+        <!-- 7. e-Sign & Watermark PDF -->
+        <div class="tool-launch-card reveal delay-3" data-tool="sign">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            </div>
+            <h3>e-Sign &amp; Watermark PDF</h3>
+            <p>Draw your signature on screen, stamp custom watermarks, and add page numbers.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+
+        <!-- 8. PDF to Image & QR Studio -->
+        <div class="tool-launch-card reveal delay-4" data-tool="pdf2img">
+          <div>
+            <div class="tool-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+              </svg>
+            </div>
+            <h3>PDF to Image &amp; QR Studio</h3>
+            <p>Render PDF pages into high-resolution PNG images or generate document QR codes.</p>
+          </div>
+          <button type="button" class="launch-link-btn">Launch Tool →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Active Launched Tool Workspace -->
+  <section class="workspace-section" id="workspace">
+    <div class="container">
+
+      <!-- Quick Switcher Bar -->
+      <div class="workspace-tabs-bar" id="sidebarNav">
+        <button type="button" class="ws-tab-btn active" data-tool="img2pdf">Image to PDF</button>
+        <button type="button" class="ws-tab-btn" data-tool="converter">Format Converter</button>
+        <button type="button" class="ws-tab-btn" data-tool="scanner">Document Scanner</button>
+        <button type="button" class="ws-tab-btn" data-tool="ocr">Text Extractor</button>
+        <button type="button" class="ws-tab-btn" data-tool="mergeSplit">Merge &amp; Split PDF</button>
+        <button type="button" class="ws-tab-btn" data-tool="summarizer">AI Summarizer</button>
+        <button type="button" class="ws-tab-btn" data-tool="sign">e-Sign &amp; Watermark</button>
+        <button type="button" class="ws-tab-btn" data-tool="pdf2img">PDF to Image &amp; QR</button>
+      </div>
+
+      <!-- Tool Panels Container -->
       <main id="toolPanelsContainer">
 
         <!-- ===================================================================
-             TOOL 1: Image to PDF Pro
+             TOOL 1: Image to PDF
              =================================================================== -->
         <div class="tool-panel active" id="panel-img2pdf">
           <div class="panel-header">
             <div>
-              <h2>Image to PDF Pro</h2>
-              <p>Convert multiple photos or scanned pages into a clean, standardized PDF document.</p>
+              <h2>Image to PDF</h2>
+              <p>Convert multiple images into a single PDF file.</p>
             </div>
-            <span class="panel-badge">Multi-Image Builder</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
           <label class="dropzone" for="imgToPdfInput">
@@ -1170,73 +1311,68 @@
         </div>
 
         <!-- ===================================================================
-             TOOL 2: Merge, Split & Rotate PDF Suite
+             TOOL 2: Format Converter & Target-KB Resizer
              =================================================================== -->
-        <div class="tool-panel" id="panel-mergeSplit">
+        <div class="tool-panel" id="panel-converter">
           <div class="panel-header">
             <div>
-              <h2>Merge, Split &amp; Rotate PDF Suite</h2>
-              <p>Combine multiple PDF files into one, extract custom page ranges, or rotate pages.</p>
+              <h2>Format Converter</h2>
+              <p>Convert images between different formats or compress to exact 20 KB / 50 KB / 100 KB limits.</p>
             </div>
-            <span class="panel-badge">PDF Power Suite</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
-         
-          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--cyan-400);">1. Merge Multiple PDFs</h3>
-          <label class="dropzone" for="mergePdfInput">
-            <input type="file" id="mergePdfInput" accept="application/pdf" multiple />
-            <div class="dropzone-title">Select 2 or More PDF Files to Merge</div>
-            <div class="dropzone-sub" id="mergePdfFileListText">No PDF files selected yet</div>
-          </label>
-          <div class="action-bar" style="margin-bottom: 36px;">
-            <button type="button" class="btn btn-primary" id="mergePdfsBtn">
-              Merge &amp; Download Combined PDF
-            </button>
-          </div>
-
-         
-          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--cyan-400);">2. Split Pages or Rotate PDF</h3>
-          <label class="dropzone" for="splitPdfInput">
-            <input type="file" id="splitPdfInput" accept="application/pdf" />
-            <div class="dropzone-title">Select a PDF File to Split or Rotate</div>
-            <div class="dropzone-sub" id="splitPdfInfoText">Upload a PDF to see total page count</div>
+          <label class="dropzone" for="converterInput">
+            <input type="file" id="converterInput" accept="image/*" />
+            <div class="dropzone-title">Upload Image to Convert or Compress</div>
+            <div class="dropzone-sub" id="converterOriginalInfo">Supports PNG, JPG, WEBP, BMP</div>
           </label>
 
-          <div class="controls-grid-2">
+          <div class="controls-grid">
             <div class="field-group">
-              <label for="splitPageRange">Page Range to Extract (e.g., 1-3, 5)</label>
-              <input type="text" id="splitPageRange" placeholder="Leave blank for all pages (e.g., 1-2, 4)" />
-            </div>
-
-            <div class="field-group">
-              <label for="rotatePdfAngle">Rotate Pages</label>
-              <select id="rotatePdfAngle">
-                <option value="0">0° (Keep Original Orientation)</option>
-                <option value="90">Rotate 90° Clockwise</option>
-                <option value="180">Rotate 180° (Upside Down)</option>
-                <option value="270">Rotate 270° Counter-Clockwise</option>
+              <label for="targetFormatSelect">Output Format</label>
+              <select id="targetFormatSelect">
+                <option value="image/jpeg">JPG (Best for Small KB Size)</option>
+                <option value="image/png">PNG (Lossless Quality)</option>
+                <option value="image/webp">WEBP (Modern High Efficiency)</option>
               </select>
+            </div>
+
+            <div class="field-group">
+              <label for="targetKbPreset">Target File Size Preset</label>
+              <select id="targetKbPreset">
+                <option value="0">Manual Quality Slider</option>
+                <option value="20">Exam / Signature (&lt; 20 KB)</option>
+                <option value="50">Passport Photo (&lt; 50 KB)</option>
+                <option value="100">Official Document (&lt; 100 KB)</option>
+                <option value="200">High-Clarity Upload (&lt; 200 KB)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="converterQuality">Quality (<span id="qualityValLabel">85</span>%)</label>
+              <input type="range" id="converterQuality" min="10" max="100" value="85" />
             </div>
           </div>
 
           <div class="action-bar">
-            <button type="button" class="btn btn-primary" id="processSplitRotateBtn">
-              Extract / Rotate &amp; Download PDF
+            <button type="button" class="btn btn-primary" id="runConverterBtn">
+              Convert / Compress &amp; Download
             </button>
           </div>
-          <div class="status-banner" id="mergeSplitStatus"></div>
+          <div class="status-banner" id="converterStatus"></div>
         </div>
 
         <!-- ===================================================================
-             TOOL 3: Pro AI Document Scanner Studio
+             TOOL 3: Document Scanner
              =================================================================== -->
         <div class="tool-panel" id="panel-scanner">
           <div class="panel-header">
             <div>
-              <h2>Pro AI Document Scanner</h2>
-              <p>Enhance document photos with Magic Color, crisp B&amp;W photocopy mode, or live camera scan.</p>
+              <h2>Document Scanner</h2>
+              <p>Enhance and scan document images with Magic Color, B&amp;W photocopy mode, or live camera.</p>
             </div>
-            <span class="panel-badge">Vision Enhancement</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
           <div class="action-bar" style="margin-bottom: 18px;">
@@ -1295,15 +1431,15 @@
         </div>
 
         <!-- ===================================================================
-             TOOL 4: AI OCR & Smart Data Extractor
+             TOOL 4: Text Extractor (AI OCR)
              =================================================================== -->
         <div class="tool-panel" id="panel-ocr">
           <div class="panel-header">
             <div>
-              <h2>AI OCR &amp; Smart Data Extractor</h2>
-              <p>Extract text from scanned images or PDFs, detect structured entities, and redact sensitive PII.</p>
+              <h2>Text Extractor</h2>
+              <p>Extract text from images and PDFs using AI OCR, detect structured fields, and redact PII.</p>
             </div>
-            <span class="panel-badge">OCR + Entity AI</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
           <label class="dropzone" for="ocrInput">
@@ -1314,20 +1450,20 @@
 
           <div class="action-bar">
             <button type="button" class="btn btn-primary" id="runOcrBtn">
-              Run AI Text &amp; Data Extraction
+              Extract Text with AI OCR
             </button>
             <button type="button" class="btn btn-ghost" id="redactPiiBtn">
               Redact Sensitive PII (Emails/Phones/IDs)
             </button>
             <button type="button" class="btn btn-emerald" id="sendToSummarizerBtn">
-              Send Text to AI Summarizer →
+              Summarize Extracted Text →
             </button>
           </div>
 
           <div class="progress-wrap" id="ocrProgressWrap">
             <div class="progress-fill" id="ocrProgressFill"></div>
           </div>
-          <p id="ocrProgressLabel" class="mono" style="font-size: 0.82rem; color: var(--cyan-400); margin: 8px 0;"></p>
+          <p id="ocrProgressLabel" style="font-size: 0.85rem; font-weight: 700; color: var(--primary-600); margin: 8px 0;"></p>
 
           <div class="field-group" style="margin-top: 16px;">
             <label for="ocrOutputText">Extracted Text (Editable)</label>
@@ -1338,9 +1474,8 @@
             ></textarea>
           </div>
 
-          <!-- Smart Detected Entities -->
           <div style="margin-top: 18px;">
-            <strong style="font-size: 0.9rem; color: var(--cyan-400);">
+            <strong style="font-size: 0.9rem; color: var(--navy-900);">
               ✦ Smart Detected Entities (Emails, Phones, Dates, Amounts):
             </strong>
             <div class="entity-pills" id="ocrEntityPills">
@@ -1352,26 +1487,82 @@
             <button type="button" class="btn btn-ghost btn-sm" id="copyOcrTextBtn">Copy Text</button>
             <button type="button" class="btn btn-primary btn-sm" id="downloadOcrTxtBtn">Download .TXT</button>
             <button type="button" class="btn btn-primary btn-sm" id="downloadOcrDocBtn">Download .DOC (Word)</button>
-            <button type="button" class="btn btn-emerald btn-sm" id="downloadOcrJsonBtn">Download Structured .JSON</button>
+            <button type="button" class="btn btn-emerald btn-sm" id="downloadOcrJsonBtn">Download .JSON</button>
           </div>
         </div>
 
         <!-- ===================================================================
-             TOOL 5: AI Document Summarizer & Q&A Intelligence
+             TOOL 5: Merge, Split & Rotate PDF
+             =================================================================== -->
+        <div class="tool-panel" id="panel-mergeSplit">
+          <div class="panel-header">
+            <div>
+              <h2>Merge, Split &amp; Rotate PDF</h2>
+              <p>Combine multiple PDF files into one, extract custom page ranges, or rotate pages.</p>
+            </div>
+            <span class="panel-badge">SnapDocs AI Tool</span>
+          </div>
+
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--primary-600);">1. Merge Multiple PDFs</h3>
+          <label class="dropzone" for="mergePdfInput">
+            <input type="file" id="mergePdfInput" accept="application/pdf" multiple />
+            <div class="dropzone-title">Select 2 or More PDF Files to Merge</div>
+            <div class="dropzone-sub" id="mergePdfFileListText">No PDF files selected yet</div>
+          </label>
+          <div class="action-bar" style="margin-bottom: 36px;">
+            <button type="button" class="btn btn-primary" id="mergePdfsBtn">
+              Merge &amp; Download Combined PDF
+            </button>
+          </div>
+
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--primary-600);">2. Split Pages or Rotate PDF</h3>
+          <label class="dropzone" for="splitPdfInput">
+            <input type="file" id="splitPdfInput" accept="application/pdf" />
+            <div class="dropzone-title">Select a PDF File to Split or Rotate</div>
+            <div class="dropzone-sub" id="splitPdfInfoText">Upload a PDF to see total page count</div>
+          </label>
+
+          <div class="controls-grid-2">
+            <div class="field-group">
+              <label for="splitPageRange">Page Range to Extract (e.g., 1-3, 5)</label>
+              <input type="text" id="splitPageRange" placeholder="Leave blank for all pages (e.g., 1-2, 4)" />
+            </div>
+
+            <div class="field-group">
+              <label for="rotatePdfAngle">Rotate Pages</label>
+              <select id="rotatePdfAngle">
+                <option value="0">0° (Keep Original Orientation)</option>
+                <option value="90">Rotate 90° Clockwise</option>
+                <option value="180">Rotate 180° (Upside Down)</option>
+                <option value="270">Rotate 270° Counter-Clockwise</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary" id="processSplitRotateBtn">
+              Extract / Rotate &amp; Download PDF
+            </button>
+          </div>
+          <div class="status-banner" id="mergeSplitStatus"></div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 6: AI Document Summarizer & Q&A
              =================================================================== -->
         <div class="tool-panel" id="panel-summarizer">
           <div class="panel-header">
             <div>
-              <h2>AI Document Summarizer &amp; Q&amp;A Intelligence</h2>
-              <p>Distil long PDFs or text into an executive summary, key takeaways, action items, and instant Q&amp;A.</p>
+              <h2>AI Document Summarizer &amp; Q&amp;A</h2>
+              <p>Distil long PDFs or text into an executive summary, key takeaways, and instant Q&amp;A.</p>
             </div>
-            <span class="panel-badge">Document Intelligence</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
           <div class="controls-grid-2">
             <label class="dropzone" for="sumFileInput" style="margin-bottom: 0; padding: 20px;">
               <input type="file" id="sumFileInput" accept="application/pdf,text/plain" />
-              <div class="dropzone-title" style="font-size: 0.95rem;">Upload PDF or .TXT Document</div>
+              <div class="dropzone-title" style="font-size: 0.98rem;">Upload PDF or .TXT Document</div>
               <div class="dropzone-sub" id="sumFileLabel">Automatically extracts all text for analysis</div>
             </label>
 
@@ -1397,7 +1588,6 @@
             ></textarea>
           </div>
 
-          <!-- Document Telemetry Stats -->
           <div class="intel-grid">
             <div class="intel-stat-box">
               <strong id="statWords">0</strong>
@@ -1417,7 +1607,6 @@
             </div>
           </div>
 
-          <!-- Ask Your Document Q&A -->
           <div class="controls-grid-2" style="margin-top: 20px;">
             <div class="field-group">
               <label for="docQuestionInput">Ask Your Document (Keyword or Question Search)</label>
@@ -1447,73 +1636,20 @@
 
           <div class="action-bar">
             <button type="button" class="btn btn-primary btn-sm" id="copySummaryBtn">Copy Summary</button>
-            <button type="button" class="btn btn-emerald btn-sm" id="downloadSummaryTxtBtn">Download Summary Report (.TXT)</button>
+            <button type="button" class="btn btn-emerald btn-sm" id="downloadSummaryTxtBtn">Download Summary (.TXT)</button>
           </div>
         </div>
 
         <!-- ===================================================================
-             TOOL 6: Format Converter & Target-KB Compressor
-             =================================================================== -->
-        <div class="tool-panel" id="panel-converter">
-          <div class="panel-header">
-            <div>
-              <h2>Universal Format Converter &amp; Target-KB Compressor</h2>
-              <p>Convert between JPG, PNG, WEBP, and PDF, or compress images to exact 20 KB / 50 KB / 100 KB limits.</p>
-            </div>
-            <span class="panel-badge">Format &amp; Size Control</span>
-          </div>
-
-          <label class="dropzone" for="converterInput">
-            <input type="file" id="converterInput" accept="image/*" />
-            <div class="dropzone-title">Upload Image to Convert or Compress</div>
-            <div class="dropzone-sub" id="converterOriginalInfo">Supports PNG, JPG, WEBP, BMP</div>
-          </label>
-
-          <div class="controls-grid">
-            <div class="field-group">
-              <label for="targetFormatSelect">Output Format</label>
-              <select id="targetFormatSelect">
-                <option value="image/jpeg">JPG (Best for Small KB Size)</option>
-                <option value="image/webp">WEBP (Modern High Efficiency)</option>
-                <option value="image/png">PNG (Lossless Quality)</option>
-              </select>
-            </div>
-
-            <div class="field-group">
-              <label for="targetKbPreset">Target File Size Preset</label>
-              <select id="targetKbPreset">
-                <option value="0">Manual Quality Slider</option>
-                <option value="20">Exam / Signature (&lt; 20 KB)</option>
-                <option value="50">Passport Photo (&lt; 50 KB)</option>
-                <option value="100">Official Document (&lt; 100 KB)</option>
-                <option value="200">High-Clarity Upload (&lt; 200 KB)</option>
-              </select>
-            </div>
-
-            <div class="field-group">
-              <label for="converterQuality">Quality (<span id="qualityValLabel">85</span>%)</label>
-              <input type="range" id="converterQuality" min="10" max="100" value="85" />
-            </div>
-          </div>
-
-          <div class="action-bar">
-            <button type="button" class="btn btn-primary" id="runConverterBtn">
-              Convert / Compress &amp; Download
-            </button>
-          </div>
-          <div class="status-banner" id="converterStatus"></div>
-        </div>
-
-        <!-- ===================================================================
-             TOOL 7: Sign, Stamp & Watermark PDF
+             TOOL 7: e-Sign & Watermark PDF
              =================================================================== -->
         <div class="tool-panel" id="panel-sign">
           <div class="panel-header">
             <div>
-              <h2>e-Sign, Stamp &amp; Watermark PDF</h2>
+              <h2>e-Sign &amp; Watermark PDF</h2>
               <p>Draw your signature on screen, stamp a custom watermark, and add page numbers to any PDF.</p>
             </div>
-            <span class="panel-badge">e-Signature &amp; Security</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
           <label class="dropzone" for="signPdfInput">
@@ -1548,7 +1684,7 @@
 
           <div class="field-group">
             <label>Draw Your Signature Below (Placed on Bottom-Right of Last Page)</label>
-            <div class="canvas-stage" style="padding: 14px;">
+            <div class="canvas-stage" style="padding: 14px; background: #f1f5f9;">
               <canvas id="sigPadCanvas" class="sig-pad-canvas" width="460" height="150"></canvas>
             </div>
           </div>
@@ -1563,19 +1699,18 @@
         </div>
 
         <!-- ===================================================================
-             TOOL 8: PDF to Images & Document QR Code Studio
+             TOOL 8: PDF to Image & QR Studio
              =================================================================== -->
         <div class="tool-panel" id="panel-pdf2img">
           <div class="panel-header">
             <div>
-              <h2>PDF to Images &amp; Document QR Studio</h2>
-              <p>Render PDF pages into high-resolution PNG images or generate a downloadable verification QR code.</p>
+              <h2>PDF to Image &amp; QR Studio</h2>
+              <p>Render PDF pages into high-resolution PNG images or generate a downloadable document QR code.</p>
             </div>
-            <span class="panel-badge">Export &amp; QR</span>
+            <span class="panel-badge">SnapDocs AI Tool</span>
           </div>
 
-          <!-- Part 1: PDF to Images -->
-          <h3 style="font-size: 1.12rem; color: var(--cyan-400); margin-bottom: 12px;">1. Convert PDF Pages to PNG Images</h3>
+          <h3 style="font-size: 1.12rem; color: var(--primary-600); margin-bottom: 12px;">1. Convert PDF Pages to PNG Images</h3>
           <label class="dropzone" for="pdfToImgInput">
             <input type="file" id="pdfToImgInput" accept="application/pdf" />
             <div class="dropzone-title">Upload PDF to Render Pages as Images</div>
@@ -1583,8 +1718,7 @@
           </label>
           <div class="preview-grid" id="pdfToImgGallery"></div>
 
-          <!-- Part 2: Document QR Code Studio -->
-          <h3 style="font-size: 1.12rem; color: var(--cyan-400); margin: 32px 0 12px;">2. Document Verification QR Code Generator</h3>
+          <h3 style="font-size: 1.12rem; color: var(--primary-600); margin: 32px 0 12px;">2. Document Verification QR Code Generator</h3>
           <div class="controls-grid-2">
             <div class="field-group">
               <label for="qrTextInput">Document URL, Verification ID, or Text</label>
@@ -1615,8 +1749,10 @@
     <div class="container info-grid reveal">
       <div>
         <div class="hero-badge">An MVAPS &amp; Company Product</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 14px;">Built for Speed, Accuracy &amp; Complete Privacy.</h2>
-        <p style="color: var(--text-slate); margin-bottom: 18px;">
+        <h2 style="font-size: 2.1rem; margin-bottom: 14px; color: #fff;">
+          Built for Speed, Accuracy &amp; Complete Privacy.
+        </h2>
+        <p style="color: #cbd5e1; margin-bottom: 18px;">
           Founded in Nagpur on May 20, 2024, <strong>MVAPS &amp; Company</strong> builds practical,
           high-impact software products and digital solutions. <strong>SnapDocs AI</strong> processes
           your documents locally in your browser so sensitive files never leave your device.
@@ -1624,33 +1760,45 @@
 
         <div class="ecosystem-cards">
           <div class="eco-card">
-            <div>
-              <strong style="display: block; font-size: 1.05rem;">MVAPS &amp; Company</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted);">Parent Organisation &amp; Connected Ecosystem</span>
+            <div class="eco-card-left">
+              <img
+                src="https://i.postimg.cc/RZYgxbY3/Screenshot-2025-09-27-114254.png"
+                alt="MVAPS & Company Logo"
+              />
+              <div>
+                <strong style="display: block; font-size: 1.05rem; color: #fff;">MVAPS &amp; Company</strong>
+                <span style="font-size: 0.85rem; color: #94a3b8;">Parent Organisation &amp; Connected Ecosystem</span>
+              </div>
             </div>
-            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
-              Visit Website ↗
+            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm">
+              Launch Website ↗
             </a>
           </div>
 
           <div class="eco-card">
-            <div>
-              <strong style="display: block; font-size: 1.05rem;">Project Nest AI</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted);">Custom AI, Web, Mobile &amp; Student Project Delivery</span>
+            <div class="eco-card-left">
+              <img
+                src="https://i.postimg.cc/mZMfX7tV/Screenshot-2025-09-22-205658.png"
+                alt="SnapDocs AI Logo"
+              />
+              <div>
+                <strong style="display: block; font-size: 1.05rem; color: #fff;">Project Nest AI</strong>
+                <span style="font-size: 0.85rem; color: #94a3b8;">Custom AI, Web, Mobile &amp; Student Project Delivery</span>
+              </div>
             </div>
-            <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
               Launch Project Nest ↗
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Direct Feature Request / Customer Inquiry Form to mvapscompany@gmail.com -->
+      <!-- Direct Support Form to mvapscompany@gmail.com -->
       <div class="support-form-card">
-        <h3 style="font-size: 1.4rem; margin-bottom: 6px;">Request a Feature or Get Support</h3>
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 6px; color: var(--navy-900);">Get In Touch / Support</h3>
+        <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 20px;">
           Need a custom enterprise document workflow or have feedback on SnapDocs AI? Send a message
-          directly to our engineering team.
+          directly to our team.
         </p>
 
         <form
@@ -1715,7 +1863,14 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-inner">
-      <span>&copy; 2024–2026 SnapDocs AI by MVAPS &amp; Company. All rights reserved.</span>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img
+          src="https://i.postimg.cc/mZMfX7tV/Screenshot-2025-09-22-205658.png"
+          alt="SnapDocs AI Logo"
+          style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover;"
+        />
+        <span>&copy; 2024–2026 SnapDocs AI by MVAPS &amp; Company. All rights reserved.</span>
+      </div>
       <div style="display: flex; gap: 20px;">
         <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer">MVAPS &amp; Company ↗</a>
         <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer">Project Nest AI ↗</a>
@@ -1724,18 +1879,18 @@
   </footer>
 
   <script>
-    // Configure PDF.js worker
     if (window.pdfjsLib) {
       window.pdfjsLib.GlobalWorkerOptions.workerSrc =
         'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    // =========================================================================
     // 1. Mobile Navbar & Scroll Reveal
-    // =========================================================================
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach((link) =>
+      link.addEventListener('click', () => navLinks.classList.remove('open'))
+    );
 
     const revealObserver = new IntersectionObserver(
       (entries) => {
@@ -1748,31 +1903,28 @@
     );
     document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
-    // =========================================================================
-    // 2. Interactive Tool Switcher (Quick Cards + Sidebar)
-    // =========================================================================
-    const quickCards = document.querySelectorAll('.quick-tool-card');
-    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+    // 2. Tool Launching System (Cards + Workspace Tabs)
+    const launchCards = document.querySelectorAll('.tool-launch-card');
+    const wsTabBtns = document.querySelectorAll('.ws-tab-btn');
     const toolPanels = document.querySelectorAll('.tool-panel');
 
-    function switchTool(toolId) {
-      quickCards.forEach((c) => c.classList.toggle('active', c.dataset.tool === toolId));
-      sidebarBtns.forEach((b) => b.classList.toggle('active', b.dataset.tool === toolId));
+    function switchTool(toolId, scrollToWorkspace = false) {
+      launchCards.forEach((c) => c.classList.toggle('active', c.dataset.tool === toolId));
+      wsTabBtns.forEach((b) => b.classList.toggle('active', b.dataset.tool === toolId));
       toolPanels.forEach((p) => p.classList.toggle('active', p.id === `panel-${toolId}`));
+      if (scrollToWorkspace) {
+        document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
-    quickCards.forEach((card) => {
-      card.addEventListener('click', () => {
-        switchTool(card.dataset.tool);
-        document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
-      });
+    launchCards.forEach((card) => {
+      card.addEventListener('click', () => switchTool(card.dataset.tool, true));
     });
 
-    sidebarBtns.forEach((btn) => {
-      btn.addEventListener('click', () => switchTool(btn.dataset.tool));
+    wsTabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => switchTool(btn.dataset.tool, false));
     });
 
-    // Helper to trigger browser file download
     function downloadBlob(blob, filename) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1804,7 +1956,7 @@
     }
 
     // =========================================================================
-    // TOOL 1: Image to PDF Pro (Uses pdf-lib)
+    // TOOL 1: Image to PDF
     // =========================================================================
     const imgToPdfInput = document.getElementById('imgToPdfInput');
     const imgToPdfPreview = document.getElementById('imgToPdfPreview');
@@ -1861,7 +2013,7 @@
         const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.92);
         const embeddedImg = await pdfDoc.embedJpg(jpgDataUrl);
 
-        let pageW = 595.28; // A4 Portrait points
+        let pageW = 595.28;
         let pageH = 841.89;
         if (pageSizeMode === 'letter') {
           pageW = 612;
@@ -1894,119 +2046,86 @@
     });
 
     // =========================================================================
-    // TOOL 2: Merge, Split & Rotate PDF Suite
+    // TOOL 2: Format Converter & Target-KB Compressor
     // =========================================================================
-    const mergePdfInput = document.getElementById('mergePdfInput');
-    const mergePdfFileListText = document.getElementById('mergePdfFileListText');
-    const splitPdfInput = document.getElementById('splitPdfInput');
-    const splitPdfInfoText = document.getElementById('splitPdfInfoText');
-    const mergeSplitStatus = document.getElementById('mergeSplitStatus');
+    const converterInput = document.getElementById('converterInput');
+    const converterQuality = document.getElementById('converterQuality');
+    const converterStatus = document.getElementById('converterStatus');
+    let converterFile = null;
 
-    mergePdfInput.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files || []);
-      mergePdfFileListText.textContent = files.length
-        ? `${files.length} PDF file(s) selected: ${files.map((f) => f.name).join(', ')}`
-        : 'No PDF files selected yet';
+    converterQuality.addEventListener('input', () => {
+      document.getElementById('qualityValLabel').textContent = converterQuality.value;
     });
 
-    document.getElementById('mergePdfsBtn').addEventListener('click', async () => {
-      const files = Array.from(mergePdfInput.files || []);
-      if (files.length < 2) {
-        alert('Please select at least 2 PDF files to merge.');
-        return;
+    converterInput.addEventListener('change', (e) => {
+      converterFile = e.target.files?.[0] || null;
+      if (converterFile) {
+        document.getElementById('converterOriginalInfo').textContent =
+          `Selected: ${converterFile.name} (${(converterFile.size / 1024).toFixed(1)} KB)`;
       }
-
-      const { PDFDocument } = window.PDFLib;
-      const mergedPdf = await PDFDocument.create();
-
-      for (const file of files) {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach((p) => mergedPdf.addPage(p));
-      }
-
-      const mergedBytes = await mergedPdf.save();
-      downloadBlob(new Blob([mergedBytes], { type: 'application/pdf' }), 'SnapDocs-Merged.pdf');
-      mergeSplitStatus.textContent = `✓ Merged ${files.length} PDF files successfully!`;
-      mergeSplitStatus.classList.add('visible');
     });
 
-    let loadedSplitPdfBytes = null;
-    let loadedSplitPageCount = 0;
-
-    splitPdfInput.addEventListener('change', async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      loadedSplitPdfBytes = await file.arrayBuffer();
-      const { PDFDocument } = window.PDFLib;
-      const pdf = await PDFDocument.load(loadedSplitPdfBytes);
-      loadedSplitPageCount = pdf.getPageCount();
-      splitPdfInfoText.textContent = `Loaded "${file.name}" (${loadedSplitPageCount} total pages)`;
-    });
-
-    function parsePageRange(rangeStr, maxPages) {
-      if (!rangeStr.trim()) {
-        return Array.from({ length: maxPages }, (_, i) => i);
-      }
-      const indices = new Set();
-      rangeStr.split(',').forEach((part) => {
-        const trimmed = part.trim();
-        if (trimmed.includes('-')) {
-          const [start, end] = trimmed.split('-').map((n) => parseInt(n.trim(), 10));
-          if (!isNaN(start) && !isNaN(end)) {
-            for (let p = Math.max(1, start); p <= Math.min(maxPages, end); p++) {
-              indices.add(p - 1);
-            }
-          }
-        } else {
-          const p = parseInt(trimmed, 10);
-          if (!isNaN(p) && p >= 1 && p <= maxPages) {
-            indices.add(p - 1);
-          }
-        }
-      });
-      return Array.from(indices);
+    function canvasToBlobWithQuality(canvas, mime, q) {
+      return new Promise((resolve) => canvas.toBlob(resolve, mime, q));
     }
 
-    document.getElementById('processSplitRotateBtn').addEventListener('click', async () => {
-      if (!loadedSplitPdfBytes) {
-        alert('Please upload a PDF file first.');
+    document.getElementById('runConverterBtn').addEventListener('click', async () => {
+      if (!converterFile) {
+        alert('Please upload an image first.');
         return;
       }
 
-      const { PDFDocument, degrees } = window.PDFLib;
-      const srcPdf = await PDFDocument.load(loadedSplitPdfBytes);
-      const outPdf = await PDFDocument.create();
-      const indices = parsePageRange(
-        document.getElementById('splitPageRange').value,
-        srcPdf.getPageCount()
+      const dataUrl = await fileToDataURL(converterFile);
+      const img = await loadImageElement(dataUrl);
+      const mime = document.getElementById('targetFormatSelect').value;
+      const targetKb = Number(document.getElementById('targetKbPreset').value) || 0;
+
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth;
+      let h = img.naturalHeight;
+      canvas.width = w;
+      canvas.height = h;
+      const ctx2 = canvas.getContext('2d');
+      ctx2.fillStyle = '#ffffff';
+      ctx2.fillRect(0, 0, w, h);
+      ctx2.drawImage(img, 0, 0, w, h);
+
+      let outBlob = await canvasToBlobWithQuality(
+        canvas,
+        mime,
+        Number(converterQuality.value) / 100
       );
 
-      if (indices.length === 0) {
-        alert('Please enter a valid page range within the document.');
-        return;
+      if (targetKb > 0) {
+        const targetBytes = targetKb * 1024;
+        let q = 0.88;
+        let scale = 1.0;
+        for (let attempt = 0; attempt < 9; attempt++) {
+          if (outBlob.size <= targetBytes) break;
+          if (q > 0.25) {
+            q -= 0.14;
+          } else {
+            scale *= 0.8;
+            canvas.width = Math.max(180, Math.round(w * scale));
+            canvas.height = Math.max(180, Math.round(h * scale));
+            const c = canvas.getContext('2d');
+            c.fillStyle = '#ffffff';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+            c.drawImage(img, 0, 0, canvas.width, canvas.height);
+          }
+          outBlob = await canvasToBlobWithQuality(canvas, 'image/jpeg', Math.max(0.15, q));
+        }
       }
 
-      const addAngle = Number(document.getElementById('rotatePdfAngle').value) || 0;
-      const copiedPages = await outPdf.copyPages(srcPdf, indices);
-
-      copiedPages.forEach((page) => {
-        if (addAngle !== 0) {
-          const currentRot = page.getRotation().angle;
-          page.setRotation(degrees((currentRot + addAngle) % 360));
-        }
-        outPdf.addPage(page);
-      });
-
-      const outBytes = await outPdf.save();
-      downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), 'SnapDocs-Extracted.pdf');
-      mergeSplitStatus.textContent = `✓ Exported ${indices.length} page(s) successfully!`;
-      mergeSplitStatus.classList.add('visible');
+      const ext = mime === 'image/png' ? 'png' : mime === 'image/webp' ? 'webp' : 'jpg';
+      downloadBlob(outBlob, `SnapDocs-Converted.${ext}`);
+      converterStatus.textContent =
+        `✓ Done! Original: ${(converterFile.size / 1024).toFixed(1)} KB → Output: ${(outBlob.size / 1024).toFixed(1)} KB`;
+      converterStatus.classList.add('visible');
     });
 
     // =========================================================================
-    // TOOL 3: Pro AI Document Scanner Studio
+    // TOOL 3: Document Scanner
     // =========================================================================
     const scannerInput = document.getElementById('scannerInput');
     const scannerCanvas = document.getElementById('scannerCanvas');
@@ -2022,9 +2141,9 @@
     let cameraStream = null;
 
     function drawPlaceholderScanner() {
-      scannerCtx.fillStyle = '#070d1b';
+      scannerCtx.fillStyle = '#0b1628';
       scannerCtx.fillRect(0, 0, scannerCanvas.width, scannerCanvas.height);
-      scannerCtx.fillStyle = '#64748b';
+      scannerCtx.fillStyle = '#94a3b8';
       scannerCtx.font = '600 16px Plus Jakarta Sans, sans-serif';
       scannerCtx.textAlign = 'center';
       scannerCtx.fillText(
@@ -2107,7 +2226,6 @@
         let g = d[i + 1];
         let b = d[i + 2];
 
-        // Apply brightness & contrast
         r = contrastFactor * (r - 128) + 128 + brightOffset;
         g = contrastFactor * (g - 128) + 128 + brightOffset;
         b = contrastFactor * (b - 128) + 128 + brightOffset;
@@ -2115,7 +2233,6 @@
         const lum = 0.299 * r + 0.587 * g + 0.114 * b;
 
         if (preset === 'magic') {
-          // Whiten paper background while keeping text crisp
           if (lum > 175) {
             r = Math.min(255, r * 1.15);
             g = Math.min(255, g * 1.15);
@@ -2184,7 +2301,7 @@
     });
 
     // =========================================================================
-    // TOOL 4: AI OCR & Smart Data Extractor (Images + PDFs)
+    // TOOL 4: Text Extractor (AI OCR)
     // =========================================================================
     const ocrInput = document.getElementById('ocrInput');
     const ocrFileNameText = document.getElementById('ocrFileNameText');
@@ -2285,7 +2402,7 @@
 
     document.getElementById('sendToSummarizerBtn').addEventListener('click', () => {
       document.getElementById('sumInputText').value = ocrOutputText.value;
-      switchTool('summarizer');
+      switchTool('summarizer', false);
       document.getElementById('runSummarizerBtn').click();
     });
 
@@ -2316,7 +2433,117 @@
     });
 
     // =========================================================================
-    // TOOL 5: AI Document Summarizer & Q&A Intelligence
+    // TOOL 5: Merge, Split & Rotate PDF
+    // =========================================================================
+    const mergePdfInput = document.getElementById('mergePdfInput');
+    const mergePdfFileListText = document.getElementById('mergePdfFileListText');
+    const splitPdfInput = document.getElementById('splitPdfInput');
+    const splitPdfInfoText = document.getElementById('splitPdfInfoText');
+    const mergeSplitStatus = document.getElementById('mergeSplitStatus');
+
+    mergePdfInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      mergePdfFileListText.textContent = files.length
+        ? `${files.length} PDF file(s) selected: ${files.map((f) => f.name).join(', ')}`
+        : 'No PDF files selected yet';
+    });
+
+    document.getElementById('mergePdfsBtn').addEventListener('click', async () => {
+      const files = Array.from(mergePdfInput.files || []);
+      if (files.length < 2) {
+        alert('Please select at least 2 PDF files to merge.');
+        return;
+      }
+
+      const { PDFDocument } = window.PDFLib;
+      const mergedPdf = await PDFDocument.create();
+
+      for (const file of files) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((p) => mergedPdf.addPage(p));
+      }
+
+      const mergedBytes = await mergedPdf.save();
+      downloadBlob(new Blob([mergedBytes], { type: 'application/pdf' }), 'SnapDocs-Merged.pdf');
+      mergeSplitStatus.textContent = `✓ Merged ${files.length} PDF files successfully!`;
+      mergeSplitStatus.classList.add('visible');
+    });
+
+    let loadedSplitPdfBytes = null;
+
+    splitPdfInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      loadedSplitPdfBytes = await file.arrayBuffer();
+      const { PDFDocument } = window.PDFLib;
+      const pdf = await PDFDocument.load(loadedSplitPdfBytes);
+      splitPdfInfoText.textContent = `Loaded "${file.name}" (${pdf.getPageCount()} total pages)`;
+    });
+
+    function parsePageRange(rangeStr, maxPages) {
+      if (!rangeStr.trim()) {
+        return Array.from({ length: maxPages }, (_, i) => i);
+      }
+      const indices = new Set();
+      rangeStr.split(',').forEach((part) => {
+        const trimmed = part.trim();
+        if (trimmed.includes('-')) {
+          const [start, end] = trimmed.split('-').map((n) => parseInt(n.trim(), 10));
+          if (!isNaN(start) && !isNaN(end)) {
+            for (let p = Math.max(1, start); p <= Math.min(maxPages, end); p++) {
+              indices.add(p - 1);
+            }
+          }
+        } else {
+          const p = parseInt(trimmed, 10);
+          if (!isNaN(p) && p >= 1 && p <= maxPages) {
+            indices.add(p - 1);
+          }
+        }
+      });
+      return Array.from(indices);
+    }
+
+    document.getElementById('processSplitRotateBtn').addEventListener('click', async () => {
+      if (!loadedSplitPdfBytes) {
+        alert('Please upload a PDF file first.');
+        return;
+      }
+
+      const { PDFDocument, degrees } = window.PDFLib;
+      const srcPdf = await PDFDocument.load(loadedSplitPdfBytes);
+      const outPdf = await PDFDocument.create();
+      const indices = parsePageRange(
+        document.getElementById('splitPageRange').value,
+        srcPdf.getPageCount()
+      );
+
+      if (indices.length === 0) {
+        alert('Please enter a valid page range within the document.');
+        return;
+      }
+
+      const addAngle = Number(document.getElementById('rotatePdfAngle').value) || 0;
+      const copiedPages = await outPdf.copyPages(srcPdf, indices);
+
+      copiedPages.forEach((page) => {
+        if (addAngle !== 0) {
+          const currentRot = page.getRotation().angle;
+          page.setRotation(degrees((currentRot + addAngle) % 360));
+        }
+        outPdf.addPage(page);
+      });
+
+      const outBytes = await outPdf.save();
+      downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), 'SnapDocs-Extracted.pdf');
+      mergeSplitStatus.textContent = `✓ Exported ${indices.length} page(s) successfully!`;
+      mergeSplitStatus.classList.add('visible');
+    });
+
+    // =========================================================================
+    // TOOL 6: AI Document Summarizer & Q&A
     // =========================================================================
     const sumFileInput = document.getElementById('sumFileInput');
     const sumInputText = document.getElementById('sumInputText');
@@ -2364,7 +2591,6 @@
       document.getElementById('statSentences').textContent = sentences.length;
       document.getElementById('statReadTime').textContent = `${Math.max(1, Math.ceil(words.length / 200))} min`;
 
-      // Compute word frequencies
       const freq = {};
       words.forEach((w) => {
         const clean = w.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -2378,7 +2604,6 @@
         .slice(0, 8)
         .map((e) => e[0]);
 
-      // Score sentences by TF-IDF importance + position weight
       const scored = sentences.map((s, index) => {
         const sWords = s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
         let score = 0;
@@ -2407,7 +2632,7 @@
         '=== KEY TAKEAWAYS ===',
         ...selected.map((s) => `• ${s.sentence}`),
         '',
-        `=== TOP KEYWORDS ===`,
+        '=== TOP KEYWORDS ===',
         topKeywords.join(' · '),
       ].join('\n');
 
@@ -2454,87 +2679,7 @@
     });
 
     // =========================================================================
-    // TOOL 6: Universal Format Converter & Target-KB Compressor
-    // =========================================================================
-    const converterInput = document.getElementById('converterInput');
-    const converterQuality = document.getElementById('converterQuality');
-    const converterStatus = document.getElementById('converterStatus');
-    let converterFile = null;
-
-    converterQuality.addEventListener('input', () => {
-      document.getElementById('qualityValLabel').textContent = converterQuality.value;
-    });
-
-    converterInput.addEventListener('change', (e) => {
-      converterFile = e.target.files?.[0] || null;
-      if (converterFile) {
-        document.getElementById('converterOriginalInfo').textContent =
-          `Selected: ${converterFile.name} (${(converterFile.size / 1024).toFixed(1)} KB)`;
-      }
-    });
-
-    function canvasToBlobWithQuality(canvas, mime, q) {
-      return new Promise((resolve) => canvas.toBlob(resolve, mime, q));
-    }
-
-    document.getElementById('runConverterBtn').addEventListener('click', async () => {
-      if (!converterFile) {
-        alert('Please upload an image first.');
-        return;
-      }
-
-      const dataUrl = await fileToDataURL(converterFile);
-      const img = await loadImageElement(dataUrl);
-      const mime = document.getElementById('targetFormatSelect').value;
-      const targetKb = Number(document.getElementById('targetKbPreset').value) || 0;
-
-      const canvas = document.createElement('canvas');
-      let w = img.naturalWidth;
-      let h = img.naturalHeight;
-      canvas.width = w;
-      canvas.height = h;
-      const ctx2 = canvas.getContext('2d');
-      ctx2.fillStyle = '#ffffff';
-      ctx2.fillRect(0, 0, w, h);
-      ctx2.drawImage(img, 0, 0, w, h);
-
-      let outBlob = await canvasToBlobWithQuality(
-        canvas,
-        mime,
-        Number(converterQuality.value) / 100
-      );
-
-      // If user selected a Target KB preset (e.g. 20 KB, 50 KB, 100 KB), iteratively optimize
-      if (targetKb > 0) {
-        const targetBytes = targetKb * 1024;
-        let q = 0.88;
-        let scale = 1.0;
-        for (let attempt = 0; attempt < 9; attempt++) {
-          if (outBlob.size <= targetBytes) break;
-          if (q > 0.25) {
-            q -= 0.14;
-          } else {
-            scale *= 0.8;
-            canvas.width = Math.max(180, Math.round(w * scale));
-            canvas.height = Math.max(180, Math.round(h * scale));
-            const c = canvas.getContext('2d');
-            c.fillStyle = '#ffffff';
-            c.fillRect(0, 0, canvas.width, canvas.height);
-            c.drawImage(img, 0, 0, canvas.width, canvas.height);
-          }
-          outBlob = await canvasToBlobWithQuality(canvas, 'image/jpeg', Math.max(0.15, q));
-        }
-      }
-
-      const ext = mime === 'image/png' ? 'png' : mime === 'image/webp' ? 'webp' : 'jpg';
-      downloadBlob(outBlob, `SnapDocs-Converted.${ext}`);
-      converterStatus.textContent =
-        `✓ Done! Original: ${(converterFile.size / 1024).toFixed(1)} KB → Output: ${(outBlob.size / 1024).toFixed(1)} KB`;
-      converterStatus.classList.add('visible');
-    });
-
-    // =========================================================================
-    // TOOL 7: Sign, Stamp & Watermark PDF
+    // TOOL 7: e-Sign & Watermark PDF
     // =========================================================================
     const sigPadCanvas = document.getElementById('sigPadCanvas');
     const sigCtx = sigPadCanvas.getContext('2d');
@@ -2653,7 +2798,7 @@
     });
 
     // =========================================================================
-    // TOOL 8: PDF to Images & Document QR Code Studio
+    // TOOL 8: PDF to Images & Document QR Studio
     // =========================================================================
     const pdfToImgInput = document.getElementById('pdfToImgInput');
     const pdfToImgGallery = document.getElementById('pdfToImgGallery');
@@ -2661,7 +2806,7 @@
     pdfToImgInput.addEventListener('change', async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
-      pdfToImgGallery.innerHTML = '<span style="color: var(--cyan-400);">Rendering PDF pages...</span>';
+      pdfToImgGallery.innerHTML = '<span style="color: var(--primary-600); font-weight: 700;">Rendering PDF pages...</span>';
       const buf = await file.arrayBuffer();
       const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
       pdfToImgGallery.innerHTML = '';
@@ -2687,19 +2832,17 @@
       }
     });
 
-    // QR Code Generator
     const qrCanvas = document.getElementById('qrCanvas');
     const qrTextInput = document.getElementById('qrTextInput');
-    let qrInstance = null;
 
     function updateQrCode() {
       if (!window.QRious) return;
-      qrInstance = new window.QRious({
+      new window.QRious({
         element: qrCanvas,
         value: qrTextInput.value.trim() || 'https://snapdocsaio.onrender.com/',
         size: 180,
         background: '#ffffff',
-        foreground: '#0a1122',
+        foreground: '#0b1628',
         level: 'H',
       });
     }
