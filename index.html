@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SnapDocs AI | Convert Photos to PDFs, Scan Documents &amp; AI OCR</title>
+  <title>SnapDocs AI | All-in-One Document Intelligence &amp; PDF Suite</title>
   <meta
     name="description"
-    content="SnapDocs AI by MVAPS & Company — Convert photos to PDFs, transform image formats, scan documents, extract text with AI OCR, merge/split PDFs, summarize documents, and e-sign PDFs."
+    content="SnapDocs AI by MVAPS & Company — Convert photos to PDFs, transform image formats, scan documents, extract text with AI OCR, merge & split PDFs, summarize documents, and e-sign PDFs."
   />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
     rel="stylesheet"
   />
 
-  <!-- Client-Side Document Engines (100% Free on Render & 100% Private) -->
+  <!-- Core Document Processing Engines (100% Client-Side & Free on Render) -->
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -25,33 +25,41 @@
 
   <style>
     :root {
-      --navy-950: #070e1a;
-      --navy-900: #0b1628;
-      --navy-800: #152542;
-      --primary-600: #2563eb;
-      --primary-500: #3b82f6;
-      --indigo-600: #4f46e5;
-      --indigo-500: #6366f1;
-      --gold-500: #d4af37;
-      --gold-400: #e5c453;
-      --emerald-600: #059669;
-      --emerald-500: #10b981;
-      --danger: #dc2626;
-      --bg-body: #f4f7fb;
-      --bg-alt: #eef2f9;
-      --bg-white: #ffffff;
-      --slate-900: #0f172a;
-      --slate-700: #334155;
-      --slate-600: #475569;
-      --slate-400: #94a3b8;
-      --slate-200: #e2e8f0;
-      --slate-300: #cbd5e1;
+      /* Core Black Palette */
+      --black-950: #030407;
+      --black-900: #07090f;
+      --black-850: #0c101a;
+      --black-800: #121826;
+      --bg-card: rgba(12, 16, 26, 0.88);
+      --bg-panel: #090c14;
+
+      /* Red, Green, Blue (RGB) Core Accents */
+      --red-500: #ef4444;
+      --red-400: #f87171;
+      --red-glow: rgba(239, 68, 68, 0.28);
+
+      --green-500: #10b981;
+      --green-400: #34d399;
+      --green-glow: rgba(16, 185, 129, 0.28);
+
+      --blue-500: #3b82f6;
+      --blue-400: #60a5fa;
+      --blue-600: #2563eb;
+      --blue-glow: rgba(59, 130, 246, 0.28);
+
+      --rgb-gradient: linear-gradient(90deg, var(--red-500) 0%, var(--green-500) 50%, var(--blue-500) 100%);
+      --rgb-Conic: conic-gradient(from 0deg, var(--red-500), var(--green-500), var(--blue-500), var(--red-500));
+
+      --text-white: #f8fafc;
+      --text-slate: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(255, 255, 255, 0.11);
+      --border-rgb: rgba(59, 130, 246, 0.38);
+
       --radius-sm: 10px;
       --radius-md: 16px;
       --radius-lg: 22px;
-      --shadow-sm: 0 4px 18px rgba(11, 22, 40, 0.06);
-      --shadow-md: 0 12px 32px rgba(11, 22, 40, 0.1);
-      --shadow-lg: 0 20px 48px rgba(11, 22, 40, 0.16);
+      --shadow-lg: 0 22px 55px rgba(0, 0, 0, 0.78);
       --transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -68,9 +76,9 @@
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-body);
-      color: var(--slate-900);
-      line-height: 1.65;
+      background-color: var(--black-950);
+      color: var(--text-white);
+      line-height: 1.6;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -79,6 +87,10 @@
       font-family: 'Space Grotesk', sans-serif;
       line-height: 1.2;
       letter-spacing: -0.02em;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
     }
 
     a {
@@ -94,20 +106,20 @@
 
     .container {
       width: 100%;
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
     /* ==========================================================================
-       Scroll Reveal Animations (Works Scrolling Down & Scrolling Up)
+       Slower Scroll-Up & Scroll-Down Reveal Animations
        ========================================================================== */
     .reveal {
       opacity: 0;
-      transform: translateY(48px);
+      transform: translateY(54px);
       transition:
-        opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.3s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: opacity, transform;
     }
 
@@ -116,14 +128,14 @@
       transform: translateY(0);
     }
 
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.4s; }
-
-    @keyframes pulseDot {
+    @keyframes pulseGlow {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.85); }
+      50% { opacity: 0.4; transform: scale(0.86); }
+    }
+
+    @keyframes gridSlide {
+      0% { background-position: 0 0; }
+      100% { background-position: 48px 48px; }
     }
 
     @keyframes inputShake {
@@ -136,41 +148,57 @@
       animation: inputShake 0.4s ease-in-out;
     }
 
-    .live-dot {
-      display: inline-block;
+    .rgb-dot-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dot-r, .dot-g, .dot-b {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #34d399;
-      animation: pulseDot 1.5s infinite ease-in-out;
+      display: inline-block;
+      animation: pulseGlow 1.6s infinite ease-in-out;
     }
 
+    .dot-r { background: var(--red-500); box-shadow: 0 0 8px var(--red-500); }
+    .dot-g { background: var(--green-500); box-shadow: 0 0 8px var(--green-500); animation-delay: 0.3s; }
+    .dot-b { background: var(--blue-500); box-shadow: 0 0 8px var(--blue-500); animation-delay: 0.6s; }
+
     /* ==========================================================================
-       Navbar with Original SnapDocs AI Logo
+       Navbar with RGB Top Accent Line & Original SnapDocs AI Logo
        ========================================================================== */
     .navbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(11, 22, 40, 0.96);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(3, 4, 7, 0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .navbar::before {
+      content: '';
+      display: block;
+      height: 3px;
+      width: 100%;
+      background: var(--rgb-gradient);
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 78px;
+      height: 76px;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      color: #ffffff;
-      font-size: 1.35rem;
       font-weight: 700;
+      font-size: 1.32rem;
     }
 
     .brand-logo-img {
@@ -178,406 +206,441 @@
       height: 44px;
       border-radius: 10px;
       object-fit: cover;
-      border: 1.5px solid rgba(212, 175, 55, 0.55);
-      background: var(--navy-900);
+      border: 1.5px solid var(--blue-500);
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.35);
+      background: var(--black-900);
     }
 
-    .brand-title {
-      color: #ffffff;
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.08;
+    }
+
+    .brand-name {
+      background: linear-gradient(90deg, #ffffff 0%, var(--red-400) 38%, var(--green-400) 70%, var(--blue-400) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.3rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
     }
 
-    .brand-title span {
-      color: #60a5fa;
+    .brand-by {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-400);
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 22px;
       list-style: none;
     }
 
     .nav-links a {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      color: #cbd5e1;
+      color: var(--text-slate);
     }
 
     .nav-links a:hover {
-      color: #60a5fa;
+      color: var(--blue-400);
     }
 
-    .nav-cta {
-      background: linear-gradient(135deg, var(--primary-600), var(--indigo-600));
-      color: #ffffff !important;
-      padding: 10px 20px !important;
+    .privacy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
       border-radius: 999px;
-      font-size: 0.88rem !important;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
-    }
-
-    .nav-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.5);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--green-400);
+      font-size: 0.76rem;
+      font-weight: 700;
     }
 
     .menu-toggle {
       display: none;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
       padding: 8px 12px;
       border-radius: 8px;
-      font-size: 1.2rem;
       cursor: pointer;
+      font-size: 1.2rem;
     }
 
     /* ==========================================================================
-       Hero Section with Original SnapDocs AI Logo & Identity
+       Hero Section with Interactive RGB Neural Canvas on Black
        ========================================================================== */
     .hero {
+      position: relative;
+      padding: 76px 0 60px;
       background:
-        radial-gradient(circle at 82% 20%, rgba(59, 130, 246, 0.22), transparent 45%),
-        radial-gradient(circle at 18% 80%, rgba(212, 175, 55, 0.14), transparent 42%),
-        linear-gradient(160deg, var(--navy-950) 0%, var(--navy-900) 60%, var(--navy-800) 100%);
-      color: #ffffff;
-      padding: 76px 0 68px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        radial-gradient(circle at 18% 22%, rgba(239, 68, 68, 0.16), transparent 40%),
+        radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.14), transparent 42%),
+        radial-gradient(circle at 82% 25%, rgba(59, 130, 246, 0.18), transparent 42%),
+        linear-gradient(180deg, var(--black-950) 0%, var(--black-900) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+      overflow: hidden;
     }
 
-    .hero-grid {
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridSlide 18s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #rgbTechCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-top-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 48px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 44px;
       align-items: center;
+      margin-bottom: 44px;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
+      gap: 10px;
+      padding: 7px 16px;
       border-radius: 999px;
-      background: rgba(59, 130, 246, 0.16);
-      border: 1px solid rgba(96, 165, 250, 0.38);
-      color: #93c5fd;
+      background: rgba(12, 16, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text-white);
       font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-weight: 600;
       margin-bottom: 18px;
     }
 
     .hero h1 {
-      font-size: clamp(2.4rem, 4.6vw, 3.6rem);
+      font-size: clamp(2.4rem, 4.6vw, 3.7rem);
       margin-bottom: 16px;
-      color: #ffffff;
     }
 
-    .hero h1 span {
-      background: linear-gradient(90deg, #60a5fa, #a78bfa, var(--gold-400));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .hero h1 .r-word { color: var(--red-400); }
+    .hero h1 .g-word { color: var(--green-400); }
+    .hero h1 .b-word { color: var(--blue-400); }
 
     .hero p {
-      font-size: 1.1rem;
-      color: #cbd5e1;
-      max-width: 600px;
-      margin-bottom: 28px;
+      font-size: 1.06rem;
+      color: var(--text-slate);
+      max-width: 640px;
+      margin-bottom: 24px;
     }
 
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 13px 26px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 0.94rem;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: var(--transition);
-    }
-
-    .btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary-600), var(--indigo-600));
-      color: #ffffff;
-      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.3);
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45);
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, var(--gold-500), #b69121);
-      color: var(--navy-950);
-      box-shadow: 0 8px 22px rgba(212, 175, 55, 0.28);
-    }
-
-    .btn-gold:hover:not(:disabled) {
-      transform: translateY(-2px);
-      background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
-    }
-
-    .btn-emerald {
-      background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
-      color: #ffffff;
-    }
-
-    .btn-emerald:hover:not(:disabled) {
-      transform: translateY(-2px);
-    }
-
-    .btn-outline-light {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.24);
-      color: #ffffff;
-    }
-
-    .btn-outline-light:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: #60a5fa;
-      transform: translateY(-2px);
-    }
-
-    .btn-ghost {
-      background: var(--bg-alt);
-      border-color: var(--slate-300);
-      color: var(--slate-700);
-    }
-
-    .btn-ghost:hover:not(:disabled) {
-      border-color: var(--primary-600);
-      color: var(--primary-600);
-      background: #ffffff;
-    }
-
-    .btn-sm {
-      padding: 9px 18px;
-      font-size: 0.84rem;
-    }
-
-    /* Hero Logo Showcase Card */
-    .hero-logo-card {
-      background: rgba(21, 37, 66, 0.78);
-      border: 1px solid rgba(212, 175, 55, 0.38);
+    /* Framed Logo Showcase Box */
+    .hero-logo-frame {
+      position: relative;
+      background: var(--black-850);
       border-radius: var(--radius-lg);
-      padding: 28px;
-      text-align: center;
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(12px);
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow:
+        -12px -8px 32px rgba(239, 68, 68, 0.14),
+        0px 12px 32px rgba(16, 185, 129, 0.14),
+        12px -8px 32px rgba(59, 130, 246, 0.16);
     }
 
-    .hero-logo-card img {
+    .hero-logo-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: var(--rgb-gradient);
+    }
+
+    .hero-logo-frame img {
       width: 100%;
-      max-height: 220px;
+      max-height: 195px;
       object-fit: contain;
+      background: var(--black-950);
       border-radius: var(--radius-md);
-      background: var(--navy-950);
-      padding: 18px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
     }
 
-    .hero-logo-caption {
+    .hero-frame-meta {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.82rem;
+      color: var(--text-slate);
     }
 
     /* ==========================================================================
-       Tool Cards Grid Section (Launch Any Tool Like Earlier)
+       8 Quick Tool Launcher Cards (Framed Tech Layout with RGB Accents)
        ========================================================================== */
-    .tools-section {
-      padding: 72px 0 44px;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 740px;
-      margin: 0 auto 48px;
-    }
-
-    .section-eyebrow {
-      display: inline-block;
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--primary-600);
-      background: rgba(37, 99, 235, 0.1);
-      padding: 6px 16px;
-      border-radius: 999px;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(1.9rem, 3.2vw, 2.55rem);
-      color: var(--navy-900);
-      margin-bottom: 12px;
-    }
-
-    .section-subtitle {
-      font-size: 1.04rem;
-      color: var(--slate-600);
-    }
-
-    .tools-cards-grid {
+    .quick-tools-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 22px;
+      gap: 16px;
     }
 
-    .tool-launch-card {
-      background: var(--bg-white);
-      border: 1px solid var(--slate-200);
-      border-top: 4px solid var(--primary-600);
+    .quick-tool-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(12, 16, 26, 0.88);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 26px 22px;
-      box-shadow: var(--shadow-sm);
+      padding: 20px 18px;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 14px;
+      color: var(--text-white);
+      font-family: inherit;
+    }
+
+    .quick-tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--rgb-gradient);
+      opacity: 0.65;
       transition: var(--transition);
-      cursor: pointer;
     }
 
-    .tool-launch-card:hover,
-    .tool-launch-card.active {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--primary-600);
+    .quick-tool-card[data-accent="red"]::before { background: var(--red-500); }
+    .quick-tool-card[data-accent="green"]::before { background: var(--green-500); }
+    .quick-tool-card[data-accent="blue"]::before { background: var(--blue-500); }
+
+    .quick-tool-card:hover,
+    .quick-tool-card.active {
+      transform: translateY(-4px);
+      background: rgba(18, 24, 38, 0.96);
     }
 
-    .tool-launch-card.active {
-      background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.16);
+    .quick-tool-card[data-accent="red"]:hover,
+    .quick-tool-card[data-accent="red"].active {
+      border-color: var(--red-500);
+      box-shadow: 0 10px 28px var(--red-glow);
     }
 
-    .tool-icon-wrap {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(79, 70, 229, 0.12));
-      color: var(--primary-600);
+    .quick-tool-card[data-accent="green"]:hover,
+    .quick-tool-card[data-accent="green"].active {
+      border-color: var(--green-500);
+      box-shadow: 0 10px 28px var(--green-glow);
+    }
+
+    .quick-tool-card[data-accent="blue"]:hover,
+    .quick-tool-card[data-accent="blue"].active {
+      border-color: var(--blue-500);
+      box-shadow: 0 10px 28px var(--blue-glow);
+    }
+
+    .qt-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .qt-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 16px;
-      border: 1px solid rgba(37, 99, 235, 0.22);
-    }
-
-    .tool-icon-wrap svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    .tool-launch-card h3 {
-      font-size: 1.22rem;
-      color: var(--navy-900);
-      margin-bottom: 8px;
-    }
-
-    .tool-launch-card p {
-      font-size: 0.9rem;
-      color: var(--slate-600);
-      margin-bottom: 20px;
-    }
-
-    .launch-link-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: var(--navy-900);
-      color: #ffffff;
-      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
       font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
+      flex-shrink: 0;
     }
 
-    .tool-launch-card:hover .launch-link-btn,
-    .tool-launch-card.active .launch-link-btn {
-      background: var(--primary-600);
+    .qt-icon.red {
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: var(--red-400);
+    }
+
+    .qt-icon.green {
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: var(--green-400);
+    }
+
+    .qt-icon.blue {
+      background: rgba(59, 130, 246, 0.16);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      color: var(--blue-400);
+    }
+
+    .qt-meta strong {
+      display: block;
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+
+    .qt-meta span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.38;
+      display: block;
+    }
+
+    .qt-launch-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text-slate);
     }
 
     /* ==========================================================================
-       Active Launched Tool Workspace Section
+       Main Interactive Document Workspace (Sidebar + Framed Tool Panel)
        ========================================================================== */
     .workspace-section {
-      padding: 24px 0 88px;
+      padding: 56px 0 88px;
+      position: relative;
     }
 
-    .workspace-tabs-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 22px;
-      background: var(--bg-white);
-      padding: 12px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--slate-200);
-      box-shadow: var(--shadow-sm);
+    .workspace-shell {
+      display: grid;
+      grid-template-columns: 275px 1fr;
+      gap: 26px;
+      align-items: start;
     }
 
-    .ws-tab-btn {
-      padding: 9px 16px;
+    /* Sidebar Navigation */
+    .workspace-sidebar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      position: sticky;
+      top: 96px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .workspace-sidebar::before {
+      content: '';
+      display: block;
+      height: 3px;
+      width: 100%;
+      background: var(--rgb-gradient);
       border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .sidebar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      padding: 4px 10px 12px;
+      display: block;
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .sidebar-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
       border: 1px solid transparent;
       background: transparent;
-      color: var(--slate-600);
+      color: var(--text-slate);
       font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.88rem;
+      font-weight: 600;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       transition: var(--transition);
     }
 
-    .ws-tab-btn:hover {
-      background: var(--bg-alt);
-      color: var(--navy-900);
-    }
-
-    .ws-tab-btn.active {
-      background: var(--primary-600);
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
     }
 
+    .sidebar-btn.active {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.15), rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.22));
+      border-color: var(--blue-400);
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.2);
+    }
+
+    .sidebar-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .sidebar-tag.red { background: rgba(239, 68, 68, 0.18); color: var(--red-400); }
+    .sidebar-tag.green { background: rgba(16, 185, 129, 0.18); color: var(--green-400); }
+    .sidebar-tag.blue { background: rgba(59, 130, 246, 0.18); color: var(--blue-400); }
+
+    /* Framed Tool Panels */
     .tool-panel {
       display: none;
-      background: var(--bg-white);
-      border: 1px solid var(--slate-200);
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 40px;
-      box-shadow: var(--shadow-md);
+      padding: 36px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(18px);
+    }
+
+    .tool-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--rgb-gradient);
     }
 
     .tool-panel.active {
@@ -590,38 +653,39 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      padding-bottom: 20px;
+      padding-bottom: 22px;
       margin-bottom: 28px;
-      border-bottom: 1px solid var(--slate-200);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .panel-header h2 {
-      font-size: 1.7rem;
-      color: var(--navy-900);
+      font-size: 1.68rem;
+      color: #ffffff;
       margin-bottom: 4px;
     }
 
     .panel-header p {
-      font-size: 0.95rem;
-      color: var(--slate-600);
+      font-size: 0.92rem;
+      color: var(--text-muted);
     }
 
     .panel-badge {
-      font-size: 0.76rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--primary-600);
-      background: rgba(37, 99, 235, 0.1);
-      border: 1px solid rgba(37, 99, 235, 0.25);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       padding: 6px 14px;
       border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     /* Upload Dropzone */
     .dropzone {
-      border: 2px dashed rgba(37, 99, 235, 0.4);
-      background: #f8fafc;
+      border: 2px dashed rgba(59, 130, 246, 0.45);
+      background: rgba(7, 9, 15, 0.8);
       border-radius: var(--radius-md);
       padding: 36px 24px;
       text-align: center;
@@ -632,8 +696,9 @@
     }
 
     .dropzone:hover {
-      border-color: var(--primary-600);
-      background: #eff6ff;
+      border-color: var(--green-400);
+      background: rgba(16, 185, 129, 0.07);
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.15);
     }
 
     .dropzone input[type='file'] {
@@ -643,27 +708,27 @@
     .dropzone-title {
       font-size: 1.08rem;
       font-weight: 700;
-      color: var(--navy-900);
+      color: #ffffff;
       margin-bottom: 6px;
     }
 
     .dropzone-sub {
-      font-size: 0.88rem;
-      color: var(--slate-600);
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
 
-    /* Controls & Inputs */
+    /* Controls & Form Elements */
     .controls-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 16px;
       margin-bottom: 22px;
     }
 
     .controls-grid-2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      gap: 16px;
       margin-bottom: 22px;
     }
 
@@ -673,22 +738,22 @@
     }
 
     .field-group label {
-      font-size: 0.86rem;
-      font-weight: 700;
-      color: var(--navy-900);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-slate);
     }
 
     .field-group input,
     .field-group select,
     .field-group textarea {
       width: 100%;
-      padding: 12px 14px;
+      padding: 11px 14px;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--slate-300);
-      background: #f8fafc;
-      color: var(--slate-900);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: var(--black-950);
+      color: #ffffff;
       font-family: inherit;
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       transition: var(--transition);
     }
 
@@ -696,9 +761,78 @@
     .field-group select:focus,
     .field-group textarea:focus {
       outline: none;
-      border-color: var(--primary-600);
-      background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      border-color: var(--blue-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+    }
+
+    /* RGB Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-blue {
+      background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+      color: #ffffff;
+      box-shadow: 0 6px 20px var(--blue-glow);
+    }
+
+    .btn-blue:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(59, 130, 246, 0.48);
+    }
+
+    .btn-red {
+      background: linear-gradient(135deg, var(--red-500), #dc2626);
+      color: #ffffff;
+      box-shadow: 0 6px 20px var(--red-glow);
+    }
+
+    .btn-red:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(239, 68, 68, 0.48);
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, var(--green-500), #059669);
+      color: #ffffff;
+      box-shadow: 0 6px 20px var(--green-glow);
+    }
+
+    .btn-green:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(16, 185, 129, 0.48);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: var(--text-white);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      border-color: var(--blue-400);
+      background: rgba(59, 130, 246, 0.14);
+    }
+
+    .btn-sm {
+      padding: 8px 15px;
+      font-size: 0.82rem;
     }
 
     .action-bar {
@@ -709,27 +843,27 @@
       margin-top: 16px;
     }
 
+    /* Preview & Output Boxes */
     .preview-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
       gap: 14px;
       margin: 18px 0;
     }
 
     .preview-item {
-      background: #f8fafc;
-      border: 1px solid var(--slate-200);
+      background: var(--black-950);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       padding: 10px;
       text-align: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--slate-700);
+      font-size: 0.78rem;
+      color: var(--text-slate);
     }
 
     .preview-item img {
       width: 100%;
-      height: 96px;
+      height: 95px;
       object-fit: cover;
       border-radius: 6px;
       margin-bottom: 6px;
@@ -738,23 +872,24 @@
     .status-banner {
       display: none;
       margin-top: 16px;
-      padding: 13px 18px;
+      padding: 13px 16px;
       border-radius: var(--radius-sm);
-      font-size: 0.92rem;
-      font-weight: 700;
-      background: #dcfce7;
-      border: 1px solid #86efac;
-      color: #166534;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      color: var(--green-400);
     }
 
     .status-banner.visible {
       display: block;
     }
 
+    /* RGB Progress Bar */
     .progress-wrap {
       display: none;
       margin: 16px 0;
-      background: var(--slate-200);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 999px;
       height: 10px;
       overflow: hidden;
@@ -767,14 +902,14 @@
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--primary-600), var(--indigo-600));
+      background: var(--rgb-gradient);
       transition: width 0.25s ease;
     }
 
-    /* Canvas Workspaces */
+    /* Canvas Workspaces (Scanner & Signature) */
     .canvas-stage {
-      background: var(--navy-900);
-      border: 1px solid var(--slate-300);
+      background: var(--black-950);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 20px;
       text-align: center;
@@ -788,16 +923,17 @@
       max-height: 440px;
       margin: 0 auto;
       border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .sig-pad-canvas {
       background: #ffffff;
-      border: 2px solid var(--slate-300);
       border-radius: var(--radius-sm);
       cursor: crosshair;
       touch-action: none;
     }
 
+    /* Entity & Intelligence Cards */
     .intel-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -806,26 +942,30 @@
     }
 
     .intel-stat-box {
-      background: #f8fafc;
-      border: 1px solid var(--slate-200);
+      background: var(--black-950);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      padding: 16px;
+      padding: 14px;
       text-align: center;
     }
 
     .intel-stat-box strong {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      color: var(--primary-600);
+      font-size: 1.45rem;
+      color: var(--blue-400);
     }
+
+    .intel-stat-box:nth-child(1) strong { color: var(--red-400); }
+    .intel-stat-box:nth-child(2) strong { color: var(--green-400); }
+    .intel-stat-box:nth-child(3) strong { color: var(--blue-400); }
+    .intel-stat-box:nth-child(4) strong { color: var(--green-400); }
 
     .intel-stat-box span {
       font-size: 0.76rem;
-      font-weight: 700;
-      color: var(--slate-600);
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
     }
 
     .entity-pills {
@@ -836,29 +976,26 @@
     }
 
     .entity-pill {
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      padding: 5px 11px;
       border-radius: 999px;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      color: var(--primary-600);
+      background: rgba(59, 130, 246, 0.14);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: var(--blue-400);
     }
 
-    /* ==========================================================================
-       About MVAPS Ecosystem & Support Section
-       ========================================================================== */
+    /* About & Support Section */
     .info-section {
-      padding: 84px 0;
-      background: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-950) 100%);
-      color: #ffffff;
-      border-top: 1px solid rgba(212, 175, 55, 0.28);
+      padding: 80px 0;
+      background: var(--black-900);
+      border-top: 1px solid var(--border-subtle);
     }
 
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1.1fr;
-      gap: 48px;
+      gap: 44px;
       align-items: start;
     }
 
@@ -869,8 +1006,8 @@
     }
 
     .eco-card {
-      background: rgba(21, 37, 66, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--black-850);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 18px 20px;
       display: flex;
@@ -886,26 +1023,38 @@
     }
 
     .eco-card-left img {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 10px;
       object-fit: cover;
-      border: 1px solid rgba(212, 175, 55, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .support-form-card {
-      background: var(--bg-white);
-      color: var(--slate-900);
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 36px;
+      padding: 34px;
       box-shadow: var(--shadow-lg);
+    }
+
+    .support-form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--rgb-gradient);
     }
 
     .field-error-msg {
       display: none;
       font-size: 0.78rem;
-      color: var(--danger);
-      font-weight: 700;
+      color: var(--red-400);
+      font-weight: 600;
     }
 
     .field-error-msg.visible {
@@ -913,16 +1062,16 @@
     }
 
     .input-invalid {
-      border-color: var(--danger) !important;
-      background: #fff5f5 !important;
+      border-color: var(--red-500) !important;
+      background: rgba(239, 68, 68, 0.1) !important;
     }
 
     /* Warning Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(7, 14, 26, 0.72);
-      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -939,36 +1088,35 @@
     }
 
     .modal-box {
-      background: var(--bg-white);
-      color: var(--slate-900);
-      border-top: 5px solid var(--danger);
+      background: var(--black-900);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 4px solid var(--red-500);
       border-radius: var(--radius-lg);
       max-width: 440px;
       width: 100%;
-      padding: 32px 28px;
+      padding: 30px 26px;
       text-align: center;
       box-shadow: var(--shadow-lg);
     }
 
     .modal-box h4 {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       margin-bottom: 10px;
-      color: var(--navy-900);
     }
 
     .modal-box p {
-      font-size: 0.94rem;
-      color: var(--slate-600);
-      margin-bottom: 22px;
+      font-size: 0.92rem;
+      color: var(--text-slate);
+      margin-bottom: 20px;
     }
 
     /* Footer */
     .footer {
-      background: var(--navy-950);
-      color: #94a3b8;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--black-950);
+      border-top: 1px solid var(--border-subtle);
       padding: 44px 0 32px;
-      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
     }
 
     .footer-inner {
@@ -980,12 +1128,21 @@
     }
 
     @media (max-width: 1024px) {
-      .hero-grid,
+      .hero-top-grid,
+      .workspace-shell,
       .info-grid {
         grid-template-columns: 1fr;
       }
 
-      .tools-cards-grid {
+      .quick-tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .workspace-sidebar {
+        position: static;
+      }
+
+      .sidebar-nav {
         grid-template-columns: repeat(2, 1fr);
       }
     }
@@ -998,37 +1155,36 @@
       .nav-links {
         display: none;
         position: absolute;
-        top: 78px;
+        top: 79px;
         left: 0;
         right: 0;
-        background: var(--navy-900);
+        background: var(--black-900);
         flex-direction: column;
-        padding: 22px;
-        gap: 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-bottom: 1px solid var(--border-subtle);
       }
 
       .nav-links.open {
         display: flex;
       }
 
-      .tools-cards-grid,
+      .quick-tools-grid,
+      .sidebar-nav,
       .controls-grid,
       .controls-grid-2,
       .intel-grid {
         grid-template-columns: 1fr;
       }
 
-      .tool-panel,
-      .support-form-card {
-        padding: 26px 18px;
+      .tool-panel {
+        padding: 24px 18px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar with Original SnapDocs AI Logo -->
+  <!-- Navbar with Original SnapDocs AI Logo & RGB Bar -->
   <header class="navbar">
     <div class="container nav-inner">
       <a href="#top" class="brand">
@@ -1037,218 +1193,247 @@
           alt="SnapDocs AI Logo"
           class="brand-logo-img"
         />
-        <span class="brand-title">SnapDocs <span>AI</span></span>
+        <div class="brand-text">
+          <span class="brand-name">SnapDocs AI</span>
+          <span class="brand-by">By MVAPS &amp; Company</span>
+        </div>
       </a>
 
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#top">Home</a></li>
-        <li><a href="#tools">Tools</a></li>
+        <li><a href="#top">Tools</a></li>
         <li><a href="#workspace">Workspace</a></li>
         <li><a href="#about">About &amp; Support</a></li>
         <li><a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer">MVAPS &amp; Company ↗</a></li>
         <li><a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer">Project Nest AI ↗</a></li>
-        <li><a href="#tools" class="nav-cta">Launch Tools</a></li>
+        <li>
+          <span class="privacy-pill">
+            <span class="rgb-dot-row">
+              <span class="dot-r"></span>
+              <span class="dot-g"></span>
+              <span class="dot-b"></span>
+            </span>
+            100% On-Device Privacy
+          </span>
+        </li>
       </ul>
     </div>
   </header>
 
-  <!-- Hero Section with Original SnapDocs AI Logo & Identity -->
+  <!-- Hero & Framed Quick Tool Launcher (With RGB Neural Particle Background) -->
   <section class="hero" id="top">
-    <div class="container hero-grid">
-      <div class="reveal is-visible">
-        <div class="hero-badge">
-          <span class="live-dot"></span>
-          AI-Powered Document Processing Hub
+    <canvas id="rgbTechCanvas"></canvas>
+
+    <div class="container hero-inner">
+      <div class="hero-top-grid reveal is-visible">
+        <div>
+          <div class="hero-badge">
+            <span class="rgb-dot-row">
+              <span class="dot-r"></span>
+              <span class="dot-g"></span>
+              <span class="dot-b"></span>
+            </span>
+            All-in-One Document Intelligence &amp; PDF Suite
+          </div>
+          <h1>
+            <span class="r-word">Convert.</span>
+            <span class="g-word">Scan.</span>
+            <span class="b-word">Extract.</span>
+            With SnapDocs AI.
+          </h1>
+          <p>
+            Convert photos to PDFs, transform image formats, scan documents, extract text with AI
+            OCR, merge &amp; split PDFs, and summarize documents effortlessly—with zero watermarks
+            and 100% local privacy.
+          </p>
+          <div class="action-bar">
+            <a href="#workspace" class="btn btn-blue">Open Active Workspace ↓</a>
+            <a href="#about" class="btn btn-ghost">About &amp; Support</a>
+          </div>
         </div>
-        <h1>
-          SnapDocs <span>AI</span>
-        </h1>
-        <p>
-          Convert photos to PDFs, transform image formats, scan documents, extract text using AI
-          OCR, merge &amp; split PDFs, and summarize documents effortlessly—100% free and private in
-          your browser.
-        </p>
-        <div class="btn-row">
-          <a href="#tools" class="btn btn-primary">Explore &amp; Launch Tools</a>
-          <a href="#workspace" class="btn btn-gold">Open Active Workspace</a>
+
+        <div class="hero-logo-frame">
+          <img
+            src="https://i.postimg.cc/mZMfX7tV/Screenshot-2025-09-22-205658.png"
+            alt="SnapDocs AI Logo"
+          />
+          <div class="hero-frame-meta">
+            <span><strong style="color: #fff;">SnapDocs AI</strong> · Document Intelligence</span>
+            <span class="mono" style="color: var(--green-400);">● SYSTEM ONLINE</span>
+          </div>
         </div>
       </div>
 
-      <div class="hero-logo-card reveal is-visible delay-1">
-        <img
-          src="https://i.postimg.cc/mZMfX7tV/Screenshot-2025-09-22-205658.png"
-          alt="SnapDocs AI Official Logo"
-        />
-        <div class="hero-logo-caption">
-          <span><strong style="color: #fff;">SnapDocs AI</strong> · By MVAPS &amp; Company</span>
-          <span style="color: #34d399; font-weight: 700;">● 100% Local Privacy</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tools Grid Section (Original 4 Core Tools + 4 New Power Tools with Visual Logos & Launch Buttons) -->
-  <section class="tools-section" id="tools">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-eyebrow">All-in-One Document Suite</span>
-        <h2 class="section-title">Choose a Tool to Launch</h2>
-        <p class="section-subtitle">
-          Click any tool card below to launch its workspace immediately.
-        </p>
-      </div>
-
-      <div class="tools-cards-grid" id="quickToolsGrid">
-        <!-- 1. Image to PDF (Original Core Tool 1) -->
-        <div class="tool-launch-card active reveal delay-1" data-tool="img2pdf">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <rect x="8" y="12" width="8" height="6" rx="1" />
-              </svg>
+      <!-- 8 Framed Quick Launcher Cards (Original 4 Core Tools + 4 Power Tools) -->
+      <div class="quick-tools-grid reveal is-visible" id="quickToolsGrid">
+        <!-- 1. Image to PDF (Red Accent) -->
+        <button type="button" class="quick-tool-card active" data-tool="img2pdf" data-accent="red">
+          <div class="qt-top">
+            <div class="qt-icon red">PDF</div>
+            <div class="qt-meta">
+              <strong>Image to PDF</strong>
+              <span>Convert multiple images into a single A4/Letter PDF file.</span>
             </div>
-            <h3>Image to PDF</h3>
-            <p>Convert multiple images into a single PDF file with custom page size and margins.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>PDF BUILDER</span>
+            <span style="color: var(--red-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 2. Format Converter (Original Core Tool 2) -->
-        <div class="tool-launch-card reveal delay-2" data-tool="converter">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 3 21 3 21 8" />
-                <line x1="4" y1="20" x2="21" y2="3" />
-                <polyline points="21 16 21 21 16 21" />
-                <line x1="15" y1="15" x2="21" y2="21" />
-                <line x1="4" y1="4" x2="9" y2="9" />
-              </svg>
+        <!-- 2. Format Converter (Blue Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="converter" data-accent="blue">
+          <div class="qt-top">
+            <div class="qt-icon blue">FMT</div>
+            <div class="qt-meta">
+              <strong>Format Converter</strong>
+              <span>Convert between JPG, PNG, WEBP &amp; compress to 20KB/50KB/100KB.</span>
             </div>
-            <h3>Format Converter</h3>
-            <p>Convert images between JPG, PNG, and WEBP or compress to 20KB, 50KB, or 100KB.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>FORMAT &amp; KB</span>
+            <span style="color: var(--blue-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 3. Document Scanner (Original Core Tool 3) -->
-        <div class="tool-launch-card reveal delay-3" data-tool="scanner">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                <circle cx="12" cy="13" r="4" />
-              </svg>
+        <!-- 3. Document Scanner (Green Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="scanner" data-accent="green">
+          <div class="qt-top">
+            <div class="qt-icon green">SCN</div>
+            <div class="qt-meta">
+              <strong>Document Scanner</strong>
+              <span>Enhance and scan documents with Magic Color, B&amp;W, or camera.</span>
             </div>
-            <h3>Document Scanner</h3>
-            <p>Enhance and scan document images with Magic Color, B&amp;W photocopy, or live camera.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>AI VISION SCAN</span>
+            <span style="color: var(--green-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 4. Text Extractor (Original Core Tool 4) -->
-        <div class="tool-launch-card reveal delay-4" data-tool="ocr">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 7V4h3M20 7V4h-3M4 17v3h3M20 17v3h-3" />
-                <line x1="7" y1="12" x2="17" y2="12" />
-                <line x1="7" y1="8" x2="13" y2="8" />
-                <line x1="7" y1="16" x2="15" y2="16" />
-              </svg>
+        <!-- 4. Text Extractor (Blue Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="ocr" data-accent="blue">
+          <div class="qt-top">
+            <div class="qt-icon blue">OCR</div>
+            <div class="qt-meta">
+              <strong>Text Extractor</strong>
+              <span>Extract text, emails, phones &amp; amounts from images or PDFs.</span>
             </div>
-            <h3>Text Extractor</h3>
-            <p>Extract text, emails, phones, and amounts from images or PDFs using AI OCR.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>AI OCR ENGINE</span>
+            <span style="color: var(--blue-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 5. Merge, Split & Rotate PDF -->
-        <div class="tool-launch-card reveal delay-1" data-tool="mergeSplit">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="9" rx="1" />
-                <rect x="14" y="3" width="7" height="9" rx="1" />
-                <path d="M12 15v6M9 18l3 3 3-3" />
-              </svg>
+        <!-- 5. Merge, Split & Rotate PDF (Red Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="mergeSplit" data-accent="red">
+          <div class="qt-top">
+            <div class="qt-icon red">M&amp;S</div>
+            <div class="qt-meta">
+              <strong>Merge, Split &amp; Rotate</strong>
+              <span>Combine multiple PDFs, extract page ranges, or rotate pages.</span>
             </div>
-            <h3>Merge, Split &amp; Rotate PDF</h3>
-            <p>Combine multiple PDF files into one, extract custom page ranges, or rotate pages.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>PDF SUITE</span>
+            <span style="color: var(--red-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 6. AI Document Summarizer & Q&A -->
-        <div class="tool-launch-card reveal delay-2" data-tool="summarizer">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
+        <!-- 6. AI Document Summarizer (Blue Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="summarizer" data-accent="blue">
+          <div class="qt-top">
+            <div class="qt-icon blue">SUM</div>
+            <div class="qt-meta">
+              <strong>AI Doc Summarizer</strong>
+              <span>Executive summary, key bullet takeaways &amp; Ask Document Q&amp;A.</span>
             </div>
-            <h3>AI Document Summarizer</h3>
-            <p>Generate executive summaries, key bullet takeaways, and ask questions on any document.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>DOC INTEL</span>
+            <span style="color: var(--blue-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 7. e-Sign & Watermark PDF -->
-        <div class="tool-launch-card reveal delay-3" data-tool="sign">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 20h9" />
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-              </svg>
+        <!-- 7. e-Sign & Watermark PDF (Red Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="sign" data-accent="red">
+          <div class="qt-top">
+            <div class="qt-icon red">SGN</div>
+            <div class="qt-meta">
+              <strong>e-Sign &amp; Watermark</strong>
+              <span>Draw signature, stamp custom watermarks &amp; add page numbers.</span>
             </div>
-            <h3>e-Sign &amp; Watermark PDF</h3>
-            <p>Draw your signature on screen, stamp custom watermarks, and add page numbers.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>e-SIGNATURE</span>
+            <span style="color: var(--red-400);">Launch Tool →</span>
+          </div>
+        </button>
 
-        <!-- 8. PDF to Image & QR Studio -->
-        <div class="tool-launch-card reveal delay-4" data-tool="pdf2img">
-          <div>
-            <div class="tool-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-              </svg>
+        <!-- 8. PDF to Image & QR Studio (Green Accent) -->
+        <button type="button" class="quick-tool-card" data-tool="pdf2img" data-accent="green">
+          <div class="qt-top">
+            <div class="qt-icon green">QR</div>
+            <div class="qt-meta">
+              <strong>PDF to Image &amp; QR</strong>
+              <span>Export PDF pages as high-res PNGs &amp; generate document QR codes.</span>
             </div>
-            <h3>PDF to Image &amp; QR Studio</h3>
-            <p>Render PDF pages into high-resolution PNG images or generate document QR codes.</p>
           </div>
-          <button type="button" class="launch-link-btn">Launch Tool →</button>
-        </div>
+          <div class="qt-launch-bar">
+            <span>EXPORT &amp; QR</span>
+            <span style="color: var(--green-400);">Launch Tool →</span>
+          </div>
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- Active Launched Tool Workspace -->
+  <!-- Main Interactive Framed Workspace -->
   <section class="workspace-section" id="workspace">
-    <div class="container">
+    <div class="container workspace-shell">
 
-      <!-- Quick Switcher Bar -->
-      <div class="workspace-tabs-bar" id="sidebarNav">
-        <button type="button" class="ws-tab-btn active" data-tool="img2pdf">Image to PDF</button>
-        <button type="button" class="ws-tab-btn" data-tool="converter">Format Converter</button>
-        <button type="button" class="ws-tab-btn" data-tool="scanner">Document Scanner</button>
-        <button type="button" class="ws-tab-btn" data-tool="ocr">Text Extractor</button>
-        <button type="button" class="ws-tab-btn" data-tool="mergeSplit">Merge &amp; Split PDF</button>
-        <button type="button" class="ws-tab-btn" data-tool="summarizer">AI Summarizer</button>
-        <button type="button" class="ws-tab-btn" data-tool="sign">e-Sign &amp; Watermark</button>
-        <button type="button" class="ws-tab-btn" data-tool="pdf2img">PDF to Image &amp; QR</button>
-      </div>
+      <!-- Left Sidebar Navigation -->
+      <aside class="workspace-sidebar">
+        <span class="sidebar-label">SnapDocs AI Workspace</span>
+        <div class="sidebar-nav" id="sidebarNav">
+          <button type="button" class="sidebar-btn active" data-tool="img2pdf">
+            <span>Image to PDF</span>
+            <span class="sidebar-tag red">PDF</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="converter">
+            <span>Format Converter</span>
+            <span class="sidebar-tag blue">FMT/KB</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="scanner">
+            <span>Document Scanner</span>
+            <span class="sidebar-tag green">SCAN</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="ocr">
+            <span>Text Extractor</span>
+            <span class="sidebar-tag blue">OCR</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="mergeSplit">
+            <span>Merge, Split &amp; Rotate</span>
+            <span class="sidebar-tag red">SUITE</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="summarizer">
+            <span>AI Doc Summarizer</span>
+            <span class="sidebar-tag blue">AI</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="sign">
+            <span>e-Sign &amp; Watermark</span>
+            <span class="sidebar-tag red">SIGN</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="pdf2img">
+            <span>PDF to Image &amp; QR</span>
+            <span class="sidebar-tag green">QR</span>
+          </button>
+        </div>
+      </aside>
 
-      <!-- Tool Panels Container -->
+      <!-- Right Active Tool Container -->
       <main id="toolPanelsContainer">
 
         <!-- ===================================================================
@@ -1258,9 +1443,9 @@
           <div class="panel-header">
             <div>
               <h2>Image to PDF</h2>
-              <p>Convert multiple images into a single PDF file.</p>
+              <p>Convert multiple images into a single PDF file with custom layout and margins.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-r"></span>PDF Builder</span>
           </div>
 
           <label class="dropzone" for="imgToPdfInput">
@@ -1300,7 +1485,7 @@
           <div class="preview-grid" id="imgToPdfPreview"></div>
 
           <div class="action-bar">
-            <button type="button" class="btn btn-primary" id="generatePdfFromImgsBtn">
+            <button type="button" class="btn btn-red" id="generatePdfFromImgsBtn">
               Convert &amp; Download PDF
             </button>
             <button type="button" class="btn btn-ghost" id="clearImgToPdfBtn">
@@ -1311,15 +1496,15 @@
         </div>
 
         <!-- ===================================================================
-             TOOL 2: Format Converter & Target-KB Resizer
+             TOOL 2: Format Converter & Target-KB Compressor
              =================================================================== -->
         <div class="tool-panel" id="panel-converter">
           <div class="panel-header">
             <div>
               <h2>Format Converter</h2>
-              <p>Convert images between different formats or compress to exact 20 KB / 50 KB / 100 KB limits.</p>
+              <p>Convert images between JPG, PNG, and WEBP, or compress to exact 20 KB / 50 KB / 100 KB limits.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-b"></span>Format &amp; Size Control</span>
           </div>
 
           <label class="dropzone" for="converterInput">
@@ -1356,7 +1541,7 @@
           </div>
 
           <div class="action-bar">
-            <button type="button" class="btn btn-primary" id="runConverterBtn">
+            <button type="button" class="btn btn-blue" id="runConverterBtn">
               Convert / Compress &amp; Download
             </button>
           </div>
@@ -1370,20 +1555,20 @@
           <div class="panel-header">
             <div>
               <h2>Document Scanner</h2>
-              <p>Enhance and scan document images with Magic Color, B&amp;W photocopy mode, or live camera.</p>
+              <p>Enhance and scan document photos with Magic Color, B&amp;W photocopy mode, or live camera.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-g"></span>Vision Enhancement</span>
           </div>
 
           <div class="action-bar" style="margin-bottom: 18px;">
-            <label class="btn btn-primary" for="scannerInput" style="cursor: pointer;">
+            <label class="btn btn-green" for="scannerInput" style="cursor: pointer;">
               Upload Document Image
               <input type="file" id="scannerInput" accept="image/*" style="display: none;" />
             </label>
             <button type="button" class="btn btn-ghost" id="startCameraBtn">
               Use Camera to Scan
             </button>
-            <button type="button" class="btn btn-emerald" id="captureCameraBtn" style="display: none;">
+            <button type="button" class="btn btn-blue" id="captureCameraBtn" style="display: none;">
               Capture Photo
             </button>
           </div>
@@ -1420,10 +1605,10 @@
             <button type="button" class="btn btn-ghost" id="rotateScanBtn">
               Rotate 90° ↻
             </button>
-            <button type="button" class="btn btn-primary" id="downloadScanPngBtn">
+            <button type="button" class="btn btn-green" id="downloadScanPngBtn">
               Download Scanned PNG
             </button>
-            <button type="button" class="btn btn-emerald" id="downloadScanPdfBtn">
+            <button type="button" class="btn btn-red" id="downloadScanPdfBtn">
               Download as Scanned PDF
             </button>
           </div>
@@ -1437,9 +1622,9 @@
           <div class="panel-header">
             <div>
               <h2>Text Extractor</h2>
-              <p>Extract text from images and PDFs using AI OCR, detect structured fields, and redact PII.</p>
+              <p>Extract text from images and PDFs using AI OCR, detect structured entities, and redact PII.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-b"></span>OCR + Entity AI</span>
           </div>
 
           <label class="dropzone" for="ocrInput">
@@ -1449,21 +1634,21 @@
           </label>
 
           <div class="action-bar">
-            <button type="button" class="btn btn-primary" id="runOcrBtn">
-              Extract Text with AI OCR
+            <button type="button" class="btn btn-blue" id="runOcrBtn">
+              Run AI Text &amp; Data Extraction
             </button>
             <button type="button" class="btn btn-ghost" id="redactPiiBtn">
               Redact Sensitive PII (Emails/Phones/IDs)
             </button>
-            <button type="button" class="btn btn-emerald" id="sendToSummarizerBtn">
-              Summarize Extracted Text →
+            <button type="button" class="btn btn-green" id="sendToSummarizerBtn">
+              Send Text to AI Summarizer →
             </button>
           </div>
 
           <div class="progress-wrap" id="ocrProgressWrap">
             <div class="progress-fill" id="ocrProgressFill"></div>
           </div>
-          <p id="ocrProgressLabel" style="font-size: 0.85rem; font-weight: 700; color: var(--primary-600); margin: 8px 0;"></p>
+          <p id="ocrProgressLabel" class="mono" style="font-size: 0.82rem; color: var(--green-400); margin: 8px 0;"></p>
 
           <div class="field-group" style="margin-top: 16px;">
             <label for="ocrOutputText">Extracted Text (Editable)</label>
@@ -1475,7 +1660,7 @@
           </div>
 
           <div style="margin-top: 18px;">
-            <strong style="font-size: 0.9rem; color: var(--navy-900);">
+            <strong style="font-size: 0.9rem; color: var(--green-400);">
               ✦ Smart Detected Entities (Emails, Phones, Dates, Amounts):
             </strong>
             <div class="entity-pills" id="ocrEntityPills">
@@ -1485,14 +1670,14 @@
 
           <div class="action-bar" style="margin-top: 22px;">
             <button type="button" class="btn btn-ghost btn-sm" id="copyOcrTextBtn">Copy Text</button>
-            <button type="button" class="btn btn-primary btn-sm" id="downloadOcrTxtBtn">Download .TXT</button>
-            <button type="button" class="btn btn-primary btn-sm" id="downloadOcrDocBtn">Download .DOC (Word)</button>
-            <button type="button" class="btn btn-emerald btn-sm" id="downloadOcrJsonBtn">Download .JSON</button>
+            <button type="button" class="btn btn-blue btn-sm" id="downloadOcrTxtBtn">Download .TXT</button>
+            <button type="button" class="btn btn-blue btn-sm" id="downloadOcrDocBtn">Download .DOC (Word)</button>
+            <button type="button" class="btn btn-green btn-sm" id="downloadOcrJsonBtn">Download Structured .JSON</button>
           </div>
         </div>
 
         <!-- ===================================================================
-             TOOL 5: Merge, Split & Rotate PDF
+             TOOL 5: Merge, Split & Rotate PDF Suite
              =================================================================== -->
         <div class="tool-panel" id="panel-mergeSplit">
           <div class="panel-header">
@@ -1500,22 +1685,22 @@
               <h2>Merge, Split &amp; Rotate PDF</h2>
               <p>Combine multiple PDF files into one, extract custom page ranges, or rotate pages.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-r"></span>PDF Power Suite</span>
           </div>
 
-          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--primary-600);">1. Merge Multiple PDFs</h3>
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--red-400);">1. Merge Multiple PDFs</h3>
           <label class="dropzone" for="mergePdfInput">
             <input type="file" id="mergePdfInput" accept="application/pdf" multiple />
             <div class="dropzone-title">Select 2 or More PDF Files to Merge</div>
             <div class="dropzone-sub" id="mergePdfFileListText">No PDF files selected yet</div>
           </label>
           <div class="action-bar" style="margin-bottom: 36px;">
-            <button type="button" class="btn btn-primary" id="mergePdfsBtn">
+            <button type="button" class="btn btn-red" id="mergePdfsBtn">
               Merge &amp; Download Combined PDF
             </button>
           </div>
 
-          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--primary-600);">2. Split Pages or Rotate PDF</h3>
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--blue-400);">2. Split Pages or Rotate PDF</h3>
           <label class="dropzone" for="splitPdfInput">
             <input type="file" id="splitPdfInput" accept="application/pdf" />
             <div class="dropzone-title">Select a PDF File to Split or Rotate</div>
@@ -1540,7 +1725,7 @@
           </div>
 
           <div class="action-bar">
-            <button type="button" class="btn btn-primary" id="processSplitRotateBtn">
+            <button type="button" class="btn btn-blue" id="processSplitRotateBtn">
               Extract / Rotate &amp; Download PDF
             </button>
           </div>
@@ -1548,7 +1733,7 @@
         </div>
 
         <!-- ===================================================================
-             TOOL 6: AI Document Summarizer & Q&A
+             TOOL 6: AI Document Summarizer & Q&A Intelligence
              =================================================================== -->
         <div class="tool-panel" id="panel-summarizer">
           <div class="panel-header">
@@ -1556,13 +1741,13 @@
               <h2>AI Document Summarizer &amp; Q&amp;A</h2>
               <p>Distil long PDFs or text into an executive summary, key takeaways, and instant Q&amp;A.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-b"></span>Document Intelligence</span>
           </div>
 
           <div class="controls-grid-2">
             <label class="dropzone" for="sumFileInput" style="margin-bottom: 0; padding: 20px;">
               <input type="file" id="sumFileInput" accept="application/pdf,text/plain" />
-              <div class="dropzone-title" style="font-size: 0.98rem;">Upload PDF or .TXT Document</div>
+              <div class="dropzone-title" style="font-size: 0.95rem;">Upload PDF or .TXT Document</div>
               <div class="dropzone-sub" id="sumFileLabel">Automatically extracts all text for analysis</div>
             </label>
 
@@ -1573,7 +1758,7 @@
                 <option value="5" selected>Standard Summary (Top 5 Sentences)</option>
                 <option value="8">Detailed Breakdown (Top 8 Sentences)</option>
               </select>
-              <button type="button" class="btn btn-primary" id="runSummarizerBtn" style="margin-top: 8px;">
+              <button type="button" class="btn btn-blue" id="runSummarizerBtn" style="margin-top: 8px;">
                 Generate AI Summary &amp; Insights
               </button>
             </div>
@@ -1635,21 +1820,21 @@
           </div>
 
           <div class="action-bar">
-            <button type="button" class="btn btn-primary btn-sm" id="copySummaryBtn">Copy Summary</button>
-            <button type="button" class="btn btn-emerald btn-sm" id="downloadSummaryTxtBtn">Download Summary (.TXT)</button>
+            <button type="button" class="btn btn-blue btn-sm" id="copySummaryBtn">Copy Summary</button>
+            <button type="button" class="btn btn-green btn-sm" id="downloadSummaryTxtBtn">Download Summary (.TXT)</button>
           </div>
         </div>
 
         <!-- ===================================================================
-             TOOL 7: e-Sign & Watermark PDF
+             TOOL 7: Sign, Stamp & Watermark PDF
              =================================================================== -->
         <div class="tool-panel" id="panel-sign">
           <div class="panel-header">
             <div>
-              <h2>e-Sign &amp; Watermark PDF</h2>
+              <h2>e-Sign, Stamp &amp; Watermark PDF</h2>
               <p>Draw your signature on screen, stamp a custom watermark, and add page numbers to any PDF.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-r"></span>e-Signature &amp; Security</span>
           </div>
 
           <label class="dropzone" for="signPdfInput">
@@ -1684,14 +1869,14 @@
 
           <div class="field-group">
             <label>Draw Your Signature Below (Placed on Bottom-Right of Last Page)</label>
-            <div class="canvas-stage" style="padding: 14px; background: #f1f5f9;">
+            <div class="canvas-stage" style="padding: 14px;">
               <canvas id="sigPadCanvas" class="sig-pad-canvas" width="460" height="150"></canvas>
             </div>
           </div>
 
           <div class="action-bar">
             <button type="button" class="btn btn-ghost btn-sm" id="clearSigPadBtn">Clear Signature Pad</button>
-            <button type="button" class="btn btn-primary" id="applySignWatermarkBtn">
+            <button type="button" class="btn btn-red" id="applySignWatermarkBtn">
               Apply Signature / Watermark &amp; Download PDF
             </button>
           </div>
@@ -1699,18 +1884,18 @@
         </div>
 
         <!-- ===================================================================
-             TOOL 8: PDF to Image & QR Studio
+             TOOL 8: PDF to Images & Document QR Code Studio
              =================================================================== -->
         <div class="tool-panel" id="panel-pdf2img">
           <div class="panel-header">
             <div>
-              <h2>PDF to Image &amp; QR Studio</h2>
-              <p>Render PDF pages into high-resolution PNG images or generate a downloadable document QR code.</p>
+              <h2>PDF to Images &amp; Document QR Studio</h2>
+              <p>Render PDF pages into high-resolution PNG images or generate a downloadable verification QR code.</p>
             </div>
-            <span class="panel-badge">SnapDocs AI Tool</span>
+            <span class="panel-badge"><span class="dot-g"></span>Export &amp; QR</span>
           </div>
 
-          <h3 style="font-size: 1.12rem; color: var(--primary-600); margin-bottom: 12px;">1. Convert PDF Pages to PNG Images</h3>
+          <h3 style="font-size: 1.12rem; color: var(--green-400); margin-bottom: 12px;">1. Convert PDF Pages to PNG Images</h3>
           <label class="dropzone" for="pdfToImgInput">
             <input type="file" id="pdfToImgInput" accept="application/pdf" />
             <div class="dropzone-title">Upload PDF to Render Pages as Images</div>
@@ -1718,7 +1903,7 @@
           </label>
           <div class="preview-grid" id="pdfToImgGallery"></div>
 
-          <h3 style="font-size: 1.12rem; color: var(--primary-600); margin: 32px 0 12px;">2. Document Verification QR Code Generator</h3>
+          <h3 style="font-size: 1.12rem; color: var(--blue-400); margin: 32px 0 12px;">2. Document Verification QR Code Generator</h3>
           <div class="controls-grid-2">
             <div class="field-group">
               <label for="qrTextInput">Document URL, Verification ID, or Text</label>
@@ -1729,8 +1914,8 @@
                 placeholder="Enter URL, certificate ID, or verification text"
               />
               <div class="action-bar">
-                <button type="button" class="btn btn-primary btn-sm" id="generateQrBtn">Generate QR Code</button>
-                <button type="button" class="btn btn-emerald btn-sm" id="downloadQrBtn">Download QR PNG</button>
+                <button type="button" class="btn btn-blue btn-sm" id="generateQrBtn">Generate QR Code</button>
+                <button type="button" class="btn btn-green btn-sm" id="downloadQrBtn">Download QR PNG</button>
               </div>
             </div>
 
@@ -1748,11 +1933,16 @@
   <section class="info-section" id="about">
     <div class="container info-grid reveal">
       <div>
-        <div class="hero-badge">An MVAPS &amp; Company Product</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 14px; color: #fff;">
-          Built for Speed, Accuracy &amp; Complete Privacy.
-        </h2>
-        <p style="color: #cbd5e1; margin-bottom: 18px;">
+        <div class="hero-badge">
+          <span class="rgb-dot-row">
+            <span class="dot-r"></span>
+            <span class="dot-g"></span>
+            <span class="dot-b"></span>
+          </span>
+          An MVAPS &amp; Company Product
+        </div>
+        <h2 style="font-size: 2.1rem; margin-bottom: 14px;">Built for Speed, Accuracy &amp; Complete Privacy.</h2>
+        <p style="color: var(--text-slate); margin-bottom: 18px;">
           Founded in Nagpur on May 20, 2024, <strong>MVAPS &amp; Company</strong> builds practical,
           high-impact software products and digital solutions. <strong>SnapDocs AI</strong> processes
           your documents locally in your browser so sensitive files never leave your device.
@@ -1766,12 +1956,12 @@
                 alt="MVAPS & Company Logo"
               />
               <div>
-                <strong style="display: block; font-size: 1.05rem; color: #fff;">MVAPS &amp; Company</strong>
-                <span style="font-size: 0.85rem; color: #94a3b8;">Parent Organisation &amp; Connected Ecosystem</span>
+                <strong style="display: block; font-size: 1.05rem;">MVAPS &amp; Company</strong>
+                <span style="font-size: 0.84rem; color: var(--text-muted);">Parent Organisation &amp; Connected Ecosystem</span>
               </div>
             </div>
-            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm">
-              Launch Website ↗
+            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
+              Visit Website ↗
             </a>
           </div>
 
@@ -1782,23 +1972,23 @@
                 alt="SnapDocs AI Logo"
               />
               <div>
-                <strong style="display: block; font-size: 1.05rem; color: #fff;">Project Nest AI</strong>
-                <span style="font-size: 0.85rem; color: #94a3b8;">Custom AI, Web, Mobile &amp; Student Project Delivery</span>
+                <strong style="display: block; font-size: 1.05rem;">Project Nest AI</strong>
+                <span style="font-size: 0.84rem; color: var(--text-muted);">Custom AI, Web, Mobile &amp; Student Project Delivery</span>
               </div>
             </div>
-            <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
+            <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-blue btn-sm">
               Launch Project Nest ↗
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Direct Support Form to mvapscompany@gmail.com -->
+      <!-- Direct Feature Request / Customer Inquiry Form to mvapscompany@gmail.com -->
       <div class="support-form-card">
-        <h3 style="font-size: 1.4rem; margin-bottom: 6px; color: var(--navy-900);">Get In Touch / Support</h3>
-        <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 20px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 6px;">Request a Feature or Get Support</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
           Need a custom enterprise document workflow or have feedback on SnapDocs AI? Send a message
-          directly to our team.
+          directly to our engineering team.
         </p>
 
         <form
@@ -1842,7 +2032,7 @@
             ></textarea>
           </div>
 
-          <button type="submit" id="supSubmitBtn" class="btn btn-primary" style="width: 100%;">
+          <button type="submit" id="supSubmitBtn" class="btn btn-blue" style="width: 100%;">
             Send Message
           </button>
           <div class="status-banner" id="supStatusBanner"></div>
@@ -1856,7 +2046,7 @@
     <div class="modal-box">
       <h4 id="modalTitle">Invalid Input</h4>
       <p id="modalDesc">Please check your details and try again.</p>
-      <button type="button" id="closeModalBtn" class="btn btn-primary" style="width: 100%;">OK</button>
+      <button type="button" id="closeModalBtn" class="btn btn-red" style="width: 100%;">OK</button>
     </div>
   </div>
 
@@ -1884,7 +2074,9 @@
         'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
+    // =========================================================================
     // 1. Mobile Navbar & Scroll Reveal
+    // =========================================================================
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
@@ -1903,26 +2095,98 @@
     );
     document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
-    // 2. Tool Launching System (Cards + Workspace Tabs)
-    const launchCards = document.querySelectorAll('.tool-launch-card');
-    const wsTabBtns = document.querySelectorAll('.ws-tab-btn');
-    const toolPanels = document.querySelectorAll('.tool-panel');
+    // =========================================================================
+    // 2. Interactive Red, Green, Blue (RGB) Neural Particle Canvas on Black
+    // =========================================================================
+    const rgbCanvas = document.getElementById('rgbTechCanvas');
+    const rgbCtx = rgbCanvas.getContext('2d');
+    const RGB_COLORS = ['rgba(239, 68, 68, 0.78)', 'rgba(16, 185, 129, 0.78)', 'rgba(59, 130, 246, 0.78)'];
+    let particles = [];
 
-    function switchTool(toolId, scrollToWorkspace = false) {
-      launchCards.forEach((c) => c.classList.toggle('active', c.dataset.tool === toolId));
-      wsTabBtns.forEach((b) => b.classList.toggle('active', b.dataset.tool === toolId));
-      toolPanels.forEach((p) => p.classList.toggle('active', p.id === `panel-${toolId}`));
-      if (scrollToWorkspace) {
-        document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
+    function resizeRgbCanvas() {
+      rgbCanvas.width = rgbCanvas.parentElement.offsetWidth;
+      rgbCanvas.height = rgbCanvas.parentElement.offsetHeight;
+    }
+    window.addEventListener('resize', resizeRgbCanvas);
+    resizeRgbCanvas();
+
+    class RgbParticle {
+      constructor(idx) {
+        this.x = Math.random() * rgbCanvas.width;
+        this.y = Math.random() * rgbCanvas.height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.size = Math.random() * 2.2 + 1.2;
+        this.color = RGB_COLORS[idx % RGB_COLORS.length];
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > rgbCanvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > rgbCanvas.height) this.vy *= -1;
+      }
+      draw() {
+        rgbCtx.beginPath();
+        rgbCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        rgbCtx.fillStyle = this.color;
+        rgbCtx.fill();
       }
     }
 
-    launchCards.forEach((card) => {
-      card.addEventListener('click', () => switchTool(card.dataset.tool, true));
+    function initRgbParticles() {
+      particles = [];
+      const count = Math.min(48, Math.floor((rgbCanvas.width * rgbCanvas.height) / 18000));
+      for (let i = 0; i < count; i++) {
+        particles.push(new RgbParticle(i));
+      }
+    }
+    initRgbParticles();
+
+    function animateRgbParticles() {
+      rgbCtx.clearRect(0, 0, rgbCanvas.width, rgbCanvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            rgbCtx.beginPath();
+            rgbCtx.strokeStyle = `rgba(59, 130, 246, ${0.18 * (1 - dist / 130)})`;
+            rgbCtx.lineWidth = 1;
+            rgbCtx.moveTo(particles[i].x, particles[i].y);
+            rgbCtx.lineTo(particles[j].x, particles[j].y);
+            rgbCtx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateRgbParticles);
+    }
+    animateRgbParticles();
+
+    // =========================================================================
+    // 3. Interactive Tool Switcher (Quick Launcher Cards + Sidebar)
+    // =========================================================================
+    const quickCards = document.querySelectorAll('.quick-tool-card');
+    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+    const toolPanels = document.querySelectorAll('.tool-panel');
+
+    function switchTool(toolId) {
+      quickCards.forEach((c) => c.classList.toggle('active', c.dataset.tool === toolId));
+      sidebarBtns.forEach((b) => b.classList.toggle('active', b.dataset.tool === toolId));
+      toolPanels.forEach((p) => p.classList.toggle('active', p.id === `panel-${toolId}`));
+    }
+
+    quickCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        switchTool(card.dataset.tool);
+        document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
+      });
     });
 
-    wsTabBtns.forEach((btn) => {
-      btn.addEventListener('click', () => switchTool(btn.dataset.tool, false));
+    sidebarBtns.forEach((btn) => {
+      btn.addEventListener('click', () => switchTool(btn.dataset.tool));
     });
 
     function downloadBlob(blob, filename) {
@@ -2141,7 +2405,7 @@
     let cameraStream = null;
 
     function drawPlaceholderScanner() {
-      scannerCtx.fillStyle = '#0b1628';
+      scannerCtx.fillStyle = '#030407';
       scannerCtx.fillRect(0, 0, scannerCanvas.width, scannerCanvas.height);
       scannerCtx.fillStyle = '#94a3b8';
       scannerCtx.font = '600 16px Plus Jakarta Sans, sans-serif';
@@ -2402,7 +2666,7 @@
 
     document.getElementById('sendToSummarizerBtn').addEventListener('click', () => {
       document.getElementById('sumInputText').value = ocrOutputText.value;
-      switchTool('summarizer', false);
+      switchTool('summarizer');
       document.getElementById('runSummarizerBtn').click();
     });
 
@@ -2806,7 +3070,7 @@
     pdfToImgInput.addEventListener('change', async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
-      pdfToImgGallery.innerHTML = '<span style="color: var(--primary-600); font-weight: 700;">Rendering PDF pages...</span>';
+      pdfToImgGallery.innerHTML = '<span style="color: var(--green-400);">Rendering PDF pages...</span>';
       const buf = await file.arrayBuffer();
       const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
       pdfToImgGallery.innerHTML = '';
@@ -2824,7 +3088,7 @@
         card.className = 'preview-item';
         card.innerHTML = `
           <img src="${dataUrl}" alt="Page ${i}" />
-          <a href="${dataUrl}" download="SnapDocs-Page-${i}.png" class="btn btn-primary btn-sm" style="width:100%; margin-top:4px;">
+          <a href="${dataUrl}" download="SnapDocs-Page-${i}.png" class="btn btn-green btn-sm" style="width:100%; margin-top:4px;">
             Page ${i} PNG
           </a>
         `;
@@ -2842,7 +3106,7 @@
         value: qrTextInput.value.trim() || 'https://snapdocsaio.onrender.com/',
         size: 180,
         background: '#ffffff',
-        foreground: '#0b1628',
+        foreground: '#030407',
         level: 'H',
       });
     }
