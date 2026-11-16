@@ -1,319 +1,2841 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SnapDocs AI - Document Processing Tools by MVAPS & Company</title>
-    
-    <!-- TailwindCSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- jsPDF Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <!-- Tesseract.js for OCR -->
-    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js'></script>
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 9999; animation: fadeOut 0.5s ease-in-out 4s forwards; overflow: hidden; }
-        .splash-screen::before { content: ''; position: absolute; width: 0; height: 0; background: radial-gradient(circle, #ef4444 0%, #f59e0b 25%, #3b82f6 50%, #8b5cf6 75%, #ec4899 100%); border-radius: 50%; animation: colorBlast 1.5s ease-out forwards; opacity: 0; }
-        @keyframes colorBlast { 0% { width: 0; height: 0; opacity: 0; } 30% { opacity: 1; } 100% { width: 300vw; height: 300vw; opacity: 0.8; } }
-        .splash-logo { width: 200px; height: 200px; margin-bottom: 2rem; z-index: 2; opacity: 0; transform: scale(0.5); animation: logoAppear 1s ease-out 0.5s forwards, logoFloat 2s ease-in-out 1.5s infinite; }
-        @keyframes logoAppear { to { opacity: 1; transform: scale(1); } }
-        @keyframes logoFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
-        .splash-screen h1 { font-size: 4rem; font-weight: bold; color: white; text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); z-index: 2; opacity: 0; transform: translateY(30px); animation: textAppear 0.8s ease-out 1.5s forwards; }
-        .splash-subtitle { font-size: 1.25rem; color: rgba(255, 255, 255, 0.8); margin-top: 0.5rem; z-index: 2; opacity: 0; transform: translateY(30px); animation: textAppear 0.8s ease-out 1.7s forwards; }
-        @keyframes textAppear { to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-        .main-app { opacity: 0; animation: fadeIn 0.5s ease-in-out 4.5s forwards; }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .navbar { position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-        .animated-logo { animation: breathe 3s ease-in-out infinite; }
-        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .nav-link { transition: all 0.3s ease; position: relative; cursor: pointer; }
-        .nav-link:hover { color: #3b82f6; transform: translateY(-2px); }
-        .tool-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); }
-        .preview-image { max-width: 100%; max-height: 400px; border-radius: 0.5rem; margin: 1rem 0; }
-        .file-input-label { cursor: pointer; transition: all 0.3s ease; }
-        .file-input-label:hover { background-color: #374151; }
-        #ocr-progress { display: none; }
-        .about-section { display: none; animation: slideDown 0.3s ease-out; }
-        .about-section.active { display: block; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) {
-            .splash-screen h1 { font-size: 2.5rem; }
-            .splash-logo { width: 150px; height: 150px; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnapDocs AI | All-in-One Document Intelligence &amp; PDF Suite</title>
+  <meta
+    name="description"
+    content="SnapDocs AI by MVAPS & Company — Your All-in-One Document Intelligence Hub. Image to PDF, Merge & Split PDF, AI Document Scanner, OCR Data Extractor, AI Summarizer, Target-KB Compressor, and e-Sign PDF."
+  />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Core Document Processing Engines (100% Client-Side & Free on Render) -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+  <style>
+    :root {
+      --bg-950: #050914;
+      --bg-900: #0a1122;
+      --bg-800: #111c35;
+      --bg-card: rgba(17, 28, 53, 0.82);
+      --bg-panel: #0d162b;
+      --cyan-400: #22d3ee;
+      --cyan-500: #06b6d4;
+      --indigo-400: #818cf8;
+      --indigo-500: #6366f1;
+      --blue-500: #3b82f6;
+      --blue-600: #2563eb;
+      --emerald-400: #34d399;
+      --emerald-500: #10b981;
+      --amber-400: #fbbf24;
+      --danger: #ef4444;
+      --text-white: #f8fafc;
+      --text-slate: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(56, 189, 248, 0.18);
+      --border-bright: rgba(34, 211, 238, 0.45);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --shadow-lg: 0 20px 50px rgba(2, 6, 23, 0.55);
+      --shadow-glow: 0 0 30px rgba(6, 182, 212, 0.25);
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 84px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-950);
+      color: var(--text-white);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       Slower Scroll-Up & Scroll-Down Reveal Animations
+       ========================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition:
+        opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.88); }
+    }
+
+    @keyframes gridSlide {
+      0% { background-position: 0 0; }
+      100% { background-position: 48px 48px; }
+    }
+
+    @keyframes inputShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .shake {
+      animation: inputShake 0.4s ease-in-out;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald-400);
+      box-shadow: 0 0 10px var(--emerald-400);
+      animation: pulseGlow 1.6s infinite ease-in-out;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(5, 9, 20, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.32rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.08;
+    }
+
+    .brand-name {
+      background: linear-gradient(90deg, #ffffff, var(--cyan-400), var(--indigo-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.28rem;
+      font-weight: 700;
+    }
+
+    .brand-by {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan-400);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-slate);
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan-400);
+    }
+
+    .privacy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--emerald-400);
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      padding: 76px 0 56px;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.22), transparent 42%),
+        radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.18), transparent 42%),
+        linear-gradient(180deg, var(--bg-950) 0%, var(--bg-900) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridSlide 18s linear infinite;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      color: var(--cyan-400);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      margin-bottom: 16px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--cyan-400), var(--indigo-400), #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      color: var(--text-slate);
+      max-width: 700px;
+      margin: 0 auto 28px;
+    }
+
+    /* Quick Tool Launcher Cards Grid (8 Tools) */
+    .quick-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .quick-tool-card {
+      background: rgba(15, 25, 48, 0.78);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--text-white);
+      font-family: inherit;
+    }
+
+    .quick-tool-card:hover,
+    .quick-tool-card.active {
+      border-color: var(--cyan-400);
+      background: rgba(6, 182, 212, 0.14);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .qt-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.22), rgba(99, 102, 241, 0.22));
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--cyan-400);
+      flex-shrink: 0;
+    }
+
+    .qt-meta strong {
+      display: block;
+      font-size: 0.94rem;
+      margin-bottom: 3px;
+    }
+
+    .qt-meta span {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      display: block;
+    }
+
+    /* ==========================================================================
+       Main Interactive Document Workspace
+       ========================================================================== */
+    .workspace-section {
+      padding: 56px 0 88px;
+    }
+
+    .workspace-shell {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    /* Sidebar Navigation */
+    .workspace-sidebar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      position: sticky;
+      top: 96px;
+    }
+
+    .sidebar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--cyan-400);
+      padding: 6px 10px 12px;
+      display: block;
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .sidebar-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-slate);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .sidebar-btn.active {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+      border-color: var(--cyan-400);
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(6, 182, 212, 0.2);
+    }
+
+    .sidebar-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--cyan-400);
+    }
+
+    /* Tool Panels */
+    .tool-panel {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(16px);
+    }
+
+    .tool-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header h2 {
+      font-size: 1.65rem;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .panel-header p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .panel-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan-400);
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    /* Upload Dropzone */
+    .dropzone {
+      border: 2px dashed rgba(56, 189, 248, 0.38);
+      background: rgba(10, 17, 34, 0.65);
+      border-radius: var(--radius-md);
+      padding: 36px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .dropzone:hover {
+      border-color: var(--cyan-400);
+      background: rgba(6, 182, 212, 0.08);
+    }
+
+    .dropzone input[type='file'] {
+      display: none;
+    }
+
+    .dropzone-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .dropzone-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Controls & Form Elements */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .controls-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .field-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field-group label {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-slate);
+    }
+
+    .field-group input,
+    .field-group select,
+    .field-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(5, 9, 20, 0.75);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: var(--transition);
+    }
+
+    .field-group input:focus,
+    .field-group select:focus,
+    .field-group textarea:focus {
+      outline: none;
+      border-color: var(--cyan-400);
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan-500), var(--blue-600));
+      color: #ffffff;
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(6, 182, 212, 0.48);
+    }
+
+    .btn-emerald {
+      background: linear-gradient(135deg, var(--emerald-500), #059669);
+      color: #ffffff;
+    }
+
+    .btn-emerald:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: var(--text-white);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      border-color: var(--cyan-400);
+      background: rgba(6, 182, 212, 0.14);
+    }
+
+    .btn-sm {
+      padding: 8px 15px;
+      font-size: 0.82rem;
+    }
+
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* Preview & Output Boxes */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .preview-item {
+      background: rgba(5, 9, 20, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-slate);
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 95px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .status-banner {
+      display: none;
+      margin-top: 16px;
+      padding: 13px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--emerald-400);
+    }
+
+    .status-banner.visible {
+      display: block;
+    }
+
+    /* Progress Bar */
+    .progress-wrap {
+      display: none;
+      margin: 16px 0;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .progress-wrap.visible {
+      display: block;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan-400), var(--indigo-500));
+      transition: width 0.25s ease;
+    }
+
+    /* Canvas Workspaces (Scanner & Signature) */
+    .canvas-stage {
+      background: rgba(5, 9, 20, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      margin: 18px 0;
+      overflow: auto;
+    }
+
+    .canvas-stage canvas,
+    .canvas-stage video {
+      max-width: 100%;
+      max-height: 440px;
+      margin: 0 auto;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .sig-pad-canvas {
+      background: #ffffff;
+      border-radius: var(--radius-sm);
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    /* Entity & Intelligence Cards */
+    .intel-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .intel-stat-box {
+      background: rgba(5, 9, 20, 0.72);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .intel-stat-box strong {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.45rem;
+      color: var(--cyan-400);
+    }
+
+    .intel-stat-box span {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .entity-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .entity-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(6, 182, 212, 0.14);
+      border: 1px solid rgba(34, 211, 238, 0.32);
+      color: var(--cyan-400);
+    }
+
+    /* About & Support Section */
+    .info-section {
+      padding: 80px 0;
+      background: var(--bg-900);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 44px;
+      align-items: start;
+    }
+
+    .ecosystem-cards {
+      display: grid;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .eco-card {
+      background: rgba(17, 28, 53, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .support-form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 34px;
+    }
+
+    .field-error-msg {
+      display: none;
+      font-size: 0.78rem;
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .field-error-msg.visible {
+      display: block;
+    }
+
+    .input-invalid {
+      border-color: var(--danger) !important;
+      background: rgba(239, 68, 68, 0.1) !important;
+    }
+
+    /* Warning Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      background: var(--bg-900);
+      border: 1px solid var(--border-bright);
+      border-top: 4px solid var(--danger);
+      border-radius: var(--radius-lg);
+      max-width: 440px;
+      width: 100%;
+      padding: 30px 26px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-box h4 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-box p {
+      font-size: 0.92rem;
+      color: var(--text-slate);
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-950);
+      border-top: 1px solid var(--border-subtle);
+      padding: 48px 0 32px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .quick-tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .workspace-shell,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-sidebar {
+        position: static;
+      }
+
+      .sidebar-nav {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 76px;
+        left: 0;
+        right: 0;
+        background: var(--bg-900);
+        flex-direction: column;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .quick-tools-grid,
+      .sidebar-nav,
+      .controls-grid,
+      .controls-grid-2,
+      .intel-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tool-panel {
+        padding: 24px 18px;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-r from-red-500 via-blue-500 to-black min-h-screen">
-    
-    <div class="splash-screen" id="splashScreen">
-        <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI Logo" class="splash-logo">
-        <h1>SnapDocs AI</h1>
-        <p class="splash-subtitle">By MVAPS & Company</p>
-    </div>
-    
-    <div class="main-app">
-        <nav class="navbar">
-            <div class="container mx-auto px-4 py-4 flex items-center justify-between flex-wrap">
-                <div class="flex items-center gap-3">
-                    <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI" class="w-12 h-12 animated-logo">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800">SnapDocs AI</h2>
-                        <p class="text-xs text-gray-600">An MVAPS & Company Product</p>
-                    </div>
-                </div>
-                <div class="md:hidden">
-                    <button id="menu-button" class="text-gray-800 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
-                <div id="nav-menu" class="hidden md:flex md:items-center md:w-auto w-full">
-                    <div class="flex flex-col md:flex-row md:gap-6 mt-4 md:mt-0">
-                        <a href="#home" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Home</a>
-                        <a onclick="toggleAbout()" class="nav-link font-semibold text-gray-700 py-2 md:py-0">About</a>
-                        <a href="https://mvaps-and-company.onrender.com/#services" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Services</a>
-                        <a href="https://mvaps-and-company.onrender.com/#products" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Products</a>
-                        <a href="https://mvaps-and-company.onrender.com/#team" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Team</a>
-                        <a href="https://mvaps-and-company.onrender.com/#contact" target="_blank" class="nav-link font-semibold text-gray-700 py-2 md:py-0">Contact</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        
-        <header id="home" class="text-center py-8 px-4">
-            <img src="./SnapDocs AI - Document final_files/snapdocs-logo.png" alt="SnapDocs AI" class="w-24 h-24 mx-auto mb-4 animated-logo">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">SnapDocs AI</h1>
-            <p class="text-lg text-white/90 mb-2">Your All-in-One Document Processing Suite</p>
-            <p class="text-sm text-white/80"></p>
-        </header>
-        
-        <div id="aboutSection" class="about-section">
-            <div class="container mx-auto px-4 pb-8">
-                <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4 text-center">About MVAPS & Company</h2>
-                    <p class="text-lg text-gray-700 leading-relaxed mb-4">Founded in Nagpur on May 20, 2024, MVAPS & Company is a software development agency dedicated to excellence and innovation. We specialize in creating powerful solutions that transform visions into reality, delivering cutting-edge technology with a focus on quality, reliability, and client satisfaction.</p>
-                    <p class="text-lg text-gray-700 leading-relaxed mb-6">SnapDocs AI  Convert photos to PDFs, transform image formats, and scan documents effortlessly with our AI-powered app. Streamline your document management today!</p>
-                    <div class="text-center">
-                        <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105">Learn More About Us <i class="fas fa-external-link-alt ml-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="container mx-auto px-4 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-file-pdf text-4xl text-red-500 mr-4"></i><h2 class="text-2xl font-bold text-red-400">Image to PDF</h2></div>
-                    <p class="text-gray-300 mb-4">Convert multiple images into a single PDF file.</p>
-                    <label for="imageToPdfInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-red-400 rounded-lg border-2 border-dashed border-red-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Images</label>
-                    <input type="file" id="imageToPdfInput" multiple accept="image/*" class="hidden">
-                    <div id="pdfImagePreview" class="mb-3 text-sm text-gray-400"></div>
-                    <button onclick="convertImagesToPdf()" class="w-full bg-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-600 transition-colors"><i class="fas fa-magic mr-2"></i>Convert to PDF</button>
-                </div>
-                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-image text-4xl text-blue-500 mr-4"></i><h2 class="text-2xl font-bold text-blue-400">Format Converter</h2></div>
-                    <p class="text-gray-300 mb-4">Convert images between different formats.</p>
-                    <label for="formatConverterInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-blue-400 rounded-lg border-2 border-dashed border-blue-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Image</label>
-                    <input type="file" id="formatConverterInput" accept="image/*" class="hidden">
-                    <select id="formatSelect" class="w-full p-3 border-2 border-gray-700 bg-gray-800 text-gray-200 rounded-lg mb-3 focus:outline-none focus:border-blue-500">
-                        <option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/bmp">BMP</option><option value="image/webp">WEBP</option>
-                    </select>
-                    <button onclick="convertImageFormat()" class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-exchange-alt mr-2"></i>Convert Format</button>
-                </div>
-                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-scanner text-4xl text-green-500 mr-4"></i><h2 class="text-2xl font-bold text-green-400">Document Scanner</h2></div>
-                    <p class="text-gray-300 mb-4">Enhance and scan document images.</p>
-                    <label for="scannerInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-green-400 rounded-lg border-2 border-dashed border-green-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Document</label>
-                    <input type="file" id="scannerInput" accept="image/*" class="hidden">
-                    <div id="scannerPreview" class="text-center mb-3"></div>
-                    <div class="flex gap-2">
-                        <button onclick="scanDocument()" class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-wand-magic-sparkles mr-2"></i>Scan</button>
-                        <button onclick="downloadScannedDoc()" id="downloadScanBtn" disabled class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed hover:bg-green-600 transition-colors"><i class="fas fa-download mr-2"></i>Download</button>
-                    </div>
-                </div>
-                <div class="tool-card bg-gray-900 rounded-xl shadow-lg p-6">
-                    <div class="flex items-center mb-4"><i class="fas fa-text-width text-4xl text-purple-500 mr-4"></i><h2 class="text-2xl font-bold text-purple-400">Text Extractor</h2></div>
-                    <p class="text-gray-300 mb-4">Extract text from images using AI OCR.</p>
-                    <label for="ocrInput" class="file-input-label block w-full text-center py-3 px-4 bg-gray-800 text-purple-400 rounded-lg border-2 border-dashed border-purple-500 mb-3"><i class="fas fa-upload mr-2"></i>Upload Image</label>
-                    <input type="file" id="ocrInput" accept="image/*" class="hidden">
-                    <button onclick="extractText()" class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold mb-3 hover:bg-blue-600 transition-colors"><i class="fas fa-magnifying-glass mr-2"></i>Extract Text</button>
-                    <div id="ocr-progress" class="mb-3">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm text-gray-400">Processing...</span><span id="ocr-percent" class="text-sm font-bold text-blue-400">0%</span></div>
-                        <div class="w-full bg-gray-700 rounded-full h-2"><div id="ocr-bar" class="bg-blue-500 h-2 rounded-full transition-all" style="width: 0%"></div></div>
-                    </div>
-                    <textarea id="extractedText" class="w-full h-32 p-3 border-2 border-gray-700 bg-gray-800 text-gray-200 rounded-lg mb-3 focus:outline-none focus:border-blue-500" placeholder="Extracted text will appear here..."></textarea>
-                    <button onclick="downloadExtractedText()" id="downloadTextBtn" disabled class="w-full bg-green-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed hover:bg-green-600 transition-colors"><i class="fas fa-download mr-2"></i>Download Text</button>
-                </div>
-            </div>
-        </div>
-        
-        <footer class="text-center py-6 text-white/80">
-            <p>© 2025 SnapDocs AI by MVAPS & Company. All rights reserved.</p>
-            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="text-white/90 hover:text-white transition-colors mt-2 inline-block">Visit Our Website <i class="fas fa-external-link-alt ml-1"></i></a>
-        </footer>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('menu-button').addEventListener('click', () => {
-                document.getElementById('nav-menu').classList.toggle('hidden');
-            });
-        });
+<body>
 
-        function toggleAbout() {
-            document.getElementById('aboutSection').classList.toggle('active');
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <svg class="brand-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sdGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#22d3ee" />
+              <stop offset="50%" stop-color="#6366f1" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="4" width="30" height="38" rx="6" fill="#0d162b" stroke="url(#sdGrad)" stroke-width="2.5" />
+          <path d="M14 14H28M14 21H28M14 28H22" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" />
+          <circle cx="34" cy="34" r="10" fill="url(#sdGrad)" />
+          <path d="M30 34L33 37L39 31" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="brand-text">
+          <span class="brand-name">SnapDocs AI</span>
+          <span class="brand-by">By MVAPS &amp; Company</span>
+        </div>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#workspace">Document Hub</a></li>
+        <li><a href="#about">About &amp; Support</a></li>
+        <li><a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer">MVAPS &amp; Company ↗</a></li>
+        <li><a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer">Project Nest AI ↗</a></li>
+        <li>
+          <span class="privacy-pill">
+            <span class="live-dot"></span>100% On-Device Privacy
+          </span>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero & Quick Tool Selector -->
+  <section class="hero" id="top">
+    <div class="container hero-content reveal is-visible">
+      <div class="hero-badge">
+        <span class="live-dot"></span>
+        All-in-One Document Intelligence &amp; PDF Processing Hub
+      </div>
+      <h1>
+        Every Document Tool You Need, <span>Powered by AI.</span>
+      </h1>
+      <p>
+        Convert, merge, split, scan, compress, sign, extract OCR data, and summarize documents
+        instantly in your browser—with zero watermarks, zero daily limits, and 100% local privacy.
+      </p>
+
+      <!-- 8 Quick Launcher Cards -->
+      <div class="quick-tools-grid" id="quickToolsGrid">
+        <button type="button" class="quick-tool-card active" data-tool="img2pdf">
+          <div class="qt-icon">PDF</div>
+          <div class="qt-meta">
+            <strong>Image to PDF Pro</strong>
+            <span>Multi-image to A4/Letter PDF with margins &amp; layout</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="mergeSplit">
+          <div class="qt-icon">M&amp;S</div>
+          <div class="qt-meta">
+            <strong>Merge, Split &amp; Rotate</strong>
+            <span>Combine PDFs, extract page ranges, or rotate pages</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="scanner">
+          <div class="qt-icon">SCN</div>
+          <div class="qt-meta">
+            <strong>AI Document Scanner</strong>
+            <span>Magic Color, B&amp;W scan, shadow removal &amp; camera</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="ocr">
+          <div class="qt-icon">OCR</div>
+          <div class="qt-meta">
+            <strong>AI OCR &amp; Data Extractor</strong>
+            <span>Extract text, emails, phones, amounts &amp; redact PII</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="summarizer">
+          <div class="qt-icon">SUM</div>
+          <div class="qt-meta">
+            <strong>AI Doc Summarizer &amp; Q&amp;A</strong>
+            <span>Executive summary, key takeaways &amp; Ask Document</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="converter">
+          <div class="qt-icon">KB</div>
+          <div class="qt-meta">
+            <strong>Converter &amp; KB Resizer</strong>
+            <span>JPG/PNG/WEBP converter &amp; 20KB/50KB/100KB compressor</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="sign">
+          <div class="qt-icon">SGN</div>
+          <div class="qt-meta">
+            <strong>e-Sign &amp; Watermark PDF</strong>
+            <span>Draw signature, stamp watermark &amp; number pages</span>
+          </div>
+        </button>
+
+        <button type="button" class="quick-tool-card" data-tool="pdf2img">
+          <div class="qt-icon">QR</div>
+          <div class="qt-meta">
+            <strong>PDF to Image &amp; QR Studio</strong>
+            <span>Export PDF pages as PNGs &amp; generate document QR codes</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Interactive Workspace -->
+  <section class="workspace-section" id="workspace">
+    <div class="container workspace-shell">
+
+      <!-- Left Sidebar Navigation -->
+      <aside class="workspace-sidebar">
+        <span class="sidebar-label">Document Suite</span>
+        <div class="sidebar-nav" id="sidebarNav">
+          <button type="button" class="sidebar-btn active" data-tool="img2pdf">
+            <span>Image to PDF Pro</span>
+            <span class="sidebar-tag">PDF</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="mergeSplit">
+            <span>Merge, Split &amp; Rotate</span>
+            <span class="sidebar-tag">SUITE</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="scanner">
+            <span>AI Document Scanner</span>
+            <span class="sidebar-tag">SCAN</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="ocr">
+            <span>AI OCR &amp; Extractor</span>
+            <span class="sidebar-tag">AI OCR</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="summarizer">
+            <span>AI Summarizer &amp; Q&amp;A</span>
+            <span class="sidebar-tag">INTEL</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="converter">
+            <span>Format &amp; KB Compressor</span>
+            <span class="sidebar-tag">IMG/KB</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="sign">
+            <span>Sign &amp; Watermark PDF</span>
+            <span class="sidebar-tag">SIGN</span>
+          </button>
+          <button type="button" class="sidebar-btn" data-tool="pdf2img">
+            <span>PDF to Image &amp; QR</span>
+            <span class="sidebar-tag">EXPORT</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Right Active Tool Container -->
+      <main id="toolPanelsContainer">
+
+        <!-- ===================================================================
+             TOOL 1: Image to PDF Pro
+             =================================================================== -->
+        <div class="tool-panel active" id="panel-img2pdf">
+          <div class="panel-header">
+            <div>
+              <h2>Image to PDF Pro</h2>
+              <p>Convert multiple photos or scanned pages into a clean, standardized PDF document.</p>
+            </div>
+            <span class="panel-badge">Multi-Image Builder</span>
+          </div>
+
+          <label class="dropzone" for="imgToPdfInput">
+            <input type="file" id="imgToPdfInput" accept="image/*" multiple />
+            <div class="dropzone-title">Click to Upload Images (JPG, PNG, WEBP)</div>
+            <div class="dropzone-sub">Select one or multiple images — they will be combined in order</div>
+          </label>
+
+          <div class="controls-grid">
+            <div class="field-group">
+              <label for="pdfPageSize">Page Size</label>
+              <select id="pdfPageSize">
+                <option value="a4">A4 Standard (210 × 297 mm)</option>
+                <option value="letter">US Letter</option>
+                <option value="fit">Fit Exact Image Dimensions</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="pdfOrientation">Orientation</label>
+              <select id="pdfOrientation">
+                <option value="portrait">Portrait (Vertical)</option>
+                <option value="landscape">Landscape (Horizontal)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="pdfMargin">Page Margin</label>
+              <select id="pdfMargin">
+                <option value="20">Standard Margin</option>
+                <option value="0">No Margin (Full Bleed)</option>
+                <option value="40">Wide Margin</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="preview-grid" id="imgToPdfPreview"></div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary" id="generatePdfFromImgsBtn">
+              Convert &amp; Download PDF
+            </button>
+            <button type="button" class="btn btn-ghost" id="clearImgToPdfBtn">
+              Clear Images
+            </button>
+          </div>
+          <div class="status-banner" id="imgToPdfStatus"></div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 2: Merge, Split & Rotate PDF Suite
+             =================================================================== -->
+        <div class="tool-panel" id="panel-mergeSplit">
+          <div class="panel-header">
+            <div>
+              <h2>Merge, Split &amp; Rotate PDF Suite</h2>
+              <p>Combine multiple PDF files into one, extract custom page ranges, or rotate pages.</p>
+            </div>
+            <span class="panel-badge">PDF Power Suite</span>
+          </div>
+
+         
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--cyan-400);">1. Merge Multiple PDFs</h3>
+          <label class="dropzone" for="mergePdfInput">
+            <input type="file" id="mergePdfInput" accept="application/pdf" multiple />
+            <div class="dropzone-title">Select 2 or More PDF Files to Merge</div>
+            <div class="dropzone-sub" id="mergePdfFileListText">No PDF files selected yet</div>
+          </label>
+          <div class="action-bar" style="margin-bottom: 36px;">
+            <button type="button" class="btn btn-primary" id="mergePdfsBtn">
+              Merge &amp; Download Combined PDF
+            </button>
+          </div>
+
+         
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--cyan-400);">2. Split Pages or Rotate PDF</h3>
+          <label class="dropzone" for="splitPdfInput">
+            <input type="file" id="splitPdfInput" accept="application/pdf" />
+            <div class="dropzone-title">Select a PDF File to Split or Rotate</div>
+            <div class="dropzone-sub" id="splitPdfInfoText">Upload a PDF to see total page count</div>
+          </label>
+
+          <div class="controls-grid-2">
+            <div class="field-group">
+              <label for="splitPageRange">Page Range to Extract (e.g., 1-3, 5)</label>
+              <input type="text" id="splitPageRange" placeholder="Leave blank for all pages (e.g., 1-2, 4)" />
+            </div>
+
+            <div class="field-group">
+              <label for="rotatePdfAngle">Rotate Pages</label>
+              <select id="rotatePdfAngle">
+                <option value="0">0° (Keep Original Orientation)</option>
+                <option value="90">Rotate 90° Clockwise</option>
+                <option value="180">Rotate 180° (Upside Down)</option>
+                <option value="270">Rotate 270° Counter-Clockwise</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary" id="processSplitRotateBtn">
+              Extract / Rotate &amp; Download PDF
+            </button>
+          </div>
+          <div class="status-banner" id="mergeSplitStatus"></div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 3: Pro AI Document Scanner Studio
+             =================================================================== -->
+        <div class="tool-panel" id="panel-scanner">
+          <div class="panel-header">
+            <div>
+              <h2>Pro AI Document Scanner</h2>
+              <p>Enhance document photos with Magic Color, crisp B&amp;W photocopy mode, or live camera scan.</p>
+            </div>
+            <span class="panel-badge">Vision Enhancement</span>
+          </div>
+
+          <div class="action-bar" style="margin-bottom: 18px;">
+            <label class="btn btn-primary" for="scannerInput" style="cursor: pointer;">
+              Upload Document Image
+              <input type="file" id="scannerInput" accept="image/*" style="display: none;" />
+            </label>
+            <button type="button" class="btn btn-ghost" id="startCameraBtn">
+              Use Camera to Scan
+            </button>
+            <button type="button" class="btn btn-emerald" id="captureCameraBtn" style="display: none;">
+              Capture Photo
+            </button>
+          </div>
+
+          <div class="controls-grid">
+            <div class="field-group">
+              <label for="scanPreset">AI Scan Filter</label>
+              <select id="scanPreset">
+                <option value="magic">Magic Color (Crisp Ink + White Paper)</option>
+                <option value="bw">High-Contrast B&amp;W Photocopy</option>
+                <option value="deshadow">Shadow Removal &amp; Brighten</option>
+                <option value="grayscale">Clean Grayscale</option>
+                <option value="original">Original Image</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="scanBrightness">Brightness Boost (<span id="brightVal">10</span>%)</label>
+              <input type="range" id="scanBrightness" min="-40" max="60" value="10" />
+            </div>
+
+            <div class="field-group">
+              <label for="scanContrast">Contrast Boost (<span id="contrastVal">25</span>%)</label>
+              <input type="range" id="scanContrast" min="-20" max="80" value="25" />
+            </div>
+          </div>
+
+          <div class="canvas-stage">
+            <video id="scannerVideo" autoplay playsinline style="display: none;"></video>
+            <canvas id="scannerCanvas" width="700" height="480"></canvas>
+          </div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-ghost" id="rotateScanBtn">
+              Rotate 90° ↻
+            </button>
+            <button type="button" class="btn btn-primary" id="downloadScanPngBtn">
+              Download Scanned PNG
+            </button>
+            <button type="button" class="btn btn-emerald" id="downloadScanPdfBtn">
+              Download as Scanned PDF
+            </button>
+          </div>
+          <div class="status-banner" id="scannerStatus"></div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 4: AI OCR & Smart Data Extractor
+             =================================================================== -->
+        <div class="tool-panel" id="panel-ocr">
+          <div class="panel-header">
+            <div>
+              <h2>AI OCR &amp; Smart Data Extractor</h2>
+              <p>Extract text from scanned images or PDFs, detect structured entities, and redact sensitive PII.</p>
+            </div>
+            <span class="panel-badge">OCR + Entity AI</span>
+          </div>
+
+          <label class="dropzone" for="ocrInput">
+            <input type="file" id="ocrInput" accept="image/*,application/pdf" />
+            <div class="dropzone-title">Upload an Image (JPG, PNG, WEBP) or PDF File</div>
+            <div class="dropzone-sub" id="ocrFileNameText">Supports scanned images and multi-page PDFs</div>
+          </label>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary" id="runOcrBtn">
+              Run AI Text &amp; Data Extraction
+            </button>
+            <button type="button" class="btn btn-ghost" id="redactPiiBtn">
+              Redact Sensitive PII (Emails/Phones/IDs)
+            </button>
+            <button type="button" class="btn btn-emerald" id="sendToSummarizerBtn">
+              Send Text to AI Summarizer →
+            </button>
+          </div>
+
+          <div class="progress-wrap" id="ocrProgressWrap">
+            <div class="progress-fill" id="ocrProgressFill"></div>
+          </div>
+          <p id="ocrProgressLabel" class="mono" style="font-size: 0.82rem; color: var(--cyan-400); margin: 8px 0;"></p>
+
+          <div class="field-group" style="margin-top: 16px;">
+            <label for="ocrOutputText">Extracted Text (Editable)</label>
+            <textarea
+              id="ocrOutputText"
+              rows="8"
+              placeholder="Extracted text from your image or PDF will appear here..."
+            ></textarea>
+          </div>
+
+          <!-- Smart Detected Entities -->
+          <div style="margin-top: 18px;">
+            <strong style="font-size: 0.9rem; color: var(--cyan-400);">
+              ✦ Smart Detected Entities (Emails, Phones, Dates, Amounts):
+            </strong>
+            <div class="entity-pills" id="ocrEntityPills">
+              <span class="entity-pill">Run extraction to detect structured fields</span>
+            </div>
+          </div>
+
+          <div class="action-bar" style="margin-top: 22px;">
+            <button type="button" class="btn btn-ghost btn-sm" id="copyOcrTextBtn">Copy Text</button>
+            <button type="button" class="btn btn-primary btn-sm" id="downloadOcrTxtBtn">Download .TXT</button>
+            <button type="button" class="btn btn-primary btn-sm" id="downloadOcrDocBtn">Download .DOC (Word)</button>
+            <button type="button" class="btn btn-emerald btn-sm" id="downloadOcrJsonBtn">Download Structured .JSON</button>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 5: AI Document Summarizer & Q&A Intelligence
+             =================================================================== -->
+        <div class="tool-panel" id="panel-summarizer">
+          <div class="panel-header">
+            <div>
+              <h2>AI Document Summarizer &amp; Q&amp;A Intelligence</h2>
+              <p>Distil long PDFs or text into an executive summary, key takeaways, action items, and instant Q&amp;A.</p>
+            </div>
+            <span class="panel-badge">Document Intelligence</span>
+          </div>
+
+          <div class="controls-grid-2">
+            <label class="dropzone" for="sumFileInput" style="margin-bottom: 0; padding: 20px;">
+              <input type="file" id="sumFileInput" accept="application/pdf,text/plain" />
+              <div class="dropzone-title" style="font-size: 0.95rem;">Upload PDF or .TXT Document</div>
+              <div class="dropzone-sub" id="sumFileLabel">Automatically extracts all text for analysis</div>
+            </label>
+
+            <div class="field-group">
+              <label for="summaryLengthSelect">Summary Depth</label>
+              <select id="summaryLengthSelect">
+                <option value="3">Concise Executive Summary (Top 3 Sentences)</option>
+                <option value="5" selected>Standard Summary (Top 5 Sentences)</option>
+                <option value="8">Detailed Breakdown (Top 8 Sentences)</option>
+              </select>
+              <button type="button" class="btn btn-primary" id="runSummarizerBtn" style="margin-top: 8px;">
+                Generate AI Summary &amp; Insights
+              </button>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-top: 16px;">
+            <label for="sumInputText">Document Content (Paste text or upload PDF above)</label>
+            <textarea
+              id="sumInputText"
+              rows="6"
+              placeholder="Paste any article, report, contract, or academic paper here, or upload a PDF above..."
+            ></textarea>
+          </div>
+
+          <!-- Document Telemetry Stats -->
+          <div class="intel-grid">
+            <div class="intel-stat-box">
+              <strong id="statWords">0</strong>
+              <span>Total Words</span>
+            </div>
+            <div class="intel-stat-box">
+              <strong id="statSentences">0</strong>
+              <span>Sentences</span>
+            </div>
+            <div class="intel-stat-box">
+              <strong id="statReadTime">0 min</strong>
+              <span>Reading Time</span>
+            </div>
+            <div class="intel-stat-box">
+              <strong id="statCompression">0%</strong>
+              <span>Reduction Ratio</span>
+            </div>
+          </div>
+
+          <!-- Ask Your Document Q&A -->
+          <div class="controls-grid-2" style="margin-top: 20px;">
+            <div class="field-group">
+              <label for="docQuestionInput">Ask Your Document (Keyword or Question Search)</label>
+              <input
+                type="text"
+                id="docQuestionInput"
+                placeholder="e.g., What is the deadline, total cost, or main conclusion?"
+              />
+            </div>
+            <div class="field-group" style="align-self: end;">
+              <button type="button" class="btn btn-ghost" id="askDocBtn">
+                Find Answer in Document →
+              </button>
+            </div>
+          </div>
+          <div class="status-banner" id="docAnswerBanner" style="margin-bottom: 18px;"></div>
+
+          <div class="field-group">
+            <label for="sumOutputText">Generated Executive Summary &amp; Key Takeaways</label>
+            <textarea
+              id="sumOutputText"
+              rows="8"
+              readonly
+              placeholder="Your executive summary, bullet takeaways, and top keywords will appear here..."
+            ></textarea>
+          </div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary btn-sm" id="copySummaryBtn">Copy Summary</button>
+            <button type="button" class="btn btn-emerald btn-sm" id="downloadSummaryTxtBtn">Download Summary Report (.TXT)</button>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 6: Format Converter & Target-KB Compressor
+             =================================================================== -->
+        <div class="tool-panel" id="panel-converter">
+          <div class="panel-header">
+            <div>
+              <h2>Universal Format Converter &amp; Target-KB Compressor</h2>
+              <p>Convert between JPG, PNG, WEBP, and PDF, or compress images to exact 20 KB / 50 KB / 100 KB limits.</p>
+            </div>
+            <span class="panel-badge">Format &amp; Size Control</span>
+          </div>
+
+          <label class="dropzone" for="converterInput">
+            <input type="file" id="converterInput" accept="image/*" />
+            <div class="dropzone-title">Upload Image to Convert or Compress</div>
+            <div class="dropzone-sub" id="converterOriginalInfo">Supports PNG, JPG, WEBP, BMP</div>
+          </label>
+
+          <div class="controls-grid">
+            <div class="field-group">
+              <label for="targetFormatSelect">Output Format</label>
+              <select id="targetFormatSelect">
+                <option value="image/jpeg">JPG (Best for Small KB Size)</option>
+                <option value="image/webp">WEBP (Modern High Efficiency)</option>
+                <option value="image/png">PNG (Lossless Quality)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="targetKbPreset">Target File Size Preset</label>
+              <select id="targetKbPreset">
+                <option value="0">Manual Quality Slider</option>
+                <option value="20">Exam / Signature (&lt; 20 KB)</option>
+                <option value="50">Passport Photo (&lt; 50 KB)</option>
+                <option value="100">Official Document (&lt; 100 KB)</option>
+                <option value="200">High-Clarity Upload (&lt; 200 KB)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="converterQuality">Quality (<span id="qualityValLabel">85</span>%)</label>
+              <input type="range" id="converterQuality" min="10" max="100" value="85" />
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary" id="runConverterBtn">
+              Convert / Compress &amp; Download
+            </button>
+          </div>
+          <div class="status-banner" id="converterStatus"></div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 7: Sign, Stamp & Watermark PDF
+             =================================================================== -->
+        <div class="tool-panel" id="panel-sign">
+          <div class="panel-header">
+            <div>
+              <h2>e-Sign, Stamp &amp; Watermark PDF</h2>
+              <p>Draw your signature on screen, stamp a custom watermark, and add page numbers to any PDF.</p>
+            </div>
+            <span class="panel-badge">e-Signature &amp; Security</span>
+          </div>
+
+          <label class="dropzone" for="signPdfInput">
+            <input type="file" id="signPdfInput" accept="application/pdf" />
+            <div class="dropzone-title">Upload PDF to Sign or Watermark</div>
+            <div class="dropzone-sub" id="signPdfFileLabel">Select any PDF document</div>
+          </label>
+
+          <div class="controls-grid">
+            <div class="field-group">
+              <label for="watermarkText">Diagonal Watermark Text (Optional)</label>
+              <input type="text" id="watermarkText" placeholder="e.g., CONFIDENTIAL, APPROVED, DRAFT" />
+            </div>
+
+            <div class="field-group">
+              <label for="sigInkColor">Signature Ink Color</label>
+              <select id="sigInkColor">
+                <option value="#0f172a">Classic Black Ink</option>
+                <option value="#1d4ed8">Executive Blue Ink</option>
+                <option value="#b91c1c">Official Red Ink</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="addPageNumbersSelect">Page Numbering</label>
+              <select id="addPageNumbersSelect">
+                <option value="yes">Add "Page X of Y" Footer</option>
+                <option value="no">No Page Numbers</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Draw Your Signature Below (Placed on Bottom-Right of Last Page)</label>
+            <div class="canvas-stage" style="padding: 14px;">
+              <canvas id="sigPadCanvas" class="sig-pad-canvas" width="460" height="150"></canvas>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <button type="button" class="btn btn-ghost btn-sm" id="clearSigPadBtn">Clear Signature Pad</button>
+            <button type="button" class="btn btn-primary" id="applySignWatermarkBtn">
+              Apply Signature / Watermark &amp; Download PDF
+            </button>
+          </div>
+          <div class="status-banner" id="signPdfStatus"></div>
+        </div>
+
+        <!-- ===================================================================
+             TOOL 8: PDF to Images & Document QR Code Studio
+             =================================================================== -->
+        <div class="tool-panel" id="panel-pdf2img">
+          <div class="panel-header">
+            <div>
+              <h2>PDF to Images &amp; Document QR Studio</h2>
+              <p>Render PDF pages into high-resolution PNG images or generate a downloadable verification QR code.</p>
+            </div>
+            <span class="panel-badge">Export &amp; QR</span>
+          </div>
+
+          <!-- Part 1: PDF to Images -->
+          <h3 style="font-size: 1.12rem; color: var(--cyan-400); margin-bottom: 12px;">1. Convert PDF Pages to PNG Images</h3>
+          <label class="dropzone" for="pdfToImgInput">
+            <input type="file" id="pdfToImgInput" accept="application/pdf" />
+            <div class="dropzone-title">Upload PDF to Render Pages as Images</div>
+            <div class="dropzone-sub">Each page will be rendered as a high-res PNG you can download</div>
+          </label>
+          <div class="preview-grid" id="pdfToImgGallery"></div>
+
+          <!-- Part 2: Document QR Code Studio -->
+          <h3 style="font-size: 1.12rem; color: var(--cyan-400); margin: 32px 0 12px;">2. Document Verification QR Code Generator</h3>
+          <div class="controls-grid-2">
+            <div class="field-group">
+              <label for="qrTextInput">Document URL, Verification ID, or Text</label>
+              <input
+                type="text"
+                id="qrTextInput"
+                value="https://snapdocsaio.onrender.com/"
+                placeholder="Enter URL, certificate ID, or verification text"
+              />
+              <div class="action-bar">
+                <button type="button" class="btn btn-primary btn-sm" id="generateQrBtn">Generate QR Code</button>
+                <button type="button" class="btn btn-emerald btn-sm" id="downloadQrBtn">Download QR PNG</button>
+              </div>
+            </div>
+
+            <div class="canvas-stage" style="margin: 0; padding: 16px;">
+              <canvas id="qrCanvas" width="180" height="180"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </section>
+
+  <!-- About MVAPS Ecosystem & Direct Support Form (Connected to mvapscompany@gmail.com) -->
+  <section class="info-section" id="about">
+    <div class="container info-grid reveal">
+      <div>
+        <div class="hero-badge">An MVAPS &amp; Company Product</div>
+        <h2 style="font-size: 2.1rem; margin-bottom: 14px;">Built for Speed, Accuracy &amp; Complete Privacy.</h2>
+        <p style="color: var(--text-slate); margin-bottom: 18px;">
+          Founded in Nagpur on May 20, 2024, <strong>MVAPS &amp; Company</strong> builds practical,
+          high-impact software products and digital solutions. <strong>SnapDocs AI</strong> processes
+          your documents locally in your browser so sensitive files never leave your device.
+        </p>
+
+        <div class="ecosystem-cards">
+          <div class="eco-card">
+            <div>
+              <strong style="display: block; font-size: 1.05rem;">MVAPS &amp; Company</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Parent Organisation &amp; Connected Ecosystem</span>
+            </div>
+            <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
+              Visit Website ↗
+            </a>
+          </div>
+
+          <div class="eco-card">
+            <div>
+              <strong style="display: block; font-size: 1.05rem;">Project Nest AI</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Custom AI, Web, Mobile &amp; Student Project Delivery</span>
+            </div>
+            <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              Launch Project Nest ↗
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direct Feature Request / Customer Inquiry Form to mvapscompany@gmail.com -->
+      <div class="support-form-card">
+        <h3 style="font-size: 1.4rem; margin-bottom: 6px;">Request a Feature or Get Support</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+          Need a custom enterprise document workflow or have feedback on SnapDocs AI? Send a message
+          directly to our engineering team.
+        </p>
+
+        <form
+          id="snapSupportForm"
+          action="https://formsubmit.co/mvapscompany@gmail.com"
+          method="POST"
+          novalidate
+        >
+          <input type="hidden" name="_subject" value="SnapDocs AI — Customer Support / Feature Inquiry" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="text" name="_honey" style="display: none;" tabindex="-1" autocomplete="off" />
+
+          <div class="field-group" style="margin-bottom: 14px;">
+            <label for="supName">Your Name *</label>
+            <input type="text" id="supName" name="Customer_Name" placeholder="Enter your full name" required />
+          </div>
+
+          <div class="controls-grid-2" style="margin-bottom: 14px;">
+            <div class="field-group">
+              <label for="supEmail">Email Address *</label>
+              <input type="email" id="supEmail" name="email" placeholder="name@example.com" required />
+              <span id="supEmailErr" class="field-error-msg">⚠ Enter a valid email address.</span>
+            </div>
+
+            <div class="field-group">
+              <label for="supPhone">Phone / WhatsApp *</label>
+              <input type="tel" id="supPhone" name="Phone_WhatsApp" placeholder="+91 98765 43210" required />
+              <span id="supPhoneErr" class="field-error-msg">⚠ Enter a valid 10-digit mobile number.</span>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-bottom: 16px;">
+            <label for="supMsg">Message / Requirement *</label>
+            <textarea
+              id="supMsg"
+              name="Message"
+              rows="3"
+              placeholder="Tell us what document tool or custom workflow you need..."
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" id="supSubmitBtn" class="btn btn-primary" style="width: 100%;">
+            Send Message
+          </button>
+          <div class="status-banner" id="supStatusBanner"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Validation Warning Modal -->
+  <div class="modal-overlay" id="warningModal" role="alertdialog" aria-modal="true">
+    <div class="modal-box">
+      <h4 id="modalTitle">Invalid Input</h4>
+      <p id="modalDesc">Please check your details and try again.</p>
+      <button type="button" id="closeModalBtn" class="btn btn-primary" style="width: 100%;">OK</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>&copy; 2024–2026 SnapDocs AI by MVAPS &amp; Company. All rights reserved.</span>
+      <div style="display: flex; gap: 20px;">
+        <a href="https://mvaps-and-company.onrender.com/" target="_blank" rel="noopener noreferrer">MVAPS &amp; Company ↗</a>
+        <a href="https://project-nest-ai.onrender.com/" target="_blank" rel="noopener noreferrer">Project Nest AI ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Configure PDF.js worker
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // =========================================================================
+    // 1. Mobile Navbar & Scroll Reveal
+    // =========================================================================
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+          else entry.target.classList.remove('is-visible');
+        });
+      },
+      { threshold: 0.08 }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+    // =========================================================================
+    // 2. Interactive Tool Switcher (Quick Cards + Sidebar)
+    // =========================================================================
+    const quickCards = document.querySelectorAll('.quick-tool-card');
+    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+    const toolPanels = document.querySelectorAll('.tool-panel');
+
+    function switchTool(toolId) {
+      quickCards.forEach((c) => c.classList.toggle('active', c.dataset.tool === toolId));
+      sidebarBtns.forEach((b) => b.classList.toggle('active', b.dataset.tool === toolId));
+      toolPanels.forEach((p) => p.classList.toggle('active', p.id === `panel-${toolId}`));
+    }
+
+    quickCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        switchTool(card.dataset.tool);
+        document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    sidebarBtns.forEach((btn) => {
+      btn.addEventListener('click', () => switchTool(btn.dataset.tool));
+    });
+
+    // Helper to trigger browser file download
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    function fileToDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadImageElement(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    // =========================================================================
+    // TOOL 1: Image to PDF Pro (Uses pdf-lib)
+    // =========================================================================
+    const imgToPdfInput = document.getElementById('imgToPdfInput');
+    const imgToPdfPreview = document.getElementById('imgToPdfPreview');
+    const imgToPdfStatus = document.getElementById('imgToPdfStatus');
+    let selectedImagesForPdf = [];
+
+    imgToPdfInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      for (const f of files) {
+        const dataUrl = await fileToDataURL(f);
+        selectedImagesForPdf.push({ file: f, dataUrl });
+      }
+      renderImgToPdfPreviews();
+    });
+
+    function renderImgToPdfPreviews() {
+      imgToPdfPreview.innerHTML = selectedImagesForPdf
+        .map(
+          (item, i) => `
+        <div class="preview-item">
+          <img src="${item.dataUrl}" alt="Page ${i + 1}" />
+          <span>Page ${i + 1}</span>
+        </div>
+      `
+        )
+        .join('');
+    }
+
+    document.getElementById('clearImgToPdfBtn').addEventListener('click', () => {
+      selectedImagesForPdf = [];
+      imgToPdfInput.value = '';
+      renderImgToPdfPreviews();
+      imgToPdfStatus.classList.remove('visible');
+    });
+
+    document.getElementById('generatePdfFromImgsBtn').addEventListener('click', async () => {
+      if (selectedImagesForPdf.length === 0) {
+        alert('Please upload at least one image first.');
+        return;
+      }
+
+      const { PDFDocument } = window.PDFLib;
+      const pdfDoc = await PDFDocument.create();
+      const pageSizeMode = document.getElementById('pdfPageSize').value;
+      const orientation = document.getElementById('pdfOrientation').value;
+      const margin = Number(document.getElementById('pdfMargin').value) || 0;
+
+      for (const item of selectedImagesForPdf) {
+        const imgEl = await loadImageElement(item.dataUrl);
+        const canvas = document.createElement('canvas');
+        canvas.width = imgEl.naturalWidth;
+        canvas.height = imgEl.naturalHeight;
+        canvas.getContext('2d').drawImage(imgEl, 0, 0);
+        const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        const embeddedImg = await pdfDoc.embedJpg(jpgDataUrl);
+
+        let pageW = 595.28; // A4 Portrait points
+        let pageH = 841.89;
+        if (pageSizeMode === 'letter') {
+          pageW = 612;
+          pageH = 792;
+        } else if (pageSizeMode === 'fit') {
+          pageW = embeddedImg.width + margin * 2;
+          pageH = embeddedImg.height + margin * 2;
         }
 
-        let uploadedImages = [], formatConverterImage = null, scannerImage = null, scannedCanvas = null, ocrImage = null;
-        
-        document.getElementById('imageToPdfInput').addEventListener('change', e => {
-            uploadedImages = Array.from(e.target.files);
-            document.getElementById('pdfImagePreview').textContent = uploadedImages.length > 0 ? `${uploadedImages.length} image(s) selected` : '';
+        if (pageSizeMode !== 'fit' && orientation === 'landscape') {
+          [pageW, pageH] = [pageH, pageW];
+        }
+
+        const page = pdfDoc.addPage([pageW, pageH]);
+        const availW = pageW - margin * 2;
+        const availH = pageH - margin * 2;
+        const scale = Math.min(availW / embeddedImg.width, availH / embeddedImg.height);
+        const drawW = embeddedImg.width * scale;
+        const drawH = embeddedImg.height * scale;
+        const x = (pageW - drawW) / 2;
+        const y = (pageH - drawH) / 2;
+
+        page.drawImage(embeddedImg, { x, y, width: drawW, height: drawH });
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'SnapDocs-Images-to-PDF.pdf');
+      imgToPdfStatus.textContent = `✓ Successfully created PDF with ${selectedImagesForPdf.length} page(s)!`;
+      imgToPdfStatus.classList.add('visible');
+    });
+
+    // =========================================================================
+    // TOOL 2: Merge, Split & Rotate PDF Suite
+    // =========================================================================
+    const mergePdfInput = document.getElementById('mergePdfInput');
+    const mergePdfFileListText = document.getElementById('mergePdfFileListText');
+    const splitPdfInput = document.getElementById('splitPdfInput');
+    const splitPdfInfoText = document.getElementById('splitPdfInfoText');
+    const mergeSplitStatus = document.getElementById('mergeSplitStatus');
+
+    mergePdfInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      mergePdfFileListText.textContent = files.length
+        ? `${files.length} PDF file(s) selected: ${files.map((f) => f.name).join(', ')}`
+        : 'No PDF files selected yet';
+    });
+
+    document.getElementById('mergePdfsBtn').addEventListener('click', async () => {
+      const files = Array.from(mergePdfInput.files || []);
+      if (files.length < 2) {
+        alert('Please select at least 2 PDF files to merge.');
+        return;
+      }
+
+      const { PDFDocument } = window.PDFLib;
+      const mergedPdf = await PDFDocument.create();
+
+      for (const file of files) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((p) => mergedPdf.addPage(p));
+      }
+
+      const mergedBytes = await mergedPdf.save();
+      downloadBlob(new Blob([mergedBytes], { type: 'application/pdf' }), 'SnapDocs-Merged.pdf');
+      mergeSplitStatus.textContent = `✓ Merged ${files.length} PDF files successfully!`;
+      mergeSplitStatus.classList.add('visible');
+    });
+
+    let loadedSplitPdfBytes = null;
+    let loadedSplitPageCount = 0;
+
+    splitPdfInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      loadedSplitPdfBytes = await file.arrayBuffer();
+      const { PDFDocument } = window.PDFLib;
+      const pdf = await PDFDocument.load(loadedSplitPdfBytes);
+      loadedSplitPageCount = pdf.getPageCount();
+      splitPdfInfoText.textContent = `Loaded "${file.name}" (${loadedSplitPageCount} total pages)`;
+    });
+
+    function parsePageRange(rangeStr, maxPages) {
+      if (!rangeStr.trim()) {
+        return Array.from({ length: maxPages }, (_, i) => i);
+      }
+      const indices = new Set();
+      rangeStr.split(',').forEach((part) => {
+        const trimmed = part.trim();
+        if (trimmed.includes('-')) {
+          const [start, end] = trimmed.split('-').map((n) => parseInt(n.trim(), 10));
+          if (!isNaN(start) && !isNaN(end)) {
+            for (let p = Math.max(1, start); p <= Math.min(maxPages, end); p++) {
+              indices.add(p - 1);
+            }
+          }
+        } else {
+          const p = parseInt(trimmed, 10);
+          if (!isNaN(p) && p >= 1 && p <= maxPages) {
+            indices.add(p - 1);
+          }
+        }
+      });
+      return Array.from(indices);
+    }
+
+    document.getElementById('processSplitRotateBtn').addEventListener('click', async () => {
+      if (!loadedSplitPdfBytes) {
+        alert('Please upload a PDF file first.');
+        return;
+      }
+
+      const { PDFDocument, degrees } = window.PDFLib;
+      const srcPdf = await PDFDocument.load(loadedSplitPdfBytes);
+      const outPdf = await PDFDocument.create();
+      const indices = parsePageRange(
+        document.getElementById('splitPageRange').value,
+        srcPdf.getPageCount()
+      );
+
+      if (indices.length === 0) {
+        alert('Please enter a valid page range within the document.');
+        return;
+      }
+
+      const addAngle = Number(document.getElementById('rotatePdfAngle').value) || 0;
+      const copiedPages = await outPdf.copyPages(srcPdf, indices);
+
+      copiedPages.forEach((page) => {
+        if (addAngle !== 0) {
+          const currentRot = page.getRotation().angle;
+          page.setRotation(degrees((currentRot + addAngle) % 360));
+        }
+        outPdf.addPage(page);
+      });
+
+      const outBytes = await outPdf.save();
+      downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), 'SnapDocs-Extracted.pdf');
+      mergeSplitStatus.textContent = `✓ Exported ${indices.length} page(s) successfully!`;
+      mergeSplitStatus.classList.add('visible');
+    });
+
+    // =========================================================================
+    // TOOL 3: Pro AI Document Scanner Studio
+    // =========================================================================
+    const scannerInput = document.getElementById('scannerInput');
+    const scannerCanvas = document.getElementById('scannerCanvas');
+    const scannerCtx = scannerCanvas.getContext('2d');
+    const scannerVideo = document.getElementById('scannerVideo');
+    const scanPreset = document.getElementById('scanPreset');
+    const scanBrightness = document.getElementById('scanBrightness');
+    const scanContrast = document.getElementById('scanContrast');
+    const scannerStatus = document.getElementById('scannerStatus');
+
+    let baseScanImage = null;
+    let scanRotation = 0;
+    let cameraStream = null;
+
+    function drawPlaceholderScanner() {
+      scannerCtx.fillStyle = '#070d1b';
+      scannerCtx.fillRect(0, 0, scannerCanvas.width, scannerCanvas.height);
+      scannerCtx.fillStyle = '#64748b';
+      scannerCtx.font = '600 16px Plus Jakarta Sans, sans-serif';
+      scannerCtx.textAlign = 'center';
+      scannerCtx.fillText(
+        'Upload a document photo or click "Use Camera to Scan"',
+        scannerCanvas.width / 2,
+        scannerCanvas.height / 2
+      );
+    }
+    drawPlaceholderScanner();
+
+    scannerInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const dataUrl = await fileToDataURL(file);
+      baseScanImage = await loadImageElement(dataUrl);
+      scanRotation = 0;
+      renderScannedCanvas();
+    });
+
+    document.getElementById('startCameraBtn').addEventListener('click', async () => {
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        scannerVideo.srcObject = cameraStream;
+        scannerVideo.style.display = 'block';
+        scannerCanvas.style.display = 'none';
+        document.getElementById('captureCameraBtn').style.display = 'inline-flex';
+      } catch (err) {
+        alert('Camera access was denied or unavailable on this device.');
+      }
+    });
+
+    document.getElementById('captureCameraBtn').addEventListener('click', async () => {
+      if (!cameraStream) return;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = scannerVideo.videoWidth || 800;
+      tempCanvas.height = scannerVideo.videoHeight || 600;
+      tempCanvas.getContext('2d').drawImage(scannerVideo, 0, 0);
+      cameraStream.getTracks().forEach((t) => t.stop());
+      cameraStream = null;
+      scannerVideo.style.display = 'none';
+      scannerCanvas.style.display = 'block';
+      document.getElementById('captureCameraBtn').style.display = 'none';
+      baseScanImage = await loadImageElement(tempCanvas.toDataURL('image/png'));
+      scanRotation = 0;
+      renderScannedCanvas();
+    });
+
+    function renderScannedCanvas() {
+      document.getElementById('brightVal').textContent = scanBrightness.value;
+      document.getElementById('contrastVal').textContent = scanContrast.value;
+      if (!baseScanImage) return;
+
+      const isRotated90 = scanRotation % 180 !== 0;
+      const w = isRotated90 ? baseScanImage.naturalHeight : baseScanImage.naturalWidth;
+      const h = isRotated90 ? baseScanImage.naturalWidth : baseScanImage.naturalHeight;
+
+      scannerCanvas.width = w;
+      scannerCanvas.height = h;
+
+      scannerCtx.save();
+      scannerCtx.translate(w / 2, h / 2);
+      scannerCtx.rotate((scanRotation * Math.PI) / 180);
+      scannerCtx.drawImage(
+        baseScanImage,
+        -baseScanImage.naturalWidth / 2,
+        -baseScanImage.naturalHeight / 2
+      );
+      scannerCtx.restore();
+
+      const preset = scanPreset.value;
+      const brightOffset = Number(scanBrightness.value) * 2.2;
+      const contrastVal = Number(scanContrast.value);
+      const contrastFactor = (259 * (contrastVal + 255)) / (255 * (259 - contrastVal));
+
+      const imgData = scannerCtx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+
+      for (let i = 0; i < d.length; i += 4) {
+        let r = d[i];
+        let g = d[i + 1];
+        let b = d[i + 2];
+
+        // Apply brightness & contrast
+        r = contrastFactor * (r - 128) + 128 + brightOffset;
+        g = contrastFactor * (g - 128) + 128 + brightOffset;
+        b = contrastFactor * (b - 128) + 128 + brightOffset;
+
+        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+
+        if (preset === 'magic') {
+          // Whiten paper background while keeping text crisp
+          if (lum > 175) {
+            r = Math.min(255, r * 1.15);
+            g = Math.min(255, g * 1.15);
+            b = Math.min(255, b * 1.15);
+          } else {
+            r *= 0.82;
+            g *= 0.82;
+            b *= 0.82;
+          }
+        } else if (preset === 'bw') {
+          const v = lum > 152 ? 255 : 18;
+          r = g = b = v;
+        } else if (preset === 'deshadow') {
+          const boost = lum > 130 ? 35 : 10;
+          r += boost;
+          g += boost;
+          b += boost;
+        } else if (preset === 'grayscale') {
+          r = g = b = lum;
+        }
+
+        d[i] = Math.max(0, Math.min(255, r));
+        d[i + 1] = Math.max(0, Math.min(255, g));
+        d[i + 2] = Math.max(0, Math.min(255, b));
+      }
+
+      scannerCtx.putImageData(imgData, 0, 0);
+    }
+
+    [scanPreset, scanBrightness, scanContrast].forEach((el) =>
+      el.addEventListener('input', renderScannedCanvas)
+    );
+
+    document.getElementById('rotateScanBtn').addEventListener('click', () => {
+      scanRotation = (scanRotation + 90) % 360;
+      renderScannedCanvas();
+    });
+
+    document.getElementById('downloadScanPngBtn').addEventListener('click', () => {
+      if (!baseScanImage) {
+        alert('Please upload or capture a document image first.');
+        return;
+      }
+      scannerCanvas.toBlob((blob) => {
+        downloadBlob(blob, 'SnapDocs-Scanned-Document.png');
+        scannerStatus.textContent = '✓ Scanned PNG downloaded!';
+        scannerStatus.classList.add('visible');
+      }, 'image/png');
+    });
+
+    document.getElementById('downloadScanPdfBtn').addEventListener('click', async () => {
+      if (!baseScanImage) {
+        alert('Please upload or capture a document image first.');
+        return;
+      }
+      const { PDFDocument } = window.PDFLib;
+      const pdfDoc = await PDFDocument.create();
+      const jpgUrl = scannerCanvas.toDataURL('image/jpeg', 0.92);
+      const embedded = await pdfDoc.embedJpg(jpgUrl);
+      const page = pdfDoc.addPage([embedded.width, embedded.height]);
+      page.drawImage(embedded, { x: 0, y: 0, width: embedded.width, height: embedded.height });
+      const pdfBytes = await pdfDoc.save();
+      downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'SnapDocs-Scanned-Document.pdf');
+      scannerStatus.textContent = '✓ Scanned PDF downloaded!';
+      scannerStatus.classList.add('visible');
+    });
+
+    // =========================================================================
+    // TOOL 4: AI OCR & Smart Data Extractor (Images + PDFs)
+    // =========================================================================
+    const ocrInput = document.getElementById('ocrInput');
+    const ocrFileNameText = document.getElementById('ocrFileNameText');
+    const ocrOutputText = document.getElementById('ocrOutputText');
+    const ocrProgressWrap = document.getElementById('ocrProgressWrap');
+    const ocrProgressFill = document.getElementById('ocrProgressFill');
+    const ocrProgressLabel = document.getElementById('ocrProgressLabel');
+    const ocrEntityPills = document.getElementById('ocrEntityPills');
+    let lastExtractedEntities = {};
+
+    ocrInput.addEventListener('change', (e) => {
+      const f = e.target.files?.[0];
+      if (f) ocrFileNameText.textContent = `Selected: ${f.name}`;
+    });
+
+    async function extractTextFromPdfBuffer(arrayBuffer) {
+      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        ocrProgressFill.style.width = `${Math.round((i / pdf.numPages) * 100)}%`;
+        ocrProgressLabel.textContent = `Reading PDF Page ${i} of ${pdf.numPages}...`;
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const pageText = content.items.map((item) => item.str).join(' ');
+        fullText += `--- Page ${i} ---\n${pageText}\n\n`;
+      }
+      return fullText.trim();
+    }
+
+    function detectStructuredEntities(text) {
+      const emails = Array.from(new Set(text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || []));
+      const phones = Array.from(new Set(text.match(/(?:\+91[\s-]?)?[6-9]\d{9}/g) || []));
+      const dates = Array.from(new Set(text.match(/\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b|\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4}\b/gi) || []));
+      const amounts = Array.from(new Set(text.match(/(?:₹|Rs\.?|INR|\$|USD)\s?\d[\d,]*(?:\.\d{1,2})?/gi) || []));
+
+      lastExtractedEntities = { emails, phones, dates, amounts };
+
+      const pills = [];
+      emails.forEach((e) => pills.push(`<span class="entity-pill">✉ ${e}</span>`));
+      phones.forEach((p) => pills.push(`<span class="entity-pill">📞 ${p}</span>`));
+      dates.forEach((d) => pills.push(`<span class="entity-pill">📅 ${d}</span>`));
+      amounts.forEach((a) => pills.push(`<span class="entity-pill">💰 ${a}</span>`));
+
+      ocrEntityPills.innerHTML = pills.length
+        ? pills.join('')
+        : '<span class="entity-pill">No emails, phone numbers, dates, or currency amounts detected</span>';
+    }
+
+    document.getElementById('runOcrBtn').addEventListener('click', async () => {
+      const file = ocrInput.files?.[0];
+      if (!file) {
+        alert('Please upload an image or PDF file first.');
+        return;
+      }
+
+      ocrProgressWrap.classList.add('visible');
+      ocrProgressFill.style.width = '5%';
+      ocrProgressLabel.textContent = 'Initializing AI extraction engine...';
+
+      try {
+        let extracted = '';
+        if (file.type === 'application/pdf') {
+          const buf = await file.arrayBuffer();
+          extracted = await extractTextFromPdfBuffer(buf);
+        } else {
+          const result = await window.Tesseract.recognize(file, 'eng', {
+            logger: (m) => {
+              if (m.status === 'recognizing text') {
+                const pct = Math.round((m.progress || 0) * 100);
+                ocrProgressFill.style.width = `${pct}%`;
+                ocrProgressLabel.textContent = `AI OCR Processing... ${pct}%`;
+              }
+            },
+          });
+          extracted = result.data.text;
+        }
+
+        ocrOutputText.value = extracted;
+        ocrProgressFill.style.width = '100%';
+        ocrProgressLabel.textContent = '✓ Extraction Complete!';
+        detectStructuredEntities(extracted);
+      } catch (err) {
+        ocrProgressLabel.textContent = 'Error extracting text. Please try a clearer file.';
+      }
+    });
+
+    ocrOutputText.addEventListener('input', () => detectStructuredEntities(ocrOutputText.value));
+
+    document.getElementById('redactPiiBtn').addEventListener('click', () => {
+      if (!ocrOutputText.value.trim()) return;
+      let redacted = ocrOutputText.value
+        .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[REDACTED_EMAIL]')
+        .replace(/(?:\+91[\s-]?)?[6-9]\d{9}/g, '[REDACTED_PHONE]')
+        .replace(/\b\d{4}\s\d{4}\s\d{4}\b/g, '[REDACTED_ID]');
+      ocrOutputText.value = redacted;
+      detectStructuredEntities(redacted);
+    });
+
+    document.getElementById('sendToSummarizerBtn').addEventListener('click', () => {
+      document.getElementById('sumInputText').value = ocrOutputText.value;
+      switchTool('summarizer');
+      document.getElementById('runSummarizerBtn').click();
+    });
+
+    document.getElementById('copyOcrTextBtn').addEventListener('click', () => {
+      navigator.clipboard.writeText(ocrOutputText.value);
+      ocrProgressLabel.textContent = '✓ Copied to clipboard!';
+    });
+
+    document.getElementById('downloadOcrTxtBtn').addEventListener('click', () => {
+      downloadBlob(new Blob([ocrOutputText.value], { type: 'text/plain' }), 'SnapDocs-Extracted.txt');
+    });
+
+    document.getElementById('downloadOcrDocBtn').addEventListener('click', () => {
+      const htmlDoc = `<html><head><meta charset="utf-8"></head><body><pre style="font-family: Calibri, sans-serif;">${ocrOutputText.value}</pre></body></html>`;
+      downloadBlob(new Blob([htmlDoc], { type: 'application/msword' }), 'SnapDocs-Extracted.doc');
+    });
+
+    document.getElementById('downloadOcrJsonBtn').addEventListener('click', () => {
+      const payload = {
+        extractedAt: new Date().toISOString(),
+        entities: lastExtractedEntities,
+        text: ocrOutputText.value,
+      };
+      downloadBlob(
+        new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }),
+        'SnapDocs-Structured-Data.json'
+      );
+    });
+
+    // =========================================================================
+    // TOOL 5: AI Document Summarizer & Q&A Intelligence
+    // =========================================================================
+    const sumFileInput = document.getElementById('sumFileInput');
+    const sumInputText = document.getElementById('sumInputText');
+    const sumOutputText = document.getElementById('sumOutputText');
+
+    sumFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      document.getElementById('sumFileLabel').textContent = `Loading ${file.name}...`;
+      if (file.type === 'application/pdf') {
+        const buf = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map((it) => it.str).join(' ') + '\n\n';
+        }
+        sumInputText.value = text.trim();
+      } else {
+        sumInputText.value = await file.text();
+      }
+      document.getElementById('sumFileLabel').textContent = `Loaded: ${file.name}`;
+      runDocumentSummarizer();
+    });
+
+    const STOP_WORDS = new Set([
+      'the', 'and', 'to', 'of', 'in', 'is', 'for', 'that', 'with', 'on', 'as', 'are', 'this', 'by',
+      'be', 'at', 'or', 'from', 'an', 'it', 'which', 'have', 'has', 'was', 'were', 'but', 'not',
+      'can', 'will', 'their', 'our', 'your', 'we', 'they', 'you', 'all', 'also', 'more', 'into'
+    ]);
+
+    function runDocumentSummarizer() {
+      const raw = sumInputText.value.trim();
+      if (!raw) return;
+
+      const words = raw.split(/\s+/).filter(Boolean);
+      const sentences = raw
+        .replace(/\n+/g, '. ')
+        .split(/(?<=[.!?])\s+/)
+        .map((s) => s.trim())
+        .filter((s) => s.length > 25);
+
+      document.getElementById('statWords').textContent = words.length;
+      document.getElementById('statSentences').textContent = sentences.length;
+      document.getElementById('statReadTime').textContent = `${Math.max(1, Math.ceil(words.length / 200))} min`;
+
+      // Compute word frequencies
+      const freq = {};
+      words.forEach((w) => {
+        const clean = w.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (clean.length > 3 && !STOP_WORDS.has(clean)) {
+          freq[clean] = (freq[clean] || 0) + 1;
+        }
+      });
+
+      const topKeywords = Object.entries(freq)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map((e) => e[0]);
+
+      // Score sentences by TF-IDF importance + position weight
+      const scored = sentences.map((s, index) => {
+        const sWords = s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
+        let score = 0;
+        sWords.forEach((w) => {
+          if (freq[w]) score += freq[w];
         });
-        
-        async function convertImagesToPdf() {
-            if (uploadedImages.length === 0) return alert('Please upload at least one image');
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            for (let i = 0; i < uploadedImages.length; i++) {
-                if (i > 0) pdf.addPage();
-                const img = await loadImage(uploadedImages[i]);
-                const imgRatio = img.height / img.width;
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                let newImgWidth = pdfWidth;
-                let newImgHeight = newImgWidth * imgRatio;
-                if (newImgHeight > pdfHeight) {
-                    newImgHeight = pdfHeight;
-                    newImgWidth = newImgHeight / imgRatio;
-                }
-                pdf.addImage(img, 'PNG', (pdfWidth - newImgWidth) / 2, 0, newImgWidth, newImgHeight);
-            }
-            pdf.save('snapdocs-converted.pdf');
-        }
-        
-        function loadImage(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    const img = new Image();
-                    img.onload = () => resolve(img);
-                    img.onerror = reject;
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-        
-        document.getElementById('formatConverterInput').addEventListener('change', e => { if (e.target.files.length > 0) formatConverterImage = e.target.files[0]; });
-        
-        async function convertImageFormat() {
-            if (!formatConverterImage) return alert('Please upload an image first');
-            const format = document.getElementById('formatSelect').value;
-            const img = await loadImage(formatConverterImage);
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width; canvas.height = img.height;
-            canvas.getContext('2d').drawImage(img, 0, 0);
-            canvas.toBlob(blob => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `converted-image.${format.split('/')[1]}`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }, format);
-        }
-        
-        document.getElementById('scannerInput').addEventListener('change', async e => {
-            if (e.target.files.length > 0) {
-                scannerImage = e.target.files[0];
-                const img = await loadImage(scannerImage);
-                document.getElementById('scannerPreview').innerHTML = `<img src="${img.src}" class="preview-image">`;
-            }
+        const normScore = score / Math.max(6, sWords.length);
+        const posBoost = index === 0 ? 1.25 : 1.0;
+        return { sentence: s, index, score: normScore * posBoost };
+      });
+
+      const targetCount = Number(document.getElementById('summaryLengthSelect').value) || 5;
+      const selected = scored
+        .sort((a, b) => b.score - a.score)
+        .slice(0, targetCount)
+        .sort((a, b) => a.index - b.index);
+
+      const summaryWords = selected.reduce((acc, s) => acc + s.sentence.split(/\s+/).length, 0);
+      const reduction = Math.max(0, Math.round((1 - summaryWords / Math.max(1, words.length)) * 100));
+      document.getElementById('statCompression').textContent = `${reduction}%`;
+
+      const report = [
+        '=== EXECUTIVE SUMMARY ===',
+        selected.map((s) => s.sentence).join(' '),
+        '',
+        '=== KEY TAKEAWAYS ===',
+        ...selected.map((s) => `• ${s.sentence}`),
+        '',
+        `=== TOP KEYWORDS ===`,
+        topKeywords.join(' · '),
+      ].join('\n');
+
+      sumOutputText.value = report;
+    }
+
+    document.getElementById('runSummarizerBtn').addEventListener('click', runDocumentSummarizer);
+
+    document.getElementById('askDocBtn').addEventListener('click', () => {
+      const q = document.getElementById('docQuestionInput').value.trim().toLowerCase();
+      const raw = sumInputText.value.trim();
+      const banner = document.getElementById('docAnswerBanner');
+      if (!q || !raw) return;
+
+      const qTokens = q.replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter((w) => w.length > 2);
+      const sentences = raw.replace(/\n+/g, '. ').split(/(?<=[.!?])\s+/);
+
+      let bestMatch = '';
+      let bestScore = 0;
+      sentences.forEach((s) => {
+        const lower = s.toLowerCase();
+        let hits = 0;
+        qTokens.forEach((t) => {
+          if (lower.includes(t)) hits += 1;
         });
-        
-        async function scanDocument() {
-            if (!scannerImage) return alert('Please upload a document image first');
-            const img = await loadImage(scannerImage);
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width; canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.filter = 'brightness(1.1) contrast(1.2)';
-            ctx.drawImage(img, 0, 0);
-            scannedCanvas = canvas;
-            document.getElementById('scannerPreview').innerHTML = `<img src="${canvas.toDataURL()}" class="preview-image">`;
-            const downloadBtn = document.getElementById('downloadScanBtn');
-            downloadBtn.disabled = false;
-            downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        if (hits > bestScore) {
+          bestScore = hits;
+          bestMatch = s;
         }
-        
-        function downloadScannedDoc() {
-            if (!scannedCanvas) return alert('Please scan a document first');
-            const url = scannedCanvas.toDataURL('image/png');
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'scanned-document.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+      });
+
+      banner.textContent = bestMatch
+        ? `✦ Most Relevant Passage: "${bestMatch}"`
+        : 'No exact matching passage found for those keywords.';
+      banner.classList.add('visible');
+    });
+
+    document.getElementById('copySummaryBtn').addEventListener('click', () => {
+      navigator.clipboard.writeText(sumOutputText.value);
+    });
+
+    document.getElementById('downloadSummaryTxtBtn').addEventListener('click', () => {
+      downloadBlob(new Blob([sumOutputText.value], { type: 'text/plain' }), 'SnapDocs-AI-Summary.txt');
+    });
+
+    // =========================================================================
+    // TOOL 6: Universal Format Converter & Target-KB Compressor
+    // =========================================================================
+    const converterInput = document.getElementById('converterInput');
+    const converterQuality = document.getElementById('converterQuality');
+    const converterStatus = document.getElementById('converterStatus');
+    let converterFile = null;
+
+    converterQuality.addEventListener('input', () => {
+      document.getElementById('qualityValLabel').textContent = converterQuality.value;
+    });
+
+    converterInput.addEventListener('change', (e) => {
+      converterFile = e.target.files?.[0] || null;
+      if (converterFile) {
+        document.getElementById('converterOriginalInfo').textContent =
+          `Selected: ${converterFile.name} (${(converterFile.size / 1024).toFixed(1)} KB)`;
+      }
+    });
+
+    function canvasToBlobWithQuality(canvas, mime, q) {
+      return new Promise((resolve) => canvas.toBlob(resolve, mime, q));
+    }
+
+    document.getElementById('runConverterBtn').addEventListener('click', async () => {
+      if (!converterFile) {
+        alert('Please upload an image first.');
+        return;
+      }
+
+      const dataUrl = await fileToDataURL(converterFile);
+      const img = await loadImageElement(dataUrl);
+      const mime = document.getElementById('targetFormatSelect').value;
+      const targetKb = Number(document.getElementById('targetKbPreset').value) || 0;
+
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth;
+      let h = img.naturalHeight;
+      canvas.width = w;
+      canvas.height = h;
+      const ctx2 = canvas.getContext('2d');
+      ctx2.fillStyle = '#ffffff';
+      ctx2.fillRect(0, 0, w, h);
+      ctx2.drawImage(img, 0, 0, w, h);
+
+      let outBlob = await canvasToBlobWithQuality(
+        canvas,
+        mime,
+        Number(converterQuality.value) / 100
+      );
+
+      // If user selected a Target KB preset (e.g. 20 KB, 50 KB, 100 KB), iteratively optimize
+      if (targetKb > 0) {
+        const targetBytes = targetKb * 1024;
+        let q = 0.88;
+        let scale = 1.0;
+        for (let attempt = 0; attempt < 9; attempt++) {
+          if (outBlob.size <= targetBytes) break;
+          if (q > 0.25) {
+            q -= 0.14;
+          } else {
+            scale *= 0.8;
+            canvas.width = Math.max(180, Math.round(w * scale));
+            canvas.height = Math.max(180, Math.round(h * scale));
+            const c = canvas.getContext('2d');
+            c.fillStyle = '#ffffff';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+            c.drawImage(img, 0, 0, canvas.width, canvas.height);
+          }
+          outBlob = await canvasToBlobWithQuality(canvas, 'image/jpeg', Math.max(0.15, q));
         }
-        
-        document.getElementById('ocrInput').addEventListener('change', e => { if (e.target.files.length > 0) ocrImage = e.target.files[0]; });
-        
-        async function extractText() {
-            if (!ocrImage) return alert('Please upload an image first');
-            const progressDiv = document.getElementById('ocr-progress'), progressBar = document.getElementById('ocr-bar'), progressPercent = document.getElementById('ocr-percent'), textArea = document.getElementById('extractedText');
-            progressDiv.style.display = 'block';
-            textArea.value = 'Processing image...';
-            try {
-                const { data: { text } } = await Tesseract.recognize(ocrImage, 'eng', { logger: m => {
-                    if (m.status === 'recognizing text') {
-                        const percent = Math.round(m.progress * 100);
-                        progressBar.style.width = percent + '%';
-                        progressPercent.textContent = percent + '%';
-                    }}
-                });
-                if (text.trim()) {
-                    textArea.value = text;
-                    document.getElementById('downloadTextBtn').disabled = false;
-                    document.getElementById('downloadTextBtn').classList.remove('opacity-50', 'cursor-not-allowed');
-                } else {
-                    textArea.value = 'No text found in the image. Please try with a clearer image.';
-                }
-            } catch (error) {
-                console.error('OCR Error:', error);
-                textArea.value = 'Error during text extraction. Please try again.';
-            } finally {
-                progressDiv.style.display = 'none';
-                progressBar.style.width = '0%';
-                progressPercent.textContent = '0%';
-            }
+      }
+
+      const ext = mime === 'image/png' ? 'png' : mime === 'image/webp' ? 'webp' : 'jpg';
+      downloadBlob(outBlob, `SnapDocs-Converted.${ext}`);
+      converterStatus.textContent =
+        `✓ Done! Original: ${(converterFile.size / 1024).toFixed(1)} KB → Output: ${(outBlob.size / 1024).toFixed(1)} KB`;
+      converterStatus.classList.add('visible');
+    });
+
+    // =========================================================================
+    // TOOL 7: Sign, Stamp & Watermark PDF
+    // =========================================================================
+    const sigPadCanvas = document.getElementById('sigPadCanvas');
+    const sigCtx = sigPadCanvas.getContext('2d');
+    const signPdfInput = document.getElementById('signPdfInput');
+    const signPdfStatus = document.getElementById('signPdfStatus');
+    let signPdfBuffer = null;
+    let isDrawingSig = false;
+    let hasDrawnSig = false;
+
+    signPdfInput.addEventListener('change', async (e) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      signPdfBuffer = await f.arrayBuffer();
+      document.getElementById('signPdfFileLabel').textContent = `Loaded: ${f.name}`;
+    });
+
+    function getSigPos(e) {
+      const rect = sigPadCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (sigPadCanvas.width / rect.width),
+        y: (clientY - rect.top) * (sigPadCanvas.height / rect.height),
+      };
+    }
+
+    function startSigDraw(e) {
+      e.preventDefault();
+      isDrawingSig = true;
+      hasDrawnSig = true;
+      const pos = getSigPos(e);
+      sigCtx.beginPath();
+      sigCtx.moveTo(pos.x, pos.y);
+    }
+
+    function moveSigDraw(e) {
+      if (!isDrawingSig) return;
+      e.preventDefault();
+      const pos = getSigPos(e);
+      sigCtx.strokeStyle = document.getElementById('sigInkColor').value;
+      sigCtx.lineWidth = 2.6;
+      sigCtx.lineCap = 'round';
+      sigCtx.lineTo(pos.x, pos.y);
+      sigCtx.stroke();
+    }
+
+    function stopSigDraw() {
+      isDrawingSig = false;
+    }
+
+    sigPadCanvas.addEventListener('mousedown', startSigDraw);
+    sigPadCanvas.addEventListener('mousemove', moveSigDraw);
+    window.addEventListener('mouseup', stopSigDraw);
+    sigPadCanvas.addEventListener('touchstart', startSigDraw, { passive: false });
+    sigPadCanvas.addEventListener('touchmove', moveSigDraw, { passive: false });
+    window.addEventListener('touchend', stopSigDraw);
+
+    document.getElementById('clearSigPadBtn').addEventListener('click', () => {
+      sigCtx.clearRect(0, 0, sigPadCanvas.width, sigPadCanvas.height);
+      hasDrawnSig = false;
+    });
+
+    document.getElementById('applySignWatermarkBtn').addEventListener('click', async () => {
+      if (!signPdfBuffer) {
+        alert('Please upload a PDF file first.');
+        return;
+      }
+
+      const { PDFDocument, rgb, degrees, StandardFonts } = window.PDFLib;
+      const pdfDoc = await PDFDocument.load(signPdfBuffer);
+      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      const pages = pdfDoc.getPages();
+      const watermark = document.getElementById('watermarkText').value.trim();
+      const addNumbers = document.getElementById('addPageNumbersSelect').value === 'yes';
+
+      pages.forEach((page, idx) => {
+        const { width, height } = page.getSize();
+        if (watermark) {
+          page.drawText(watermark, {
+            x: width * 0.18,
+            y: height * 0.45,
+            size: 42,
+            font,
+            color: rgb(0.75, 0.78, 0.84),
+            rotate: degrees(35),
+            opacity: 0.28,
+          });
         }
-        
-        function downloadExtractedText() {
-            const text = document.getElementById('extractedText').value;
-            if (!text || text === 'Extracted text will appear here...') return alert('No text to download');
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'extracted-text.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        if (addNumbers) {
+          page.drawText(`Page ${idx + 1} of ${pages.length}`, {
+            x: width / 2 - 35,
+            y: 18,
+            size: 10,
+            font,
+            color: rgb(0.35, 0.4, 0.48),
+          });
         }
-    </script>
+      });
+
+      if (hasDrawnSig && pages.length > 0) {
+        const sigPngUrl = sigPadCanvas.toDataURL('image/png');
+        const sigImg = await pdfDoc.embedPng(sigPngUrl);
+        const lastPage = pages[pages.length - 1];
+        lastPage.drawImage(sigImg, {
+          x: Math.max(30, lastPage.getSize().width - 190),
+          y: 36,
+          width: 150,
+          height: 50,
+        });
+      }
+
+      const signedBytes = await pdfDoc.save();
+      downloadBlob(new Blob([signedBytes], { type: 'application/pdf' }), 'SnapDocs-Signed.pdf');
+      signPdfStatus.textContent = '✓ Signed & watermarked PDF downloaded!';
+      signPdfStatus.classList.add('visible');
+    });
+
+    // =========================================================================
+    // TOOL 8: PDF to Images & Document QR Code Studio
+    // =========================================================================
+    const pdfToImgInput = document.getElementById('pdfToImgInput');
+    const pdfToImgGallery = document.getElementById('pdfToImgGallery');
+
+    pdfToImgInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      pdfToImgGallery.innerHTML = '<span style="color: var(--cyan-400);">Rendering PDF pages...</span>';
+      const buf = await file.arrayBuffer();
+      const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+      pdfToImgGallery.innerHTML = '';
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const c = document.createElement('canvas');
+        c.width = viewport.width;
+        c.height = viewport.height;
+        await page.render({ canvasContext: c.getContext('2d'), viewport }).promise;
+        const dataUrl = c.toDataURL('image/png');
+
+        const card = document.createElement('div');
+        card.className = 'preview-item';
+        card.innerHTML = `
+          <img src="${dataUrl}" alt="Page ${i}" />
+          <a href="${dataUrl}" download="SnapDocs-Page-${i}.png" class="btn btn-primary btn-sm" style="width:100%; margin-top:4px;">
+            Page ${i} PNG
+          </a>
+        `;
+        pdfToImgGallery.appendChild(card);
+      }
+    });
+
+    // QR Code Generator
+    const qrCanvas = document.getElementById('qrCanvas');
+    const qrTextInput = document.getElementById('qrTextInput');
+    let qrInstance = null;
+
+    function updateQrCode() {
+      if (!window.QRious) return;
+      qrInstance = new window.QRious({
+        element: qrCanvas,
+        value: qrTextInput.value.trim() || 'https://snapdocsaio.onrender.com/',
+        size: 180,
+        background: '#ffffff',
+        foreground: '#0a1122',
+        level: 'H',
+      });
+    }
+    updateQrCode();
+
+    document.getElementById('generateQrBtn').addEventListener('click', updateQrCode);
+    document.getElementById('downloadQrBtn').addEventListener('click', () => {
+      qrCanvas.toBlob((blob) => downloadBlob(blob, 'SnapDocs-QRCode.png'), 'image/png');
+    });
+
+    // =========================================================================
+    // 9. Support Form — Strict Email & Phone Validation + Direct to mvapscompany@gmail.com
+    // =========================================================================
+    const RECEIVER_EMAIL = 'mvapscompany@gmail.com';
+    const snapSupportForm = document.getElementById('snapSupportForm');
+    const supName = document.getElementById('supName');
+    const supEmail = document.getElementById('supEmail');
+    const supPhone = document.getElementById('supPhone');
+    const supMsg = document.getElementById('supMsg');
+    const supEmailErr = document.getElementById('supEmailErr');
+    const supPhoneErr = document.getElementById('supPhoneErr');
+    const supStatusBanner = document.getElementById('supStatusBanner');
+    const warningModal = document.getElementById('warningModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    let focusTarget = null;
+
+    function isValidEmailFormat(val) {
+      const t = val.trim();
+      if (!t || t.includes('..')) return false;
+      return /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,12}$/.test(t);
+    }
+
+    function isValidPhoneFormat(val) {
+      const t = val.trim();
+      if (!t || !/^\+?[\d\s()-]{10,18}$/.test(t)) return false;
+      const digits = t.replace(/\D/g, '');
+      if (/^(\d)\1+$/.test(digits)) return false;
+      if (digits.length === 10 && /^[6-9]\d{9}$/.test(digits)) return true;
+      if (digits.length === 11 && /^0[6-9]\d{9}$/.test(digits)) return true;
+      if (digits.length === 12 && /^91[6-9]\d{9}$/.test(digits)) return true;
+      if (t.startsWith('+') && digits.length >= 10 && digits.length <= 15) return true;
+      return false;
+    }
+
+    function showPopup(title, desc, inputEl, errEl) {
+      inputEl.classList.add('input-invalid', 'shake');
+      if (errEl) errEl.classList.add('visible');
+      modalTitle.textContent = title;
+      modalDesc.innerHTML = desc;
+      focusTarget = inputEl;
+      warningModal.classList.add('active');
+      setTimeout(() => inputEl.classList.remove('shake'), 450);
+    }
+
+    closeModalBtn.addEventListener('click', () => {
+      warningModal.classList.remove('active');
+      if (focusTarget) focusTarget.focus();
+    });
+
+    supEmail.addEventListener('input', () => {
+      if (isValidEmailFormat(supEmail.value)) {
+        supEmail.classList.remove('input-invalid');
+        supEmailErr.classList.remove('visible');
+      }
+    });
+
+    supPhone.addEventListener('input', () => {
+      if (isValidPhoneFormat(supPhone.value)) {
+        supPhone.classList.remove('input-invalid');
+        supPhoneErr.classList.remove('visible');
+      }
+    });
+
+    snapSupportForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!supName.value.trim()) {
+        supName.focus();
+        return;
+      }
+      if (!isValidEmailFormat(supEmail.value)) {
+        showPopup(
+          'Invalid Email Address',
+          'Please enter a valid email address format (e.g., <strong>yourname@gmail.com</strong>).',
+          supEmail,
+          supEmailErr
+        );
+        return;
+      }
+      if (!isValidPhoneFormat(supPhone.value)) {
+        showPopup(
+          'Invalid Phone / WhatsApp Number',
+          'Please enter a valid 10-digit mobile number (e.g., <strong>9876543210</strong> or <strong>+91 98765 43210</strong>).',
+          supPhone,
+          supPhoneErr
+        );
+        return;
+      }
+      if (!supMsg.value.trim()) {
+        supMsg.focus();
+        return;
+      }
+
+      if (window.location.protocol === 'file:') {
+        const subject = encodeURIComponent('SnapDocs AI — Customer Inquiry');
+        const body = encodeURIComponent(
+          `Name: ${supName.value.trim()}\nEmail: ${supEmail.value.trim()}\nPhone: ${supPhone.value.trim()}\n\nMessage:\n${supMsg.value.trim()}`
+        );
+        window.location.href = `mailto:${RECEIVER_EMAIL}?subject=${subject}&body=${body}`;
+        supStatusBanner.textContent = 'Opening email client to send to mvapscompany@gmail.com.';
+        supStatusBanner.classList.add('visible');
+        return;
+      }
+
+      const formData = new FormData(snapSupportForm);
+      formData.append('_replyto', supEmail.value.trim());
+
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${RECEIVER_EMAIL}`, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: formData,
+        });
+        const data = await res.json();
+        if (res.ok && (data.success === 'true' || data.success === true)) {
+          supStatusBanner.textContent = '✓ Thank you! Your message has been sent to MVAPS & Company.';
+          supStatusBanner.classList.add('visible');
+          snapSupportForm.reset();
+        } else {
+          snapSupportForm.submit();
+        }
+      } catch (err) {
+        snapSupportForm.submit();
+      }
+    });
+  </script>
 </body>
 </html>
